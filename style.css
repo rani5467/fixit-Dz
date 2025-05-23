@@ -1317,10 +1317,7 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     .card-title { font-size: 1.2rem; }
     .pricing-card-price { font-size: 1.8rem; }
 }
-.btn.btn-pressed {
-    transform: translateY(1px) scale(0.98); /* Slight press down effect */
-    box-shadow: 0 2px 5px rgba(var(--accent-color-rgb), 0.2); /* Reduced shadow */
-}
+
 @media (max-width: 480px) {
     body { font-size: 14px; }
     .container { padding: 0 0.8rem; }
