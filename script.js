@@ -125,10 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentSectionId = '';
 
             sections.forEach(section => {
-                const sectionTop = section.offsetTop;
+                const sectionTop = section.offsetTop - headerHeight; 
                 const sectionBottom = sectionTop + section.offsetHeight;
                 // Check if the top of the section is at or above the scrollThreshold and part of it is visible
-                if (window.scrollY + scrollThreshold >= sectionTop && window.scrollY < sectionBottom - (window.innerHeight * 0.5) + scrollThreshold ) {
+                if (window.scrollY >= sectionTop - scrollThreshold && window.scrollY < sectionBottom - scrollThreshold ) {
                      currentSectionId = section.getAttribute('id');
                 }
             });
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let submissionWasSuccessful = false;
                 
                 // IMPORTANT: Change this URL if you switch to Google Apps Script
-                const SCRIPT_URL = 'send_email.php'; 
+                const SCRIPT_URL = 'send_email.php'; // For PHP backend
 
                 fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -322,20 +322,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     // If using Google Apps Script and facing CORS issues, add: mode: 'no-cors'
                 })
                 .then(response => {
-                    // For PHP, we expect a JSON response.
-                    // If using 'no-cors' for Google Apps Script, this part needs to be handled differently
-                    // as response.ok and response.json() might not be reliable.
                     if (!response.ok) {
-                        // Attempt to get more error info if possible
                         return response.text().then(text => { 
-                            let errorDetail = `Server responded with ${response.status}: ${response.statusText}.`;
+                            let errorDetail = `خطأ من الخادم: ${response.status} ${response.statusText}.`;
+                            // Try to parse as JSON to get specific message from PHP
                             try {
                                 const jsonError = JSON.parse(text);
                                 if (jsonError && jsonError.message) {
-                                    errorDetail += ` Message: ${jsonError.message}`;
+                                    errorDetail = jsonError.message; // Use PHP's error message
+                                } else {
+                                     errorDetail += ` الرد: ${text}`; // Fallback to raw text
                                 }
                             } catch (parseError) {
-                                errorDetail += ` Response body: ${text}`;
+                                // If response is not JSON (e.g. HTML error page from server)
+                                errorDetail += ` الرد غير متوقع من الخادم.`;
+                                console.warn("Server response was not JSON:", text);
                             }
                             throw new Error(errorDetail);
                         });
@@ -354,7 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .catch(error => {
                     console.error('Error submitting form:', error);
-                    displayFormMessage('حدث خطأ في الاتصال أو في معالجة الطلب. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى. (' + error.message + ')', 'error', formMessageArea, formMessageP);
+                    // Display the detailed error message from the Error object if available
+                    displayFormMessage(error.message || 'حدث خطأ في الاتصال أو في معالجة الطلب. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.', 'error', formMessageArea, formMessageP);
                     submissionWasSuccessful = false;
                 })
                 .finally(() => {
@@ -369,7 +371,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             }, 300);
                         }, 7000);
                     }
-                    // Error messages will persist until the next submission attempt or page reload.
                 });
             });
 
@@ -384,9 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     pElement.style.color = 'white';
                 }
                 area.appendChild(pElement);
-                // Ensure the element is in the DOM and styles are applied before starting the transition
                 requestAnimationFrame(() => {
-                    setTimeout(() => { pElement.style.opacity = '1'; }, 10); // Fade in
+                    setTimeout(() => { pElement.style.opacity = '1'; }, 10);
                 });
             }
         }
@@ -396,26 +396,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function initPricingCards() {
         if (pricingCards.length > 0) {
             pricingCards.forEach(card => {
-                const purchaseButton = card.querySelector('.btn-block'); // Assumes .btn-block is unique to these buttons
+                const purchaseButton = card.querySelector('.btn-block'); 
                 if (purchaseButton) {
                     purchaseButton.addEventListener('click', function(e) {
                         if (this.getAttribute('href') === '#contact') {
-                            // Allow default smooth scroll to contact section if it's a direct link
-                            return;
+                            return; 
                         }
                         
-                        e.preventDefault(); // Prevent default for other cases or if it's just a button
+                        e.preventDefault(); 
                         const cardTitleElement = card.querySelector('.pricing-card-title');
                         const packageName = cardTitleElement ? cardTitleElement.textContent.trim() : "الباقة المحددة";
                         
                         const formMsgArea = contactFormElement ? contactFormElement.querySelector('.form-message-area') : null;
                         
                         if (formMsgArea) {
-                            formMsgArea.innerHTML = ''; // Clear previous messages
+                            formMsgArea.innerHTML = ''; 
                             const messageP = document.createElement('p');
                             messageP.textContent = `تم اختيار "${packageName}"! يرجى ملء النموذج أدناه لإكمال الطلب.`;
                             messageP.style.backgroundColor = 'var(--accent-color)';
-                            messageP.style.color = 'var(--btn-primary-text)'; // Use theme variable
+                            messageP.style.color = 'var(--btn-primary-text)';
                             messageP.style.padding = '10px';
                             messageP.style.marginTop = '15px';
                             messageP.style.borderRadius = 'var(--border-radius-sm)';
@@ -441,7 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }, 300);
                             }, 7000);
                         } else {
-                            // Fallback if form message area is not found
                             alert(`تم اختيار "${packageName}"!`);
                         }
                     });
