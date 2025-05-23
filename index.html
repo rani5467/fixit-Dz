@@ -9,19 +9,20 @@
     <title>Fixit Dz - خبيرك التقني لإصلاح الحواسيب عن بعد في الجزائر</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <link rel="stylesheet" href="style.css"> </head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
 
     <header class="navbar">
         <div class="container">
             <a href="#hero" class="nav-logo">Fixit Dz</a>
-            <button class="menu-toggle" aria-label="فتح/إغلاق القائمة" aria-expanded="false">
+            <button class="menu-toggle" id="menu-toggle-button" aria-label="فتح/إغلاق القائمة" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-            <nav class="nav-links-container"> {/* حاوية جديدة للروابط لتسهيل التحكم */}
+            <nav class="nav-links-container">
                 <ul class="nav-links">
                     <li><a href="#hero" class="nav-link">الرئيسية</a></li>
                     <li><a href="#services" class="nav-link">خدماتنا</a></li>
@@ -36,48 +37,60 @@
 
     <main>
         <section id="hero" class="section hero-section">
-            <div class="container hero-content">
-                <h1 class="hero-title">حلول تقنية مبتكرة لمشاكل حاسوبك، وأنت في مكانك!</h1>
-                <p class="hero-subtitle">Fixit Dz يقدم لك دعمًا فنيًا احترافيًا عن بعد في الجزائر. سرعة، كفاءة، وموثوقية.</p>
-                <a href="#pricing" class="btn btn-primary btn-lg">اكتشف باقاتنا الآن</a>
+            <div class="container hero-content fade-in" data-animation="fade-in">
+                <h1 class="hero-title">
+                    حلول تقنية مبتكرة لمشاكل حاسوبك،
+                    <span class="highlight" id="typewriter-text"></span><span class="cursor">&nbsp;</span>
+                </h1>
+                <p class="hero-subtitle fade-in" data-animation="fade-in-delay-1">Fixit Dz يقدم لك دعمًا فنيًا احترافيًا عن بعد في الجزائر. سرعة، كفاءة، وموثوقية.</p>
+                <a href="#pricing" class="btn btn-primary btn-lg fade-in" data-animation="fade-in-delay-2">اكتشف باقاتنا الآن</a>
+                 <div class="hero-image-container fade-in" data-animation="zoom-in" data-delay="400">
+                     <div class="gradient-border-wrapper">
+                         <div class="gradient-border"></div>
+                         <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Logo" class="profile-image" onerror="this.onerror=null;this.src='https://placehold.co/300x300/2d3440/f0f0f0?text=Profile+Error';">
+                     </div>
+                 </div>
             </div>
         </section>
 
         <section id="services" class="section services-section">
             <div class="container">
-                <h2 class="section-title">خدماتنا المتخصصة</h2>
+                <div class="section-header fade-in" data-animation="fade-in">
+                    <h2 class="section-title">خدماتنا المتخصصة</h2>
+                    <p class="section-subtitle">نقدم مجموعة واسعة من الحلول التقنية لتلبية جميع احتياجاتك.</p>
+                </div>
                 <div class="services-grid">
-                    <article class="service-card">
+                    <article class="service-card fade-in" data-animation="zoom-in" data-delay="0">
                         <div class="card-icon"><i class="fas fa-laptop-medical"></i></div>
                         <h3 class="card-title">إصلاح مشاكل النظام</h3>
                         <p class="card-description">تشخيص وإصلاح شامل لأخطاء نظام ويندوز، مشاكل الإقلاع، والشاشة الزرقاء لضمان استقرار جهازك.</p>
                         <a href="#contact" class="btn btn-primary">اطلب الخدمة</a>
                     </article>
-                    <article class="service-card">
+                    <article class="service-card fade-in" data-animation="zoom-in" data-delay="100">
                         <div class="card-icon"><i class="fas fa-shield-virus"></i></div>
                         <h3 class="card-title">إزالة الفيروسات والحماية</h3>
                         <p class="card-description">تنظيف عميق للحاسوب من الفيروسات، برامج التجسس، والبرمجيات الخبيثة مع تعزيز نظام الحماية لديك.</p>
                         <a href="#contact" class="btn btn-primary">اطلب الخدمة</a>
                     </article>
-                    <article class="service-card">
+                    <article class="service-card fade-in" data-animation="zoom-in" data-delay="200">
                         <div class="card-icon"><i class="fas fa-rocket"></i></div>
                         <h3 class="card-title">تسريع أداء الحاسوب</h3>
                         <p class="card-description">تحسين إعدادات النظام، تنظيف الملفات غير الضرورية، وإدارة برامج بدء التشغيل لزيادة سرعة استجابة جهازك.</p>
                         <a href="#contact" class="btn btn-primary">اطلب الخدمة</a>
                     </article>
-                    <article class="service-card">
+                    <article class="service-card fade-in" data-animation="zoom-in" data-delay="300">
                         <div class="card-icon"><i class="fas fa-headset"></i></div>
                         <h3 class="card-title">دعم فني عن بُعد</h3>
                         <p class="card-description">مساعدة فورية عبر برامج التحكم عن بعد (TeamViewer, AnyDesk) لحل مشكلتك مباشرة وبأمان تام.</p>
                         <a href="#contact" class="btn btn-primary">اطلب الخدمة</a>
                     </article>
-                    <article class="service-card">
+                    <article class="service-card fade-in" data-animation="zoom-in" data-delay="400">
                         <div class="card-icon"><i class="fas fa-file-archive"></i></div>
                         <h3 class="card-title">استرجاع الملفات</h3>
                         <p class="card-description">محاولات متقدمة لاسترجاع الملفات المحذوفة أو المفقودة نتيجة للأعطال أو الحذف الخاطئ (حسب الحالة).</p>
                         <a href="#contact" class="btn btn-primary">اطلب الخدمة</a>
                     </article>
-                    <article class="service-card">
+                    <article class="service-card fade-in" data-animation="zoom-in" data-delay="500">
                         <div class="card-icon"><i class="fas fa-wifi"></i></div>
                         <h3 class="card-title">إعداد الشبكات المنزلية</h3>
                         <p class="card-description">مساعدة في تكوين وإعداد الشبكات اللاسلكية (Wi-Fi) وحل مشاكل الاتصال بالإنترنت في منزلك.</p>
@@ -89,9 +102,12 @@
 
         <section id="pricing" class="section pricing-section">
             <div class="container">
-                <h2 class="section-title">باقات أسعار مرنة تناسب احتياجاتك</h2>
+                <div class="section-header fade-in" data-animation="fade-in">
+                    <h2 class="section-title">باقات أسعار مرنة تناسب احتياجاتك</h2>
+                    <p class="section-subtitle">اختر الباقة التي تناسبك وابدأ في تحسين أداء جهازك اليوم.</p>
+                </div>
                 <div class="pricing-grid">
-                    <article class="pricing-card">
+                    <article class="pricing-card fade-in" data-animation="slide-up" data-delay="0">
                         <h3 class="pricing-card-title">الباقة الأساسية</h3>
                         <p class="pricing-card-price">500 <span class="currency">دج</span></p>
                         <ul class="pricing-card-features">
@@ -103,7 +119,7 @@
                         <a href="#contact" class="btn btn-secondary-outline btn-block">اختر الباقة</a>
                     </article>
 
-                    <article class="pricing-card popular">
+                    <article class="pricing-card popular fade-in" data-animation="slide-up" data-delay="200">
                         <span class="popular-badge">الأكثر طلباً</span>
                         <h3 class="pricing-card-title">الباقة المتقدمة</h3>
                         <p class="pricing-card-price">1500 <span class="currency">دج</span></p>
@@ -116,7 +132,7 @@
                         <a href="#contact" class="btn btn-primary btn-block">اختر الباقة</a>
                     </article>
 
-                    <article class="pricing-card">
+                    <article class="pricing-card fade-in" data-animation="slide-up" data-delay="400">
                         <h3 class="pricing-card-title">الباقة الاحترافية</h3>
                         <p class="pricing-card-price">2500 <span class="currency">دج</span></p>
                         <ul class="pricing-card-features">
@@ -133,17 +149,19 @@
 
         <section id="about" class="section about-section">
             <div class="container">
-                <h2 class="section-title">من نحن؟ فريق شغوف بالتكنولوجيا في خدمتك</h2>
-                <div class="about-content">
-                    <div class="about-text">
+                <div class="section-header fade-in" data-animation="fade-in">
+                    <h2 class="section-title">من نحن؟ فريق شغوف بالتكنولوجيا في خدمتك</h2>
+                </div>
+                <div class="about-grid">
+                    <div class="about-text fade-in" data-animation="slide-from-right">
                         <p>Fixit Dz هي مبادرة شبابية جزائرية يقودها سي الطيب توفيق، طالب متخصص في إدارة وأمن الشبكات. نؤمن بأن التكنولوجيا يجب أن تكون سهلة ومتاحة للجميع. هدفنا هو تقديم حلول دعم فني سريعة، فعالة، وموثوقة عن بعد، لمساعدتك على تجاوز أي تحديات تقنية تواجهها مع حاسوبك.</p>
                         <p>نحن هنا لتبسيط الأمور المعقدة، وتقديم خبرتنا لضمان عمل جهازك بأفضل أداء ممكن. سواء كنت تواجه مشكلة في النظام، بطء في الأداء، أو هجوم فيروسات، فريقنا جاهز لتقديم المساعدة التي تحتاجها وأنت مرتاح في منزلك.</p>
                     </div>
-                    <div class="about-image">
-                        <img src="https://placehold.co/400x400/1f3c88/ffffff?text=Fixit+Dz+Team" alt="[صورة فريق Fixit Dz أو سي الطيب توفيق]">
+                    <div class="about-image fade-in" data-animation="slide-from-left">
+                        <img src="https://placehold.co/450x350/1a1f2b/ff914d?text=Si+Tayeb+Toufik" alt="سي الطيب توفيق - مؤسس Fixit Dz" class="rounded-image">
                     </div>
                 </div>
-                 <div class="designer-info" style="text-align: center; margin-top: 2rem; padding:1rem; background-color: var(--background-light-gray); border-radius: var(--border-radius-md);">
+                 <div class="designer-info fade-in" data-animation="fade-in" style="text-align: center; margin-top: 3rem; padding:1.5rem; background-color: var(--secondary-color); border-radius: var(--border-radius-md);">
                     <p><strong>سي الطيب توفيق</strong></p>
                     <p>مؤسس Fixit Dz | طالب تخصص إدارة وأمن الشبكات (BTS)</p>
                 </div>
@@ -152,11 +170,13 @@
 
         <section id="testimonials" class="section testimonials-section">
             <div class="container">
-                <h2 class="section-title">ماذا يقول عملاؤنا السعداء؟</h2>
+                <div class="section-header fade-in" data-animation="fade-in">
+                    <h2 class="section-title">ماذا يقول عملاؤنا السعداء؟</h2>
+                </div>
                 <div class="testimonials-grid">
-                    <article class="testimonial-card">
+                    <article class="testimonial-card fade-in" data-animation="zoom-in" data-delay="0">
                         <div class="testimonial-author-info">
-                            <img src="https://placehold.co/80x80/ff7f11/ffffff?text=A" alt="[صورة العميل أحمد]" class="testimonial-avatar">
+                            <img src="https://placehold.co/80x80/ff7f11/ffffff?text=أ" alt="صورة العميل أحمد" class="testimonial-avatar">
                             <div>
                                 <h4 class="testimonial-author-name">أحمد. م</h4>
                                 <p class="testimonial-author-title">مطور ويب</p>
@@ -164,9 +184,9 @@
                         </div>
                         <p class="testimonial-text">"خدمة سريعة واحترافية! تم حل مشكلة بطء جهازي في وقت قياسي. أنصح بشدة بخدمات Fixit Dz لكل من يبحث عن دعم فني موثوق."</p>
                     </article>
-                    <article class="testimonial-card">
+                    <article class="testimonial-card fade-in" data-animation="zoom-in" data-delay="200">
                          <div class="testimonial-author-info">
-                            <img src="https://placehold.co/80x80/28a745/ffffff?text=F" alt="[صورة العميلة فاطمة]" class="testimonial-avatar">
+                            <img src="https://placehold.co/80x80/28a745/ffffff?text=ف" alt="صورة العميلة فاطمة" class="testimonial-avatar">
                             <div>
                                 <h4 class="testimonial-author-name">فاطمة. ز</h4>
                                 <p class="testimonial-author-title">طالبة جامعية</p>
@@ -174,9 +194,9 @@
                         </div>
                         <p class="testimonial-text">"كنت أعاني من فيروسات مزعجة ولم أستطع إزالتها. فريق Fixit Dz قام بتنظيف جهازي بالكامل عن بعد. شكراً جزيلاً على المساعدة الرائعة!"</p>
                     </article>
-                    <article class="testimonial-card">
+                    <article class="testimonial-card fade-in" data-animation="zoom-in" data-delay="400">
                         <div class="testimonial-author-info">
-                            <img src="https://placehold.co/80x80/1f3c88/ffffff?text=Y" alt="[صورة العميل يوسف]" class="testimonial-avatar">
+                            <img src="https://placehold.co/80x80/1f3c88/ffffff?text=ي" alt="صورة العميل يوسف" class="testimonial-avatar">
                             <div>
                                 <h4 class="testimonial-author-name">يوسف. ك</h4>
                                 <p class="testimonial-author-title">صاحب عمل حر</p>
@@ -190,8 +210,12 @@
 
         <section id="contact" class="section contact-form-section">
             <div class="container">
-                <h2 class="section-title">هل أنت جاهز لحل مشاكل حاسوبك؟ تواصل معنا الآن!</h2>
-                <form class="contact-form" action="#" method="POST"> <div class="form-message-area"></div> <div class="form-group">
+                 <div class="section-header fade-in" data-animation="fade-in">
+                    <h2 class="section-title">هل أنت جاهز لحل مشاكل حاسوبك؟</h2>
+                    <p class="section-subtitle">تواصل معنا الآن وسنكون سعداء بمساعدتك!</p>
+                </div>
+                <form class="contact-form fade-in" data-animation="slide-up" action="#" method="POST">
+                    <div class="form-message-area"></div> <div class="form-group">
                         <label for="name" class="form-label">الاسم الكامل:</label>
                         <input type="text" id="name" name="name" class="form-input" placeholder="مثال: محمد أحمد" required>
                     </div>
@@ -242,9 +266,10 @@
         </div>
     </footer>
 
-    <a href="#" class="scroll-to-top-button" aria-label="العودة للأعلى" title="العودة للأعلى">
+    <a href="#" class="scroll-to-top-button" id="scrollToTopBtn" aria-label="العودة للأعلى" title="العودة للأعلى">
         <i class="fas fa-arrow-up"></i>
     </a>
 
-    <script src="script.js"></script> </body>
+    <script src="script.js"></script>
+</body>
 </html>
