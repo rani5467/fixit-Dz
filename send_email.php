@@ -1,91 +1,78 @@
 <?php
-// تفعيل عرض الأخطاء لأغراض التطوير فقط (احذفها أو علّقها في البيئة الإنتاجية)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Set the content type to application/json for AJAX requests
+header('Content-Type: application/json; charset=utf-8');
 
-// تعيين رؤوس الاستجابة للسماح بطلبات AJAX من أي مصدر (للتطوير المحلي)
-// في البيئة الإنتاجية، يجب تحديد المصدر المسموح به بدلاً من '*'
-header("Access-Control-Allow-Origin: *"); //  مهم إذا كان ملف PHP وملف HTML على نطاقات مختلفة
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Max-Age: 3600");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+// --- Configuration ---
+$recipient_email = "sitayebtoufik0@gmail.com"; // The email address where you want to receive messages
+$email_subject_prefix = "[Fixit Dz Contact Form]"; // Prefix for the email subject
 
-// التأكد من أن الطلب هو POST
+// --- Error Reporting (Enable for debugging, disable for production) ---
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+// --- Check if the form was submitted via POST ---
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // استقبال البيانات الخام من الطلب (أفضل عند إرسال JSON من JavaScript)
-    // $data = json_decode(file_get_contents("php://input"));
+    // --- Get and Sanitize Form Data ---
+    // htmlspecialchars is used to prevent XSS attacks
+    // trim removes whitespace from the beginning and end of the string
+    $name = isset($_POST['name']) ? trim(htmlspecialchars($_POST['name'])) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $service = isset($_POST['service']) ? trim(htmlspecialchars($_POST['service'])) : 'N/A';
+    $message_body = isset($_POST['message']) ? trim(htmlspecialchars($_POST['message'])) : '';
 
-    // أو استقبال البيانات من النموذج التقليدي (إذا لم يتم إرسالها كـ JSON)
-    // في هذه الحالة، سنفترض أن JavaScript يرسل FormData أو أن النموذج يرسل تقليدياً.
-    // إذا كان JavaScript يرسل JSON، استخدم الطريقة الأولى (json_decode) وعدّل JavaScript.
-
-    $name = isset($_POST["name"]) ? strip_tags(trim($_POST["name"])) : "غير متوفر";
-    $email_address = isset($_POST["email"]) ? filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL) : "غير متوفر";
-    $service = isset($_POST["service"]) && $_POST["service"] !== "" ? strip_tags(trim($_POST["service"])) : "غير محدد";
-    $message_text = isset($_POST["message"]) ? strip_tags(trim($_POST["message"])) : "لا يوجد نص رسالة.";
-
-    // التحقق من الحقول المطلوبة
-    if (empty($name) || $name === "غير متوفر" || empty($email_address) || $email_address === "غير متوفر" || !filter_var($email_address, FILTER_VALIDATE_EMAIL) || empty($message_text) || $message_text === "لا يوجد نص رسالة.") {
-        http_response_code(400); // Bad Request
-        echo json_encode(["status" => "error", "message" => "خطأ: الرجاء ملء جميع الحقول المطلوبة بشكل صحيح."]);
+    // --- Basic Validation ---
+    if (empty($name)) {
+        echo json_encode(['status' => 'error', 'message' => 'الرجاء إدخال الاسم الكامل.']);
+        exit;
+    }
+    if (empty($email)) {
+        echo json_encode(['status' => 'error', 'message' => 'الرجاء إدخال عنوان بريدك الإلكتروني.']);
+        exit;
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode(['status' => 'error', 'message' => 'الرجاء إدخال عنوان بريد إلكتروني صالح.']);
+        exit;
+    }
+    if (empty($message_body)) {
+        echo json_encode(['status' => 'error', 'message' => 'الرجاء كتابة رسالتك أو وصف المشكلة.']);
         exit;
     }
 
-    // عنوان البريد الإلكتروني الذي ستستقبل عليه الرسائل
-    $recipient = "sitayebtoufik0@gmail.com";
-    $subject = "طلب خدمة جديد من موقع Fixit Dz من: " . $name;
+    // --- Construct Email ---
+    $subject = $email_subject_prefix . " New message from " . $name;
 
-    // بناء محتوى البريد الإلكتروني بتنسيق HTML (من اليمين لليسار للغة العربية)
-    $email_body = "<!DOCTYPE html><html lang='ar' dir='rtl'><head><meta charset='UTF-8'></head><body style='font-family: Arial, sans-serif; direction: rtl; text-align: right;'>";
-    $email_body .= "<div style='max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9;'>";
-    $email_body .= "<h2 style='color: #1f3c88; border-bottom: 2px solid #ff7f11; padding-bottom: 10px;'>طلب خدمة جديد من موقع Fixit Dz</h2>";
-    
-    $email_body .= "<table style='width: 100%; border-collapse: collapse;'>";
-    $email_body .= "<tr><td style='padding: 8px; border-bottom: 1px solid #eee; background-color: #f0f5ff; font-weight: bold; width: 120px;'>الاسم:</td><td style='padding: 8px; border-bottom: 1px solid #eee;'>" . htmlspecialchars($name) . "</td></tr>";
-    $email_body .= "<tr><td style='padding: 8px; border-bottom: 1px solid #eee; background-color: #f0f5ff; font-weight: bold;'>البريد الإلكتروني:</td><td style='padding: 8px; border-bottom: 1px solid #eee;'><a href='mailto:" . htmlspecialchars($email_address) . "'>" . htmlspecialchars($email_address) . "</a></td></tr>";
-    $email_body .= "<tr><td style='padding: 8px; border-bottom: 1px solid #eee; background-color: #f0f5ff; font-weight: bold;'>الخدمة المطلوبة:</td><td style='padding: 8px; border-bottom: 1px solid #eee;'>" . htmlspecialchars($service) . "</td></tr>";
-    $email_body .= "</table>";
+    $email_content = "You have received a new message from your Fixit Dz website contact form:\n\n";
+    $email_content .= "Name: " . $name . "\n";
+    $email_content .= "Email: " . $email . "\n";
+    $email_content .= "Service Requested: " . $service . "\n\n";
+    $email_content .= "Message:\n" . $message_body . "\n\n";
+    $email_content .= "-------------------------------------\n";
+    $email_content .= "This email was sent from the contact form on your website.";
 
-    $email_body .= "<h3 style='color: #1f3c88; margin-top: 20px;'>نص الرسالة:</h3>";
-    $email_body .= "<div style='border: 1px solid #e0e0e0; padding: 15px; background-color: #ffffff; border-radius: 5px; min-height: 100px; white-space: pre-wrap; line-height: 1.6;'>";
-    $email_body .= nl2br(htmlspecialchars($message_text)); // nl2br للحفاظ على فواصل الأسطر
-    $email_body .= "</div>";
+    // Email Headers
+    // Using the sender's email in "Reply-To" is good practice.
+    // For the "From" header, it's often better to use an email address from your own domain
+    // to avoid emails being marked as spam. Some servers might also restrict this.
+    // For simplicity, we'll use the sender's email here, but be aware of potential deliverability issues.
+    $headers = "From: Fixit Dz Contact <noreply@yourdomain.com>\r\n"; // Replace yourdomain.com with your actual domain
+    $headers .= "Reply-To: " . $email . "\r\n";
+    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "X-Mailer: PHP/" . phpversion();
 
-    $email_body .= "<p style='margin-top: 30px; font-size: 0.9em; color: #7f8c8d; text-align: center;'>تم إرسال هذه الرسالة من نموذج الاتصال بموقع Fixit Dz بتاريخ: " . date("Y-m-d H:i:s") . "</p>";
-    $email_body .= "</div>";
-    $email_body .= "</body></html>";
-
-    // تعيين رؤوس البريد لإرسال HTML
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    // استخدم عنوان بريد إلكتروني موجود على نطاق الخادم الخاص بك كمرسل لتجنب مشاكل السمعة (Spam)
-    // إذا كان الخادم يسمح بذلك، وإلا استخدم عنوان افتراضي.
-    $server_email = "noreply@" . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'fixit.dz');
-    $headers .= "From: Fixit Dz <" . $server_email . ">" . "\r\n";
-    $headers .= "Reply-To: " . htmlspecialchars($name) . " <" . htmlspecialchars($email_address) . ">" . "\r\n";
-    // $headers .= "X-Mailer: PHP/" . phpversion(); // اختياري
-
-    // محاولة إرسال البريد
-    if (mail($recipient, $subject, $email_body, $headers)) {
-        http_response_code(200); // OK
-        echo json_encode(["status" => "success", "message" => "تم إرسال رسالتك بنجاح! سنتواصل معك قريباً."]);
+    // --- Send Email ---
+    if (mail($recipient_email, $subject, $email_content, $headers)) {
+        echo json_encode(['status' => 'success', 'message' => 'تم إرسال رسالتك بنجاح! سيتم التواصل معك قريباً.']);
     } else {
-        http_response_code(500); // Internal Server Error
-        // محاولة طباعة خطأ دالة mail (قد لا تعمل على كل الخوادم)
-        $last_error = error_get_last();
-        $error_message = "عذراً، حدث خطأ أثناء محاولة إرسال الرسالة.";
-        if ($last_error !== null && isset($last_error['message'])) {
-            $error_message .= " (خطأ الخادم: " . $last_error['message'] . ")";
-        }
-        echo json_encode(["status" => "error", "message" => $error_message]);
+        // Log the error for server-side debugging
+        error_log("PHP mail() failed for: " . $recipient_email . " from " . $email);
+        echo json_encode(['status' => 'error', 'message' => 'عذرًا، حدث خطأ أثناء محاولة إرسال رسالتك. يرجى المحاولة مرة أخرى لاحقًا أو التواصل معنا بطريقة أخرى.']);
     }
 
 } else {
-    // إذا لم يكن الطلب POST
+    // Not a POST request, forbid access
     http_response_code(405); // Method Not Allowed
-    echo json_encode(["status" => "error", "message" => "خطأ: طريقة الطلب غير مسموح بها."]);
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
 ?>
