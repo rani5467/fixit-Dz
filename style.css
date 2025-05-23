@@ -13,7 +13,7 @@
     --text-color-muted-dark: #b0b0b0;
     --bg-color-dark: #12161c;
     --card-bg-dark: rgba(30, 36, 47, 0.85);
-    --card-bg-rgb-dark: 30, 36, 47; /* For potential use in gradients */
+    --card-bg-rgb-dark: 30, 36, 47;
     --border-color-dark: rgba(255, 255, 255, 0.1);
     --shadow-color-dark: rgba(0, 0, 0, 0.25);
     --glow-color-dark: rgba(var(--accent-color-rgb-dark), 0.4);
@@ -21,26 +21,30 @@
     --input-border-dark: #4a5568;
     --placeholder-color-dark: var(--text-color-muted-dark);
     --designer-info-bg-dark: var(--secondary-color-dark);
-    --overlay-bg-dark: rgba(18, 22, 28, 0.88);
+    --overlay-bg-dark: rgba(18, 22, 28, 0.88); /* Overlay for dark mode background image */
+    --hero-highlight-gradient-dark: linear-gradient(45deg, #ff914d, #ffcc70);
+    --btn-primary-text-dark: var(--primary-color-dark); /* Text color for primary buttons in dark mode */
 
     /* Light Mode Variables */
-    --primary-color-light: #f4f7f6; /* Light gray page background */
-    --secondary-color-light: #ffffff; /* White for cards, header background */
-    --accent-color-light: #e67e22; /* A slightly deeper orange for better contrast on light */
-    --accent-color-rgb-light: 230, 126, 34;
-    --text-color-light: #333333; /* Dark gray for text */
+    --primary-color-light: #ffffff; /* Main background for light mode - WHITE */
+    --secondary-color-light: #f8f9fa; /* Slightly off-white for cards/header */
+    --accent-color-light: #ff7f00; /* A vibrant orange for light mode */
+    --accent-color-rgb-light: 255, 127, 0;
+    --text-color-light: #212529; /* Dark text for light mode */
     --text-color-muted-light: #6c757d; /* Medium gray for muted text */
-    --bg-color-light: #e9ecef; /* Very light gray for body background */
-    --card-bg-light: rgba(255, 255, 255, 0.9); /* Slightly transparent white for cards */
-    --card-bg-rgb-light: 255, 255, 255; /* For potential use in gradients */
-    --border-color-light: rgba(0, 0, 0, 0.1);
+    --bg-color-light: #ffffff; /* Body background is white */
+    --card-bg-light: #ffffff; /* Cards are white */
+    --card-bg-rgb-light: 255, 255, 255;
+    --border-color-light: #dee2e6; /* Light gray borders */
     --shadow-color-light: rgba(0, 0, 0, 0.1);
-    --glow-color-light: rgba(var(--accent-color-rgb-light), 0.3);
+    --glow-color-light: rgba(var(--accent-color-rgb-light), 0.2); /* Softer glow for light mode */
     --input-bg-light: #ffffff;
     --input-border-light: #ced4da;
-    --placeholder-color-light: #999;
-    --designer-info-bg-light: #e0e0e0;
-    --overlay-bg-light: rgba(255, 255, 255, 0.75);
+    --placeholder-color-light: #6c757d;
+    --designer-info-bg-light: #f1f3f5; /* Light gray for designer info */
+    --overlay-bg-light: rgba(255, 255, 255, 0); /* No overlay needed for plain white background, or very subtle if using a light pattern */
+    --hero-highlight-gradient-light: linear-gradient(45deg, #ff7f00, #ffaa33);
+    --btn-primary-text-light: #ffffff; /* Text color for primary buttons in light mode */
 
 
     /* Universal Variables */
@@ -68,6 +72,8 @@
     --placeholder-color: var(--placeholder-color-dark);
     --designer-info-bg: var(--designer-info-bg-dark);
     --overlay-bg: var(--overlay-bg-dark);
+    --hero-highlight-gradient: var(--hero-highlight-gradient-dark);
+    --btn-primary-text: var(--btn-primary-text-dark);
 }
 
 body.light-mode {
@@ -88,6 +94,8 @@ body.light-mode {
     --placeholder-color: var(--placeholder-color-light);
     --designer-info-bg: var(--designer-info-bg-light);
     --overlay-bg: var(--overlay-bg-light);
+    --hero-highlight-gradient: var(--hero-highlight-gradient-light);
+    --btn-primary-text: var(--btn-primary-text-light);
 }
 
 /* Basic Reset & Body Styles */
@@ -104,18 +112,28 @@ html {
 
 body {
     font-family: var(--font-family);
-    background-image: url('https://i.ibb.co/j3L3N7Y/v1016-b-09.jpg'); /* User-provided background */
+    /* If you want a white background ALWAYS, set it here directly and remove the image for light mode */
+    /* background-image: none; */
+    /* background-color: #ffffff; */
+
+    /* If you want the image for dark mode and white for light mode: */
+    background-image: url('https://i.ibb.co/j3L3N7Y/v1016-b-09.jpg'); /* Default background for dark mode */
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-color: var(--bg-color);
+    background-color: var(--bg-color); /* Theme-dependent background color */
     color: var(--text-color);
     line-height: 1.7;
     overflow-x: hidden;
     position: relative;
     z-index: 0;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
+}
+
+body.light-mode {
+    background-image: none; /* Remove background image in light mode for a plain white background */
+    background-color: var(--bg-color-light); /* This is #ffffff */
 }
 
 body::before {
@@ -127,11 +145,13 @@ body::before {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--overlay-bg); /* Use theme variable for overlay */
+    background-color: var(--overlay-bg); /* Theme-dependent overlay */
     z-index: -1;
     transition: background-color 0.3s ease;
+    pointer-events: none; /* Make sure overlay doesn't interfere with clicks */
 }
 
+/* Container, Sections, Main, Footer: Ensure these are above the overlay */
 .container,
 .section,
 main,
@@ -141,7 +161,7 @@ main,
 }
 
 .section {
-    padding: 70px 0; /* Standardized section padding */
+    padding: 70px 0;
 }
 
 .section-header {
@@ -166,14 +186,13 @@ main,
 }
 
 /* Header Styling */
-.navbar { /* This is the class for your header element */
+.navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     padding: 0.8rem 2%;
-    background: rgba(30, 36, 47, 0.75); /* Fallback if --primary-color-rgb-dark is not defined early */
-    background: rgba(var(--primary-color-rgb, 30, 36, 47), 0.75); /* Default dark mode header */
+    background: rgba(var(--primary-color-rgb-dark), 0.75); /* Default dark mode header */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     display: flex;
@@ -185,16 +204,18 @@ main,
     min-height: 60px;
 }
 body.light-mode .navbar {
-    background: rgba(244, 247, 246, 0.85); /* Light mode header */
+    background: rgba(248, 249, 250, 0.85); /* Light mode header (using --secondary-color-light with opacity) */
+    box-shadow: 0 2px 8px var(--shadow-color);
+    border-bottom: 1px solid var(--border-color-light); /* Add a subtle border for light mode header */
 }
 
 .navbar.scrolled {
-    background: rgba(var(--primary-color-rgb, 20, 25, 35), 0.95); /* Darker on scroll */
+    background: rgba(var(--primary-color-rgb-dark), 0.95);
     padding: 0.6rem 2%;
     box-shadow: 0 4px 15px var(--shadow-color);
 }
 body.light-mode .navbar.scrolled {
-    background: rgba(255, 255, 255, 0.95); /* Lighter on scroll for light mode */
+    background: rgba(255, 255, 255, 0.95); /* White scrolled header for light mode */
 }
 
 .navbar .container {
@@ -223,11 +244,14 @@ body.light-mode .navbar.scrolled {
     width: auto;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-/* Optional: if you have a different logo version for light mode */
-/* body.light-mode .logo-img {
-    filter: invert(1) hue-rotate(180deg);
-} */
-
+/* In light mode, if the logo is dark on a transparent BG, it's fine.
+   If the logo itself has a dark background (like the ibb.co one), it might look odd on a white header.
+   Consider a version of the logo for light backgrounds. */
+/*
+body.light-mode .logo-img {
+    filter: brightness(0.1); // Example: Invert or darken if logo is light
+}
+*/
 
 .nav-logo:hover .logo-img {
     transform: scale(1.1) rotate(-5deg);
@@ -236,7 +260,7 @@ body.light-mode .navbar.scrolled {
 .logo-text-fallback {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--accent-color); /* Ensure visibility */
+    color: var(--accent-color);
 }
 
 .nav-links-container {
@@ -247,7 +271,7 @@ body.light-mode .navbar.scrolled {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 1.5rem; /* Space between nav links */
+    gap: 1.5rem;
     margin: 0;
     padding: 0;
 }
@@ -269,8 +293,8 @@ body.light-mode .navbar.scrolled {
 .nav-link::before {
     content: '';
     position: absolute;
-    bottom: 0; /* Underline position */
-    right: 0; /* Adjusted for RTL */
+    bottom: 0;
+    right: 0;
     width: 0;
     height: 2px;
     background: var(--accent-color);
@@ -280,7 +304,7 @@ body.light-mode .navbar.scrolled {
 .nav-link:hover::before,
 .nav-link.active::before {
     width: 100%;
-    left: 0; /* Ensure it expands from the correct side in RTL */
+    left: 0;
     right: auto;
 }
 
@@ -290,57 +314,55 @@ body.light-mode .navbar.scrolled {
 }
 
 .menu-toggle {
-    display: none; /* Hidden by default, shown in media query */
+    display: none;
     flex-direction: column;
     justify-content: space-around;
-    width: 28px; /* Slightly smaller */
-    height: 22px; /* Slightly smaller */
+    width: 28px;
+    height: 22px;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 1005; /* Ensure it's above other header elements */
+    z-index: 1005;
 }
 
 .menu-toggle span {
     width: 100%;
     height: 3px;
-    background-color: var(--text-color);
+    background-color: var(--text-color); /* Will change with theme */
     border-radius: 10px;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-/* Hamburger to X animation */
 .menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px); /* Adjusted for new size */
+    transform: rotate(45deg) translate(6px, 6px);
 }
 .menu-toggle.active span:nth-child(2) {
     opacity: 0;
 }
 .menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px); /* Adjusted for new size */
+    transform: rotate(-45deg) translate(6px, -6px);
 }
 
 /* Theme Toggle Switch */
 .theme-switch-wrapper {
     display: flex;
     align-items: center;
-    margin-right: 1rem; /* For RTL, this should be margin-left */
+    margin-right: 1rem; /* RTL */
 }
 html[dir="rtl"] .theme-switch-wrapper {
     margin-right: 0;
-    margin-left: 1rem; /* Space from the menu toggle on mobile */
+    margin-left: 1rem;
 }
 html[dir="ltr"] .theme-switch-wrapper {
-    margin-left: 1rem; /* Space from nav links on desktop */
+    margin-left: 1rem; /* LTR */
 }
-
 
 .theme-switch {
     display: inline-block;
-    height: 22px; /* Slightly smaller */
+    height: 22px;
     position: relative;
-    width: 44px;  /* Slightly smaller */
+    width: 44px;
 }
 
 .theme-switch input {
@@ -356,19 +378,19 @@ html[dir="ltr"] .theme-switch-wrapper {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--secondary-color); /* Uses theme's secondary color for the track */
+    background-color: var(--secondary-color);
     transition: .4s;
-    border-radius: 22px; /* Keep it rounded */
+    border-radius: 22px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 16px; /* Adjusted size */
-    width: 16px;  /* Adjusted size */
-    left: 3px;    /* Adjusted position */
-    bottom: 3px;  /* Adjusted position */
-    background-color: white; /* Knob color for dark mode */
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff; /* Knob color for dark mode */
     transition: .4s;
     border-radius: 50%;
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
@@ -377,24 +399,22 @@ body.light-mode .slider:before {
     background-color: var(--primary-color-dark); /* Dark knob for light mode */
 }
 
-
 input:checked + .slider { /* Light mode active */
     background-color: var(--accent-color);
 }
-body.light-mode input:checked + .slider {
-    background-color: var(--accent-color-light); /* Use light mode accent for slider background */
+body.light-mode input:checked + .slider { /* Slider background when light mode is active */
+    background-color: var(--accent-color-light);
 }
 
-
 input:checked + .slider:before {
-    transform: translateX(22px); /* Adjusted translation */
+    transform: translateX(22px);
 }
 
 .theme-switch-wrapper .icon {
-    color: var(--text-color-muted); /* Muted by default */
-    font-size: 1.1rem; /* Adjusted icon size */
+    font-size: 1.1rem;
     margin: 0 0.5rem;
     transition: color 0.3s ease;
+    color: var(--text-color-muted); /* Default icon color */
 }
 
 body.light-mode .theme-switch-wrapper .icon.fa-sun {
@@ -402,6 +422,12 @@ body.light-mode .theme-switch-wrapper .icon.fa-sun {
 }
 body:not(.light-mode) .theme-switch-wrapper .icon.fa-moon {
     color: var(--accent-color); /* Moon icon active in dark mode */
+}
+body.light-mode .theme-switch-wrapper .icon.fa-moon {
+    color: var(--text-color-muted); /* Moon icon inactive in light mode */
+}
+body:not(.light-mode) .theme-switch-wrapper .icon.fa-sun {
+    color: var(--text-color-muted); /* Sun icon inactive in dark mode */
 }
 
 
@@ -411,7 +437,7 @@ body:not(.light-mode) .theme-switch-wrapper .icon.fa-moon {
     display: flex;
     align-items: center;
     text-align: center;
-    padding-top: calc(60px + 3rem); /* header height + extra padding */
+    padding-top: calc(60px + 3rem);
     padding-bottom: 3rem;
 }
 
@@ -428,7 +454,7 @@ body:not(.light-mode) .theme-switch-wrapper .icon.fa-moon {
 }
 
 .hero-title {
-    font-size: clamp(2.2rem, 5.5vw, 3.5rem); /* Adjusted for better balance */
+    font-size: clamp(2.2rem, 5.5vw, 3.5rem);
     margin-bottom: 1rem;
     line-height: 1.3;
     font-weight: 700;
@@ -436,16 +462,12 @@ body:not(.light-mode) .theme-switch-wrapper .icon.fa-moon {
 }
 
 .hero-title .highlight {
-    background: var(--gradient); /* This will use the current theme's accent color */
+    background: var(--hero-highlight-gradient); /* Use theme variable */
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
-body.light-mode .hero-title .highlight {
-    background: linear-gradient(45deg, var(--accent-color-light), #ffc107); /* Adjusted light mode highlight */
-}
-
 
 .cursor {
     display: inline-block;
@@ -453,7 +475,7 @@ body.light-mode .hero-title .highlight {
     width: 3px;
     height: 0.9em;
     animation: blink 1s step-end infinite;
-    margin-right: 2px; /* RTL */
+    margin-right: 2px;
     vertical-align: baseline;
 }
 
@@ -493,7 +515,7 @@ body.light-mode .hero-title .highlight {
 
 .btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px var(--glow-color); /* Use theme glow */
+    box-shadow: 0 6px 12px var(--glow-color);
 }
 
 .btn:active {
@@ -501,18 +523,17 @@ body.light-mode .hero-title .highlight {
     box-shadow: 0 3px 6px rgba(var(--accent-color-rgb), 0.25);
 }
 
-.btn.btn-pressed { /* For JS click effect */
+.btn.btn-pressed {
     transform: translateY(1px) scale(0.98);
     box-shadow: 0 2px 5px rgba(var(--accent-color-rgb), 0.2);
 }
 
 .btn-primary {
-    background: var(--gradient); /* Uses theme's gradient */
-    color: var(--primary-color-dark); /* Dark text on orange gradient */
+    background: var(--gradient); /* This will use the theme-specific gradient if defined, or general accent */
+    color: var(--btn-primary-text); /* Use theme variable for text color */
 }
 body.light-mode .btn-primary {
-    color: #fff; /* White text on orange for light mode */
-    background: linear-gradient(45deg, var(--accent-color-light), #ffae42);
+    background: linear-gradient(45deg, var(--accent-color-light), #ffae42); /* Specific gradient for light mode */
 }
 
 
@@ -529,26 +550,25 @@ body.light-mode .btn-primary {
 
 .btn-secondary-outline:hover {
     background: var(--accent-color);
-    color: var(--primary-color-dark); /* Dark text on accent */
+    color: var(--primary-color-dark); /* Text color for dark mode */
 }
 body.light-mode .btn-secondary-outline:hover {
-    color: var(--secondary-color-light); /* White text on accent */
+    color: var(--secondary-color-light); /* Text color for light mode */
 }
 
 
 .btn-purchase {
     background: var(--accent-color);
-    color: white; /* Text color for purchase button */
+    color: white;
 }
 body.light-mode .btn-purchase {
-    color: var(--primary-color-dark); /* Dark text on accent for light mode if needed */
+    color: var(--primary-color-dark); /* Dark text on orange for light mode */
 }
-
 .btn-purchase:hover {
     background: linear-gradient(45deg, #e87a3d, #fd833c);
 }
 body.light-mode .btn-purchase:hover {
-    background: linear-gradient(45deg, #d96d00, #ff8000); /* Darker orange for light mode hover */
+    background: linear-gradient(45deg, #d96d00, #ff8000);
 }
 
 .btn-block {
@@ -569,15 +589,12 @@ body.light-mode .btn-purchase:hover {
     padding: 8px;
     border-radius: 50%;
     overflow: hidden;
-    background-color: rgba(var(--card-bg-rgb), 0.3); /* Using theme variable */
+    background-color: rgba(var(--card-bg-rgb), 0.3); /* Use theme variable */
     width: 180px;
     height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-body.light-mode .gradient-border-wrapper {
-    background-color: rgba(var(--card-bg-rgb-light), 0.3);
 }
 
 .gradient-border {
@@ -594,7 +611,7 @@ body.light-mode .gradient-border-wrapper {
     100% { transform: rotate(360deg); }
 }
 
-.profile-image { /* This class is used for the logo in the hero */
+.profile-image {
     width: 85%;
     height: 85%;
     object-fit: contain;
@@ -607,17 +624,16 @@ body.light-mode .gradient-border-wrapper {
 /* About Section */
 .about-section .about-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Default to single column */
+    grid-template-columns: 1fr;
     gap: 2.5rem;
     align-items: center;
 }
 
-@media (min-width: 768px) { /* Two columns for medium screens and up */
+@media (min-width: 768px) {
     .about-section .about-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 }
-
 
 .about-text h3 {
     font-size: 1.6rem;
@@ -651,16 +667,16 @@ body.light-mode .gradient-border-wrapper {
 }
 .skill-item:hover {
     background-color: var(--accent-color);
-    color: var(--primary-color-dark);
+    color: var(--primary-color-dark); /* Dark text on accent */
     transform: translateY(-2px) scale(1.03);
 }
 body.light-mode .skill-item {
-    background: #e0e0e0;
-    color: var(--text-color-light);
+    background: #e0e0e0; /* Light gray for light mode */
+    color: var(--text-color-light); /* Dark text on light gray */
 }
 body.light-mode .skill-item:hover {
     background-color: var(--accent-color);
-    color: #fff;
+    color: #fff; /* White text on accent for light mode */
 }
 
 .about-image img.rounded-image {
@@ -683,7 +699,7 @@ body.light-mode .skill-item:hover {
     text-align: center;
     margin-top: 2.5rem;
     padding: 1.2rem;
-    background-color: var(--designer-info-bg);
+    background-color: var(--designer-info-bg); /* Theme variable */
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-light);
 }
@@ -780,7 +796,7 @@ body.light-mode .skill-item:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(rgba(var(--primary-color-rgb-dark), 0.7), rgba(var(--primary-color-rgb-dark), 0.98));
+    background: linear-gradient(rgba(var(--card-bg-rgb-dark), 0.7), rgba(var(--card-bg-rgb-dark), 0.98)); /* Use dark card bg for overlay */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -792,7 +808,7 @@ body.light-mode .skill-item:hover {
     border-radius: var(--border-radius-md);
 }
 body.light-mode .project-overlay {
-    background: linear-gradient(rgba(var(--primary-color-rgb-light), 0.7), rgba(var(--primary-color-rgb-light), 0.98));
+    background: linear-gradient(rgba(var(--card-bg-rgb-light), 0.7), rgba(var(--card-bg-rgb-light), 0.98)); /* Use light card bg for overlay */
 }
 
 .project-card:hover .project-overlay {
@@ -807,11 +823,8 @@ body.light-mode .project-overlay {
 
 .project-overlay p {
     font-size: 0.85rem;
-    color: var(--text-color);
+    color: var(--text-color); /* This should be fine as overlay bg changes */
     margin-bottom: 1.2rem;
-}
-body.light-mode .project-overlay p {
-    color: var(--text-color-light);
 }
 
 .project-overlay .btn {
@@ -821,12 +834,10 @@ body.light-mode .project-overlay p {
 
 /* Pricing Section */
 .pricing-section {
-    background-color: rgba(45, 52, 64, 0.2); /* Fallback for --secondary-color-rgb-dark */
-    background-color: rgba(var(--secondary-color-rgb, 45, 52, 64), 0.2);
+    background-color: rgba(var(--secondary-color-rgb-dark, 45, 52, 64), 0.2);
 }
 body.light-mode .pricing-section {
-    background-color: rgba(233, 236, 239, 0.5); /* Fallback for --secondary-color-rgb-light */
-    background-color: rgba(var(--secondary-color-rgb-light, 233, 236, 239), 0.5);
+    background-color: rgba(233, 236, 239, 0.5);
 }
 
 .pricing-grid {
@@ -871,7 +882,7 @@ body.light-mode .pricing-section {
     font-weight: 600;
 }
 body.light-mode .popular-badge {
-    color: var(--text-color-light);
+    color: #fff; /* White text on orange badge in light mode */
 }
 
 .pricing-card-title {
@@ -910,9 +921,6 @@ body.light-mode .popular-badge {
     align-items: center;
     font-size: 0.9rem;
     color: var(--text-color-muted);
-}
-body.light-mode .pricing-card-features li {
-    color: #555;
 }
 
 .pricing-card-features li i {
@@ -1010,13 +1018,11 @@ body.light-mode .pricing-card-features li i.fa-times-circle {
 
 /* Contact Section */
 .contact-form-section {
-    background-color: rgba(26, 31, 43, 0.3); /* Fallback for --primary-color-rgb-dark */
-    background-color: rgba(var(--primary-color-rgb, 26, 31, 43), 0.3);
+    background-color: rgba(var(--primary-color-rgb-dark, 26, 31, 43), 0.3);
     padding-bottom: 4rem;
 }
 body.light-mode .contact-form-section {
-    background-color: rgba(244, 247, 246, 0.5); /* Fallback for --primary-color-rgb-light */
-    background-color: rgba(var(--primary-color-rgb-light, 244, 247, 246), 0.5);
+    background-color: rgba(244, 247, 246, 0.5);
 }
 
 .contact-form {
@@ -1078,7 +1084,7 @@ select.form-input:focus {
 
 .form-message-area {
     margin-bottom: 1rem;
-    min-height: 35px; /* Reserve space for messages */
+    min-height: 35px;
 }
 .form-message-area p {
     padding: 0.7rem;
@@ -1248,36 +1254,34 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
         align-items: center;
         background: var(--primary-color); /* Will change with theme */
         padding: 2rem;
-        padding-top: 60px; /* Space for close button or if header is not fully covered */
+        padding-top: 60px;
         gap: 0.8rem;
         transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s ease;
         overflow-y: auto;
-        box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Generic shadow */
+        box-shadow: 0 0 15px var(--shadow-color); /* Generic shadow */
     }
     html[dir="rtl"] .nav-links-container {
-        transform: translateX(100%); /* Start off-screen to the right */
+        transform: translateX(100%);
         right: 0; left:auto;
-        box-shadow: -5px 0 15px var(--shadow-color); /* Shadow on the left */
     }
     html[dir="ltr"] .nav-links-container {
-        transform: translateX(-100%); /* Start off-screen to the left */
+        transform: translateX(-100%);
         left: 0; right: auto;
-        box-shadow: 5px 0 15px var(--shadow-color); /* Shadow on the right */
     }
 
     .nav-links-container.active {
-        transform: translateX(0); /* Slide in */
+        transform: translateX(0);
     }
     
     .nav-links-container .theme-switch-wrapper {
         margin: 1.5rem 0;
-        order: -1; /* Moves theme toggle to the top in mobile menu */
+        order: -1; 
     }
 
     .nav-links {
         flex-direction: column;
         width: 100%;
-        align-items: stretch; /* Make links take full width for easier tapping */
+        align-items: stretch;
         gap: 0;
     }
     .nav-links li { width: 100%; }
@@ -1291,7 +1295,7 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     html[dir="rtl"] .nav-link { text-align: right; }
     html[dir="ltr"] .nav-link { text-align: left; }
     .nav-link:last-child { border-bottom: none; }
-    .nav-link::before { display: none; } /* Hide underline for mobile nav items */
+    .nav-link::before { display: none; }
     .nav-link.active, .nav-link:hover {
       color: var(--accent-color);
       background-color: var(--secondary-color);
@@ -1300,10 +1304,10 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
 
     .hero-section { padding-top: calc(60px + 2rem); }
     .hero .container.hero-content-wrapper {
-        flex-direction: column; /* Stack hero text and image on mobile */
+        flex-direction: column;
     }
-    .hero-content { order: 2; max-width: 100%; } /* Text below image */
-    .hero-image-container { order: 1; margin-bottom: 1.5rem; } /* Image above text */
+    .hero-content { order: 2; max-width: 100%; }
+    .hero-image-container { order: 1; margin-bottom: 1.5rem; }
 
     .profile-image { max-width: 160px; max-height: 160px; }
     .gradient-border-wrapper { width: 180px; height: 180px; }
@@ -1311,7 +1315,6 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     .hero-cta { justify-content: center; }
 
     .contact-grid { grid-template-columns: 1fr; }
-    /* .contact-info was removed from HTML, so no need for its responsive rule here */
 }
 
 @media (max-width: 768px) {
@@ -1348,5 +1351,5 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     .btn-lg { font-size: 0.9rem; }
     .theme-switch-wrapper { margin-right: 0.5rem; } /* RTL */
     html[dir="rtl"] .theme-switch-wrapper { margin-left: 0.5rem; }
-    html[dir="ltr"] .theme-switch-wrapper { margin-left: 0.5rem; } /* LTR */
+    html[dir="ltr"] .theme-switch-wrapper { margin-left: 0.5rem; /* LTR */ }
 }
