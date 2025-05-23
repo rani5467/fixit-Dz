@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuToggleButton = document.getElementById('menu-toggle-button');
     const navLinksContainer = document.querySelector('.nav-links-container');
     const navLinks = document.querySelectorAll('.nav-links .nav-link');
-    const header = document.querySelector('.navbar');
+    const header = document.querySelector('.navbar'); // HTML uses class="navbar" for the header element
     const sections = document.querySelectorAll('.section'); // All sections with class="section"
     const scrollToTopBtn = document.getElementById('scrollToTopBtn');
     const themeToggleButton = document.getElementById('theme-toggle');
@@ -11,11 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactFormElement = document.querySelector('.contact-form');
     const yearSpan = document.getElementById('currentYear');
     const pricingCards = document.querySelectorAll('.pricing-card');
-    // Elements for the "Requests" section (if they exist in the current HTML)
-    const requestSearchInput = document.getElementById('requestSearchInput');
-    const requestFilterSelect = document.getElementById('requestFilterSelect');
-    const requestsList = document.getElementById('requestsList'); // For card-based list
-    const requestsTableBody = document.getElementById('requestsTableBody'); // For table-based list
 
     // --- 1. Theme Toggle Functionality ---
     function initThemeToggle() {
@@ -100,31 +95,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 4. Active Nav Link Highlighting & Header Scroll Effect ---
     function initScrollDependentEffects() {
         if (!header && sections.length === 0 && navLinks.length === 0 && !scrollToTopBtn) { return; }
+        
         const handleScroll = () => {
             const headerHeight = header ? header.offsetHeight : 0;
-            const scrollThreshold = window.innerHeight * 0.4;
+            // Use a threshold slightly below the header for activation
+            const activationOffset = headerHeight + 20; 
             let currentSectionId = '';
 
-            sections.forEach(section => {
+            // Find the current section
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const section = sections[i];
                 const sectionId = section.getAttribute('id');
-                if (!sectionId) return; 
-                const sectionTop = section.offsetTop - headerHeight;
-                const sectionBottom = sectionTop + section.offsetHeight;
-                if (window.scrollY >= sectionTop - scrollThreshold && window.scrollY < sectionBottom - scrollThreshold ) {
-                     currentSectionId = sectionId;
-                }
-            });
-            
-            if (!currentSectionId && sections.length > 0) {
-                const firstSectionWithId = Array.from(sections).find(s => s.getAttribute('id'));
-                const lastSectionWithId = Array.from(sections).reverse().find(s => s.getAttribute('id'));
+                if (!sectionId) continue;
 
-                if (firstSectionWithId && window.scrollY < firstSectionWithId.offsetTop - headerHeight) {
-                    currentSectionId = firstSectionWithId.getAttribute('id');
-                } else if (lastSectionWithId && window.scrollY + window.innerHeight >= document.body.scrollHeight - 20) {
-                    currentSectionId = lastSectionWithId.getAttribute('id');
+                const sectionTop = section.offsetTop;
+                // Activate if the top of the section is at or above the activation point
+                if (window.scrollY + activationOffset >= sectionTop) {
+                    currentSectionId = sectionId;
+                    break; 
                 }
             }
+            
+            // If no section is found (e.g., at the very top), default to the first section if it exists
+            if (!currentSectionId && sections.length > 0 && sections[0].getAttribute('id')) {
+                 if (window.scrollY < sections[0].offsetTop - headerHeight) {
+                    currentSectionId = sections[0].getAttribute('id');
+                 }
+            }
+
 
             navLinks.forEach(link => {
                 link.classList.remove('active');
@@ -134,17 +132,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            // Header scroll effect
             if (header) {
-                if (window.scrollY > 50) header.classList.add('scrolled');
-                else header.classList.remove('scrolled');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
             }
+
+            // Scroll-to-top button visibility
             if (scrollToTopBtn) {
-                if (window.scrollY > 300) scrollToTopBtn.classList.add('visible');
-                else scrollToTopBtn.classList.remove('visible');
+                if (window.scrollY > 300) {
+                    scrollToTopBtn.classList.add('visible');
+                } else {
+                    scrollToTopBtn.classList.remove('visible');
+                }
             }
         };
+
         window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll();
+        handleScroll(); // Initial call
     }
 
     // --- 5. Scroll-to-Top Button ---
@@ -211,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailInput = contactFormElement.querySelector('#email');
             const messageInput = contactFormElement.querySelector('#message');
 
-            // !!! هذا هو الرابط الذي قدمته لـ Google Apps Script !!!
             const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbPZJ0RiFXcLrJT8rNtS49jdsAPU2faveAQdT9tU-oZTy2Al90apnOTNF6COmS2h-oPg/exec";
 
             if (!submitButton || !formMessageArea || !nameInput || !emailInput || !messageInput) {
@@ -221,12 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return;
             }
-            if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" || SCRIPT_URL === "") { // Safety check, though you provided it
-                console.error("لم يتم تعيين رابط Google Apps Script في script.js. لن يعمل إرسال النموذج.");
-                displayFormMessage('تهيئة النموذج غير مكتملة. الإرسال معطل.', 'error', formMessageArea, document.createElement('p'));
-                if(submitButton) submitButton.disabled = true;
-                return;
-            }
+            // No need to check SCRIPT_URL against placeholder as it's hardcoded now with your URL
 
             const originalButtonText = submitButton.textContent;
 
@@ -269,17 +271,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: formData,
-                    mode: 'no-cors' // Important for basic Google Apps Script web apps
+                    mode: 'no-cors' 
                 })
                 .then(response => {
-                    // With mode: 'no-cors', response is opaque. We can't check response.ok or response.json().
-                    // We proceed optimistically. The Apps Script should handle errors and log them.
+                    // With 'no-cors', we cannot read the response body.
+                    // Assume success if fetch promise resolves.
                     displayFormMessage('تم إرسال رسالتك بنجاح! سيتم التحقق منها قريباً.', 'success', formMessageArea, formMessageP);
                     contactFormElement.reset();
                     submissionWasSuccessful = true;
                 })
                 .catch(error => {
-                    // This catch block will primarily handle network errors or if the SCRIPT_URL is entirely wrong.
                     console.error('Error submitting form to Google Apps Script:', error);
                     displayFormMessage('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.', 'error', formMessageArea, formMessageP);
                     submissionWasSuccessful = false;
@@ -397,33 +398,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 12. Requests Section Search and Filter (Client-side for HTML structure if it exists) ---
+    // This function is kept for completeness but will not find elements if the #requests section
+    // is not present in the public index.html.
     function initRequestsSection() {
         const requestsSection = document.getElementById('requests');
-        if (!requestsSection) { // Check if the section exists
+        if (!requestsSection) {
             // console.log("Requests section not found in this HTML, skipping initialization.");
             return; 
         }
 
-        // Proceed only if the section and its child elements exist
-        if (!requestsList && !requestsTableBody) { // Check if either card list or table body exists
-             // console.warn("Neither requestsList nor requestsTableBody found for filtering.");
-            return;
-        }
-        if (!requestSearchInput || !requestFilterSelect) {
-            // console.warn("Requests section filter/search controls not found.");
+        const localRequestSearchInput = document.getElementById('requestSearchInput');
+        const localRequestFilterSelect = document.getElementById('requestFilterSelect');
+        // Choose one based on your HTML structure for requests (cards or table)
+        const localRequestsList = document.getElementById('requestsList'); 
+        const localRequestsTableBody = document.getElementById('requestsTableBody');
+
+        if ((!localRequestsList && !localRequestsTableBody) || !localRequestSearchInput || !localRequestFilterSelect) {
+            // console.warn("Requests section filter/search elements or list/table body not found.");
             return;
         }
         
-        const requestItems = requestsTableBody ? 
-                             Array.from(requestsTableBody.querySelectorAll('tr')) : 
-                             Array.from(requestsList.querySelectorAll('.request-card'));
+        const requestItems = localRequestsTableBody ? 
+                             Array.from(localRequestsTableBody.querySelectorAll('tr')) : 
+                             (localRequestsList ? Array.from(localRequestsList.querySelectorAll('.request-card')) : []);
 
-        if(requestItems.length === 0) return; // No items to filter/search
-
+        if(requestItems.length === 0 && (localRequestsList || localRequestsTableBody) ) {
+            // console.log("No request items found to filter/search initially.");
+            // You might want to display a "No requests found" message here.
+        }
 
         function filterAndSearchRequests() {
-            const searchTerm = requestSearchInput.value.toLowerCase().trim();
-            const filterValue = requestFilterSelect.value;
+            const searchTerm = localRequestSearchInput.value.toLowerCase().trim();
+            const filterValue = localRequestFilterSelect.value;
 
             requestItems.forEach(item => { 
                 let textContentToSearch = '';
@@ -451,8 +457,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        requestSearchInput.addEventListener('input', filterAndSearchRequests);
-        requestFilterSelect.addEventListener('change', filterAndSearchRequests);
+        localRequestSearchInput.addEventListener('input', filterAndSearchRequests);
+        localRequestFilterSelect.addEventListener('change', filterAndSearchRequests);
     }
 
 
@@ -468,6 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initPricingCards();
     initFooterYear();
     initButtonAnimations();
-    initRequestsSection(); // Call this last or ensure its elements are available
+    initRequestsSection(); // This will attempt to initialize if #requests section is found.
 
 }); // End of DOMContentLoaded
