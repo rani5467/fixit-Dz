@@ -1,12 +1,58 @@
 // Custom JavaScript for Si Tayeb Toufik Portfolio
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM Element Selections ---
     const menuToggle = document.getElementById('menu-toggle-button');
     const navLinksContainer = document.querySelector('.nav-links-container');
     const navLinks = document.querySelectorAll('.nav-links .nav-link');
-    const header = document.querySelector('.navbar'); // HTML uses class="navbar" for the header
+    const header = document.querySelector('.navbar'); // HTML uses class="navbar" for the header element
     const sections = document.querySelectorAll('.section');
     const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    const themeToggleButton = document.getElementById('theme-toggle');
+    const typewriterTextElement = document.getElementById('typewriter-text');
+    const contactFormElement = document.querySelector('.contact-form');
+    const yearSpan = document.getElementById('currentYear');
+
+    // --- Theme Toggle Functionality ---
+    if (themeToggleButton) {
+        const currentTheme = localStorage.getItem('theme');
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+                themeToggleButton.checked = true;
+            } else {
+                document.body.classList.remove('light-mode');
+                themeToggleButton.checked = false;
+            }
+        }
+
+        // Apply the saved theme on initial load
+        if (currentTheme) {
+            applyTheme(currentTheme);
+        } else {
+            // Optional: Check for system preference if no theme is saved
+            // const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+            // if (prefersDarkScheme.matches) {
+            //     applyTheme('dark');
+            // } else {
+            //     applyTheme('light');
+            // }
+            // For now, defaults to dark as per CSS if no theme is saved.
+        }
+
+        themeToggleButton.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    } else {
+        console.warn("Theme toggle button with ID 'theme-toggle' not found.");
+    }
 
     // --- Mobile Menu Toggle ---
     if (menuToggle && navLinksContainer) {
@@ -31,7 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Close mobile menu when clicking outside of it
         document.addEventListener('click', (event) => {
-            if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(event.target) && !menuToggle.contains(event.target)) {
+            if (navLinksContainer.classList.contains('active') && 
+                !navLinksContainer.contains(event.target) && 
+                !menuToggle.contains(event.target)) {
                 navLinksContainer.classList.remove('active');
                 menuToggle.classList.remove('active');
                 menuToggle.setAttribute('aria-expanded', 'false');
@@ -45,10 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            // Ensure it's an internal link
             if (href && href.startsWith('#') && href.length > 1) {
                 e.preventDefault();
-                const targetId = href.substring(1); // Remove '#'
+                const targetId = href.substring(1);
                 const targetElement = document.getElementById(targetId);
 
                 if (targetElement) {
@@ -69,15 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Active Nav Link Highlighting & Header Scroll Effect ---
     const handleScroll = () => {
-        // Guard against missing elements
         if (!header || sections.length === 0 || navLinks.length === 0) {
-            // console.warn("Header, sections, or navLinks not found for scroll handling.");
             return;
         }
 
         let currentSectionId = '';
         const headerHeight = header.offsetHeight;
-        const scrollPosition = window.scrollY + headerHeight + 70; // Offset for better timing
+        // Add a buffer to make highlighting more accurate when sections are short or scrolling fast
+        const scrollPosition = window.scrollY + headerHeight + (window.innerHeight * 0.3); 
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
@@ -88,18 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
+        // Fallback for top/bottom of page
         if (!currentSectionId && sections.length > 0) {
             if (window.scrollY < sections[0].offsetTop - headerHeight) {
                 currentSectionId = sections[0].getAttribute('id');
-            } else {
-                let lastVisibleSection = '';
-                for (let i = sections.length - 1; i >= 0; i--) {
-                    if (window.scrollY >= sections[i].offsetTop - headerHeight - 50) {
-                        lastVisibleSection = sections[i].getAttribute('id');
-                        break;
-                    }
-                }
-                currentSectionId = lastVisibleSection || (sections.length > 0 ? sections[0].getAttribute('id') : '');
+            } else if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 50) { // Check if near bottom
+                currentSectionId = sections[sections.length - 1].getAttribute('id');
             }
         }
 
@@ -131,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
+    handleScroll(); // Initial call to set active link and header state
 
     // --- Scroll-to-Top Button Functionality ---
     if (scrollToTopBtn) {
@@ -146,14 +186,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // console.warn("Scroll to top button not found.");
     }
 
-
     // --- Scroll Animations with Intersection Observer ---
     const animatedElements = document.querySelectorAll('.fade-in');
     if (animatedElements.length > 0) {
         const observerOptions = {
             root: null,
-            rootMargin: '0px 0px -50px 0px',
-            threshold: 0.1
+            rootMargin: '0px 0px -50px 0px', // Trigger when element is 50px from bottom of viewport
+            threshold: 0.1 // At least 10% of the element is visible
         };
 
         const animationObserver = new IntersectionObserver((entries, observer) => {
@@ -163,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         entry.target.classList.add('appear');
                     }, delay);
-                    observer.unobserve(entry.target);
+                    observer.unobserve(entry.target); // Animate only once
                 }
             });
         }, observerOptions);
@@ -171,12 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
         animatedElements.forEach(el => {
             animationObserver.observe(el);
         });
-    } else {
-        // console.warn("No elements with class 'fade-in' found for IntersectionObserver.");
     }
 
     // --- Typewriter Effect ---
-    const typewriterTextElement = document.getElementById('typewriter-text');
     if (typewriterTextElement) {
         const textsToType = ["وأنت في مكانك!", "بكل سهولة وأمان.", "بخبرة واحترافية."];
         let textIndex = 0;
@@ -209,11 +245,10 @@ document.addEventListener('DOMContentLoaded', () => {
         typewriterTextElement.textContent = ''; // Clear initial content
         setTimeout(type, pauseBeforeTypingNewWord); // Start the typing animation
     } else {
-        // console.warn("Typewriter text element not found.");
+        // console.warn("Typewriter text element with ID 'typewriter-text' not found.");
     }
 
-    // --- Contact Form Submission (Modified for PHP backend) ---
-    const contactFormElement = document.querySelector('.contact-form');
+    // --- Contact Form Submission (Using Fetch API for PHP backend) ---
     if (contactFormElement) {
         const submitButton = contactFormElement.querySelector('button[type="submit"]');
         const formMessageArea = contactFormElement.querySelector('.form-message-area');
@@ -233,10 +268,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 formMessageArea.innerHTML = ''; // Clear previous messages
                 const formMessage = document.createElement('p');
-                // Apply basic styling for the message paragraph
                 formMessage.style.padding = '10px';
                 formMessage.style.marginTop = '15px';
-                formMessage.style.borderRadius = 'var(--border-radius-sm)'; // Assuming --border-radius-sm is defined in your CSS
+                formMessage.style.borderRadius = 'var(--border-radius-sm)';
                 formMessage.style.textAlign = 'center';
                 formMessage.style.transition = 'opacity 0.3s ease-in-out';
                 formMessage.style.opacity = '0'; // Start transparent for fade-in
@@ -260,8 +294,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(data => {
                     if (data && data.status === 'success') {
                         formMessage.textContent = data.message || 'تم إرسال رسالتك بنجاح!';
-                        formMessage.style.backgroundColor = 'var(--accent-color)'; // Assuming --accent-color is defined
-                        formMessage.style.color = 'var(--primary-color)'; // Assuming --primary-color is defined
+                        formMessage.style.backgroundColor = 'var(--accent-color)';
+                        formMessage.style.color = 'var(--primary-color-dark)'; // Use dark primary for text on accent bg
                         contactFormElement.reset(); // Clear the form fields
                         submissionWasSuccessful = true;
                     } else {
@@ -282,9 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     formMessageArea.appendChild(formMessage);
                     // Ensure the message element is in the DOM before trying to animate opacity
                     requestAnimationFrame(() => {
-                        setTimeout(() => {
+                        setTimeout(() => { // Brief delay to ensure styling is applied before transition starts
                             formMessage.style.opacity = '1'; // Fade in
-                        }, 10); // Small delay to ensure DOM update and style application
+                        }, 10);
                     });
 
                     submitButton.disabled = false;
@@ -310,7 +344,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Update Footer Year ---
-    const yearSpan = document.getElementById('currentYear');
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     } else {
