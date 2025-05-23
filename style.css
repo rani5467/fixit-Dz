@@ -6,14 +6,16 @@
 :root {
     /* Dark Mode Variables (Default) */
     --primary-color-dark: #1a1f2b;
+    --primary-color-rgb-dark: 26, 31, 43;
     --secondary-color-dark: #2d3440;
-    --accent-color-dark: #ff914d;
+    --secondary-color-rgb-dark: 45, 52, 64;
+    --accent-color-dark: #ff914d; /* Orange for dark mode */
     --accent-color-rgb-dark: 255, 145, 77;
     --text-color-dark: #f0f0f0;
     --text-color-muted-dark: #b0b0b0;
-    --bg-color-dark: #12161c;
+    --bg-color-dark: #12161c; /* Main background for dark mode */
     --card-bg-dark: rgba(30, 36, 47, 0.85);
-    --card-bg-rgb-dark: 30, 36, 47; /* For potential use in gradients */
+    --card-bg-rgb-dark: 30, 36, 47;
     --border-color-dark: rgba(255, 255, 255, 0.1);
     --shadow-color-dark: rgba(0, 0, 0, 0.25);
     --glow-color-dark: rgba(var(--accent-color-rgb-dark), 0.4);
@@ -21,30 +23,35 @@
     --input-border-dark: #4a5568;
     --placeholder-color-dark: var(--text-color-muted-dark);
     --designer-info-bg-dark: var(--secondary-color-dark);
-    --overlay-bg-dark: rgba(18, 22, 28, 0.88); /* Overlay for dark mode background image */
+    --overlay-bg-dark: rgba(18, 22, 28, 0.88);
     --hero-highlight-gradient-dark: linear-gradient(45deg, #ff914d, #ffcc70);
-    --btn-primary-text-dark: var(--primary-color-dark); /* Text color for primary buttons in dark mode */
+    --btn-primary-text-dark: #ffffff; /* Explicitly white text for primary buttons in dark mode */
+    --btn-primary-bg-dark: linear-gradient(45deg, #ff914d, #ffA500); /* Orange gradient for dark mode buttons */
+
 
     /* Light Mode Variables */
-    --primary-color-light: #f4f7f6; /* Light gray page background */
-    --secondary-color-light: #ffffff; /* White for cards, header background */
-    --accent-color-light: #e67e22; /* A slightly deeper orange for better contrast on light */
+    --primary-color-light: #ffffff; /* Main background for light mode - WHITE */
+    --primary-color-rgb-light: 255, 255, 255;
+    --secondary-color-light: #f8f9fa; /* Slightly off-white for cards, header */
+    --secondary-color-rgb-light: 248, 249, 250;
+    --accent-color-light: #e67e22; /* A slightly deeper, more saturated orange for light mode */
     --accent-color-rgb-light: 230, 126, 34;
-    --text-color-light: #333333; /* Dark gray for text */
+    --text-color-light: #212529; /* Dark text for light mode */
     --text-color-muted-light: #6c757d; /* Medium gray for muted text */
     --bg-color-light: #ffffff; /* Body background is white */
     --card-bg-light: #ffffff; /* Cards are white */
     --card-bg-rgb-light: 255, 255, 255;
     --border-color-light: #dee2e6; /* Light gray borders */
     --shadow-color-light: rgba(0, 0, 0, 0.1);
-    --glow-color-light: rgba(var(--accent-color-rgb-light), 0.2); /* Softer glow for light mode */
+    --glow-color-light: rgba(var(--accent-color-rgb-light), 0.25); /* Softer glow for light mode */
     --input-bg-light: #ffffff;
     --input-border-light: #ced4da;
     --placeholder-color-light: #6c757d;
     --designer-info-bg-light: #f1f3f5; /* Light gray for designer info */
-    --overlay-bg-light: rgba(255, 255, 255, 0); /* No overlay needed for plain white background, or very subtle if using a light pattern */
-    --hero-highlight-gradient-light: linear-gradient(45deg, #ff7f00, #ffaa33);
-    --btn-primary-text-light: #ffffff; /* Text color for primary buttons in light mode */
+    --overlay-bg-light: rgba(255, 255, 255, 0); /* No overlay for plain white background */
+    --hero-highlight-gradient-light: linear-gradient(45deg, var(--accent-color-light), #ffc107);
+    --btn-primary-text-light: #ffffff; /* White text for primary buttons in light mode */
+    --btn-primary-bg-light: linear-gradient(45deg, var(--accent-color-light), #ffae42); /* Orange gradient for light mode buttons */
 
 
     /* Universal Variables */
@@ -56,14 +63,16 @@
 
     /* Initial theme setup (defaults to dark) */
     --primary-color: var(--primary-color-dark);
+    --primary-color-rgb: var(--primary-color-rgb-dark);
     --secondary-color: var(--secondary-color-dark);
+    --secondary-color-rgb: var(--secondary-color-rgb-dark);
     --accent-color: var(--accent-color-dark);
     --accent-color-rgb: var(--accent-color-rgb-dark);
     --text-color: var(--text-color-dark);
     --text-color-muted: var(--text-color-muted-dark);
     --bg-color: var(--bg-color-dark);
     --card-bg: var(--card-bg-dark);
-    --card-bg-rgb: var(--card-bg-rgb-dark); /* For gradient-border-wrapper */
+    --card-bg-rgb: var(--card-bg-rgb-dark);
     --border-color: var(--border-color-dark);
     --shadow-color: var(--shadow-color-dark);
     --glow-color: var(--glow-color-dark);
@@ -74,11 +83,14 @@
     --overlay-bg: var(--overlay-bg-dark);
     --hero-highlight-gradient: var(--hero-highlight-gradient-dark);
     --btn-primary-text: var(--btn-primary-text-dark);
+    --btn-primary-bg: var(--btn-primary-bg-dark);
 }
 
 body.light-mode {
     --primary-color: var(--primary-color-light);
+    --primary-color-rgb: var(--primary-color-rgb-light);
     --secondary-color: var(--secondary-color-light);
+    --secondary-color-rgb: var(--secondary-color-rgb-light);
     --accent-color: var(--accent-color-light);
     --accent-color-rgb: var(--accent-color-rgb-light);
     --text-color: var(--text-color-light);
@@ -96,6 +108,7 @@ body.light-mode {
     --overlay-bg: var(--overlay-bg-light);
     --hero-highlight-gradient: var(--hero-highlight-gradient-light);
     --btn-primary-text: var(--btn-primary-text-light);
+    --btn-primary-bg: var(--btn-primary-bg-light);
 }
 
 /* Basic Reset & Body Styles */
@@ -112,13 +125,12 @@ html {
 
 body {
     font-family: var(--font-family);
-    /* Updated to local background image for dark mode */
-    background-image: url('background.jpg');
+    background-image: url('background.jpg'); /* Local background for dark mode */
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-color: var(--bg-color); /* Theme-dependent background color */
+    background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.7;
     overflow-x: hidden;
@@ -128,8 +140,8 @@ body {
 }
 
 body.light-mode {
-    background-image: none; /* Remove background image in light mode for a plain white background */
-    background-color: var(--bg-color-light); /* This is #ffffff */
+    background-image: none;
+    background-color: var(--bg-color-light);
 }
 
 body::before {
@@ -141,13 +153,12 @@ body::before {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--overlay-bg); /* Theme-dependent overlay */
+    background-color: var(--overlay-bg);
     z-index: -1;
     transition: background-color 0.3s ease;
-    pointer-events: none; /* Make sure overlay doesn't interfere with clicks */
+    pointer-events: none;
 }
 
-/* Container, Sections, Main, Footer: Ensure these are above the overlay */
 .container,
 .section,
 main,
@@ -188,7 +199,7 @@ main,
     left: 0;
     width: 100%;
     padding: 0.8rem 2%;
-    background: rgba(var(--primary-color-rgb-dark), 0.75); /* Default dark mode header */
+    background: rgba(var(--primary-color-rgb), 0.75);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     display: flex;
@@ -200,18 +211,13 @@ main,
     min-height: 60px;
 }
 body.light-mode .navbar {
-    background: rgba(248, 249, 250, 0.85); /* Light mode header (using --secondary-color-light with opacity) */
-    box-shadow: 0 2px 8px var(--shadow-color);
-    border-bottom: 1px solid var(--border-color-light); /* Add a subtle border for light mode header */
+    border-bottom: 1px solid var(--border-color);
 }
 
 .navbar.scrolled {
-    background: rgba(var(--primary-color-rgb-dark), 0.95);
+    background: rgba(var(--primary-color-rgb), 0.95);
     padding: 0.6rem 2%;
     box-shadow: 0 4px 15px var(--shadow-color);
-}
-body.light-mode .navbar.scrolled {
-    background: rgba(255, 255, 255, 0.95); /* White scrolled header for light mode */
 }
 
 .navbar .container {
@@ -236,8 +242,8 @@ body.light-mode .navbar.scrolled {
 }
 
 .logo-img {
-    height: 35px; /* Consistent logo height */
-    width: auto; /* Maintain aspect ratio */
+    height: 35px;
+    width: auto;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -248,28 +254,28 @@ body.light-mode .navbar.scrolled {
 .logo-text-fallback {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--accent-color); /* Ensure visibility */
+    color: var(--accent-color);
 }
 
 .nav-links-container {
     display: flex;
-    align-items: center; /* Vertically align nav items and theme toggle */
+    align-items: center;
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 1.5rem; /* Adjusted gap for desktop */
+    gap: 1.5rem;
     margin: 0;
     padding: 0;
 }
 
 .nav-link {
-    font-size: 0.9rem; /* Adjusted font size for nav links */
+    font-size: 0.9rem;
     color: var(--text-color);
     text-decoration: none;
     position: relative;
-    padding: 0.4rem 0; /* Adjusted padding */
+    padding: 0.4rem 0;
     font-weight: 500;
     transition: color 0.3s ease;
 }
@@ -281,7 +287,7 @@ body.light-mode .navbar.scrolled {
 .nav-link::before {
     content: '';
     position: absolute;
-    bottom: 0; /* Underline position */
+    bottom: 0;
     right: 0;
     width: 0;
     height: 2px;
@@ -302,34 +308,34 @@ body.light-mode .navbar.scrolled {
 }
 
 .menu-toggle {
-    display: none; /* Hidden by default, shown in media query */
+    display: none;
     flex-direction: column;
     justify-content: space-around;
-    width: 28px; /* Slightly smaller */
-    height: 22px; /* Slightly smaller */
+    width: 28px;
+    height: 22px;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 1005; /* Ensure it's above other header elements */
+    z-index: 1005;
 }
 
 .menu-toggle span {
     width: 100%;
     height: 3px;
-    background-color: var(--text-color); /* Will change with theme */
+    background-color: var(--text-color);
     border-radius: 10px;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px); /* Adjusted for new size */
+    transform: rotate(45deg) translate(6px, 6px);
 }
 .menu-toggle.active span:nth-child(2) {
     opacity: 0;
 }
 .menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px); /* Adjusted for new size */
+    transform: rotate(-45deg) translate(6px, -6px);
 }
 
 /* Theme Toggle Switch */
@@ -366,7 +372,7 @@ html[dir="ltr"] .theme-switch-wrapper {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--secondary-color); /* Uses theme's secondary color for the track */
+    background-color: var(--secondary-color);
     transition: .4s;
     border-radius: 22px;
 }
@@ -387,11 +393,11 @@ body.light-mode .slider:before {
     background-color: var(--primary-color-dark); /* Dark knob for light mode */
 }
 
-input:checked + .slider { /* Light mode active */
-    background-color: var(--accent-color);
+input:checked + .slider { /* Light mode active: toggle is to the right */
+    background-color: var(--accent-color); /* Slider background when checked (light mode) */
 }
-body.light-mode input:checked + .slider { /* Slider background when light mode is active */
-    background-color: var(--accent-color-light);
+body:not(.light-mode) input:not(:checked) + .slider { /* Dark mode active: toggle is to the left */
+     background-color: var(--secondary-color-dark);
 }
 
 
@@ -403,20 +409,20 @@ input:checked + .slider:before {
     font-size: 1.1rem;
     margin: 0 0.5rem;
     transition: color 0.3s ease;
-    color: var(--text-color-muted); /* Default icon color */
+    color: var(--text-color-muted);
 }
 
 body.light-mode .theme-switch-wrapper .icon.fa-sun {
-    color: var(--accent-color); /* Sun icon active in light mode */
+    color: var(--accent-color);
 }
 body:not(.light-mode) .theme-switch-wrapper .icon.fa-moon {
-    color: var(--accent-color); /* Moon icon active in dark mode */
+    color: var(--accent-color);
 }
 body.light-mode .theme-switch-wrapper .icon.fa-moon {
-    color: var(--text-color-muted); /* Moon icon inactive in light mode */
+    color: var(--text-color-muted);
 }
 body:not(.light-mode) .theme-switch-wrapper .icon.fa-sun {
-    color: var(--text-color-muted); /* Sun icon inactive in dark mode */
+    color: var(--text-color-muted);
 }
 
 
@@ -451,7 +457,7 @@ body:not(.light-mode) .theme-switch-wrapper .icon.fa-sun {
 }
 
 .hero-title .highlight {
-    background: var(--hero-highlight-gradient); /* Use theme variable */
+    background: var(--hero-highlight-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -518,13 +524,9 @@ body:not(.light-mode) .theme-switch-wrapper .icon.fa-sun {
 }
 
 .btn-primary {
-    background: var(--gradient); /* This will use the theme's accent color */
+    background: var(--btn-primary-bg); /* Use theme variable for background */
     color: var(--btn-primary-text); /* Use theme variable for text color */
 }
-body.light-mode .btn-primary {
-    background: linear-gradient(45deg, var(--accent-color-light), #ffae42);
-}
-
 
 .btn-primary.btn-lg {
     padding: 0.9em 2.2em;
@@ -539,25 +541,25 @@ body.light-mode .btn-primary {
 
 .btn-secondary-outline:hover {
     background: var(--accent-color);
-    color: var(--primary-color-dark);
+    color: var(--primary-color-dark); /* Dark text on accent bg in dark mode */
 }
 body.light-mode .btn-secondary-outline:hover {
-    color: var(--secondary-color-light);
+    color: var(--secondary-color-light); /* White text on accent bg in light mode */
 }
 
 
 .btn-purchase {
     background: var(--accent-color);
-    color: white;
+    color: white; /* White text on accent */
 }
 body.light-mode .btn-purchase {
-    color: var(--primary-color-dark);
+    color: var(--primary-color-dark); /* Dark text on accent in light mode for contrast */
 }
 .btn-purchase:hover {
-    background: linear-gradient(45deg, #e87a3d, #fd833c);
+    background: linear-gradient(45deg, #e87a3d, #fd833c); /* Darker orange gradient */
 }
 body.light-mode .btn-purchase:hover {
-    background: linear-gradient(45deg, #d96d00, #ff8000);
+    background: linear-gradient(45deg, #d96d00, #ff8000); /* Darker orange for light mode hover */
 }
 
 .btn-block {
@@ -578,15 +580,12 @@ body.light-mode .btn-purchase:hover {
     padding: 8px;
     border-radius: 50%;
     overflow: hidden;
-    background-color: rgba(var(--card-bg-rgb), 0.3);
+    background-color: rgba(var(--card-bg-rgb), 0.3); /* Use theme variable */
     width: 180px;
     height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-body.light-mode .gradient-border-wrapper {
-    background-color: rgba(var(--card-bg-rgb-light), 0.3);
 }
 
 .gradient-border {
@@ -663,7 +662,7 @@ body.light-mode .gradient-border-wrapper {
     transform: translateY(-2px) scale(1.03);
 }
 body.light-mode .skill-item {
-    background: #e0e0e0;
+    background: #e9ecef;
     color: var(--text-color-light);
 }
 body.light-mode .skill-item:hover {
@@ -729,6 +728,11 @@ body.light-mode .skill-item:hover {
     flex-direction: column;
     justify-content: space-between;
 }
+body.light-mode .service-card,
+body.light-mode .project-card {
+    box-shadow: 0 6px 12px var(--shadow-color-light);
+}
+
 
 .service-card:hover,
 .project-card:hover {
@@ -745,7 +749,7 @@ body.light-mode .skill-item:hover {
     transition: transform 0.3s ease, text-shadow 0.3s ease;
 }
 .card-icon i {
-    color: inherit; /* Ensures FontAwesome icons get the accent color */
+    color: inherit;
 }
 
 .service-card:hover .card-icon {
@@ -788,7 +792,7 @@ body.light-mode .skill-item:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(rgba(var(--card-bg-rgb-dark), 0.7), rgba(var(--card-bg-rgb-dark), 0.98)); /* Use dark card bg for overlay */
+    background: linear-gradient(rgba(var(--card-bg-rgb-dark), 0.7), rgba(var(--card-bg-rgb-dark), 0.98));
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -800,7 +804,7 @@ body.light-mode .skill-item:hover {
     border-radius: var(--border-radius-md);
 }
 body.light-mode .project-overlay {
-    background: linear-gradient(rgba(var(--card-bg-rgb-light), 0.7), rgba(var(--card-bg-rgb-light), 0.98)); /* Use light card bg for overlay */
+    background: linear-gradient(rgba(var(--card-bg-rgb-light), 0.7), rgba(var(--card-bg-rgb-light), 0.98));
 }
 
 .project-card:hover .project-overlay {
@@ -815,7 +819,7 @@ body.light-mode .project-overlay {
 
 .project-overlay p {
     font-size: 0.85rem;
-    color: var(--text-color); /* This should be fine as overlay bg changes */
+    color: var(--text-color);
     margin-bottom: 1.2rem;
 }
 
@@ -826,10 +830,7 @@ body.light-mode .project-overlay {
 
 /* Pricing Section */
 .pricing-section {
-    background-color: rgba(var(--secondary-color-rgb-dark, 45, 52, 64), 0.2);
-}
-body.light-mode .pricing-section {
-    background-color: rgba(233, 236, 239, 0.5);
+    background-color: rgba(var(--secondary-color-rgb), 0.2);
 }
 
 .pricing-grid {
@@ -866,8 +867,8 @@ body.light-mode .pricing-section {
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--gradient);
-    color: var(--primary-color-dark);
+    background: var(--gradient); /* Uses theme gradient */
+    color: var(--primary-color-dark); /* Text on badge for dark mode */
     padding: 0.25rem 0.8rem;
     border-radius: var(--border-radius-sm);
     font-size: 0.85rem;
@@ -914,18 +915,15 @@ body.light-mode .popular-badge {
     font-size: 0.9rem;
     color: var(--text-color-muted);
 }
-body.light-mode .pricing-card-features li {
-    color: #555; /* Darker text for features in light mode */
-}
 
 .pricing-card-features li i {
     margin-left: 0.6rem; /* RTL */
     margin-right: 0;
     font-size: 1.1em;
-    color: var(--accent-color); /* Ensures all feature icons are accent color */
+    color: var(--accent-color);
 }
 .pricing-card-features li i.fa-times-circle {
-    color: #888; /* Muted for times */
+    color: #888;
 }
 body.light-mode .pricing-card-features li i.fa-times-circle {
     color: #aaa;
@@ -1013,11 +1011,8 @@ body.light-mode .pricing-card-features li i.fa-times-circle {
 
 /* Contact Section */
 .contact-form-section {
-    background-color: rgba(var(--primary-color-rgb-dark, 26, 31, 43), 0.3);
+    background-color: rgba(var(--primary-color-rgb), 0.3);
     padding-bottom: 4rem;
-}
-body.light-mode .contact-form-section {
-    background-color: rgba(244, 247, 246, 0.5);
 }
 
 .contact-form {
@@ -1107,11 +1102,6 @@ select.form-input:focus {
     position: relative;
     z-index: 1;
 }
-body.light-mode .footer {
-    background: var(--secondary-color-light);
-    color: var(--text-color-muted-light);
-    border-top: 1px solid #dee2e6;
-}
 
 .footer .nav-logo {
     font-size: 1.4rem;
@@ -1144,7 +1134,7 @@ body.light-mode .footer {
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .footer-social-links a i {
-    color: inherit; /* Ensure icons inherit color */
+    color: inherit;
 }
 .footer-social-links a:hover {
     color: var(--accent-color);
@@ -1205,7 +1195,7 @@ html[dir="ltr"] .scroll-to-top-button {
     transform: translateY(-2px) scale(1.1);
 }
 .scroll-to-top-button i {
-    color: white !important; /* Ensure icon is white */
+    color: white !important;
 }
 
 /* Scroll Animation Base Styles */
@@ -1247,7 +1237,7 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
         height: 100vh;
         flex-direction: column;
         align-items: center;
-        background: var(--primary-color); /* Will change with theme */
+        background: var(--primary-color);
         padding: 2rem;
         padding-top: 60px;
         gap: 0.8rem;
