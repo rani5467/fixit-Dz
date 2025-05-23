@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactFormElement = document.querySelector('.contact-form');
     const yearSpan = document.getElementById('currentYear');
     const pricingCards = document.querySelectorAll('.pricing-card');
-    const serviceOrderButtons = document.querySelectorAll('.service-card .btn'); // "اطلب الخدمة" buttons
 
     // --- 1. Theme Toggle Functionality ---
     function initThemeToggle() {
@@ -26,18 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (theme === 'light') {
                 document.body.classList.add('light-mode');
                 themeToggleButton.checked = true;
-            } else {
+            } else { // Default to dark mode
                 document.body.classList.remove('light-mode');
                 themeToggleButton.checked = false;
             }
         }
 
-        if (currentTheme) {
-            applyTheme(currentTheme);
-        } else {
-            // Default to dark mode if no theme is saved (CSS also defaults to dark)
-            applyTheme('dark');
-        }
+        // Apply the saved theme on initial load or default to dark
+        applyTheme(currentTheme || 'dark');
+
 
         themeToggleButton.addEventListener('change', function() {
             if (this.checked) {
@@ -60,27 +56,29 @@ document.addEventListener('DOMContentLoaded', () => {
         menuToggleButton.addEventListener('click', (e) => {
             e.stopPropagation();
             navLinksContainer.classList.toggle('active');
-            menuToggleButton.classList.toggle('active');
+            menuToggleButton.classList.toggle('active'); // For animating the hamburger icon itself
             const isExpanded = navLinksContainer.classList.contains('active');
             menuToggleButton.setAttribute('aria-expanded', String(isExpanded));
         });
 
+        // Close menu when a nav link is clicked
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 if (navLinksContainer.classList.contains('active')) {
                     navLinksContainer.classList.remove('active');
-                    menuToggle.classList.remove('active');
+                    menuToggleButton.classList.remove('active'); // Ensure hamburger icon resets
                     menuToggleButton.setAttribute('aria-expanded', 'false');
                 }
             });
         });
 
+        // Close mobile menu when clicking outside of it
         document.addEventListener('click', (event) => {
             if (navLinksContainer.classList.contains('active') &&
                 !navLinksContainer.contains(event.target) &&
                 !menuToggleButton.contains(event.target)) {
                 navLinksContainer.classList.remove('active');
-                menuToggleButton.classList.remove('active');
+                menuToggleButton.classList.remove('active'); // Ensure hamburger icon resets
                 menuToggleButton.setAttribute('aria-expanded', 'false');
             }
         });
@@ -121,35 +119,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const handleScroll = () => {
             const headerHeight = header ? header.offsetHeight : 0;
-            const scrollPosition = window.scrollY + headerHeight + (window.innerHeight * 0.3); // Adjusted offset
+            // Adjust the offset for active link highlighting. Consider the middle of the viewport.
+            const scrollThreshold = window.innerHeight * 0.4; 
 
-            // Active link highlighting
-            if (sections.length > 0 && navLinks.length > 0) {
-                let currentSectionId = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionBottom = sectionTop + section.offsetHeight;
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                        currentSectionId = section.getAttribute('id');
-                    }
-                });
+            let currentSectionId = '';
 
-                if (!currentSectionId) {
-                    if (window.scrollY < sections[0].offsetTop - headerHeight) {
-                        currentSectionId = sections[0].getAttribute('id');
-                    } else if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 50) {
-                        currentSectionId = sections[sections.length - 1].getAttribute('id');
-                    }
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerHeight; 
+                const sectionBottom = sectionTop + section.offsetHeight;
+                // Check if the top of the section is above the threshold and bottom is below
+                if (window.scrollY >= sectionTop - scrollThreshold && window.scrollY < sectionBottom - scrollThreshold) {
+                    currentSectionId = section.getAttribute('id');
                 }
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    const linkHref = link.getAttribute('href');
-                    if (linkHref && linkHref === `#${currentSectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
+            });
+            
+            // Fallback for top/bottom of page
+            if (!currentSectionId && sections.length > 0) {
+                if (window.scrollY < sections[0].offsetTop - headerHeight) {
+                    currentSectionId = sections[0].getAttribute('id'); // Default to first section
+                } else if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 20) { // Near bottom
+                    currentSectionId = sections[sections.length - 1].getAttribute('id'); // Default to last section
+                }
             }
+
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const linkHref = link.getAttribute('href');
+                if (linkHref && linkHref === `#${currentSectionId}`) {
+                    link.classList.add('active');
+                }
+            });
 
             // Header scroll effect
             if (header) {
@@ -184,8 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     behavior: 'smooth'
                 });
             });
-        } else {
-            // console.warn("Scroll to top button not found.");
         }
     }
 
@@ -193,14 +191,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function initScrollAnimations() {
         const animatedElements = document.querySelectorAll('.fade-in');
         if (animatedElements.length === 0) {
-            // console.warn("No elements with class 'fade-in' found for IntersectionObserver.");
             return;
         }
 
         const observerOptions = {
             root: null,
-            rootMargin: '0px 0px -50px 0px',
-            threshold: 0.1
+            rootMargin: '0px 0px -50px 0px', // Start animation a bit before element is fully visible
+            threshold: 0.1 // At least 10% of the element is visible
         };
 
         const animationObserver = new IntersectionObserver((entries, observer) => {
@@ -210,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         entry.target.classList.add('appear');
                     }, delay);
-                    observer.unobserve(entry.target);
+                    observer.unobserve(entry.target); // Animate only once
                 }
             });
         }, observerOptions);
@@ -247,14 +244,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     charIndex--;
                     setTimeout(erase, erasingSpeed);
                 } else {
-                    textIndex = (textIndex + 1) % textsToType.length;
+                    textIndex = (textIndex + 1) % textsToType.length; // Move to the next text
                     setTimeout(type, pauseBeforeTypingNewWord);
                 }
             }
             typewriterTextElement.textContent = ''; // Clear initial content
-            setTimeout(type, pauseBeforeTypingNewWord);
-        } else {
-            // console.warn("Typewriter text element with ID 'typewriter-text' not found.");
+            setTimeout(type, pauseBeforeTypingNewWord); // Start the typing animation
         }
     }
 
@@ -268,8 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const messageInput = contactFormElement.querySelector('#message');
 
             if (!submitButton || !formMessageArea || !nameInput || !emailInput || !messageInput) {
-                console.error("أحد عناصر نموذج الاتصال مفقود. يرجى التحقق من HTML.");
-                if (formMessageArea) { // Provide feedback if possible
+                console.error("أحد عناصر نموذج الاتصال مفقود. يرجى التحقق من HTML IDs: name, email, message, and class: form-message-area.");
+                if (formMessageArea) {
                      formMessageArea.innerHTML = '<p style="color: red; background-color: #fdd; padding: 10px; border-radius: var(--border-radius-sm);">خطأ في تهيئة النموذج. يرجى الاتصال بمسؤول الموقع.</p>';
                 }
                 return;
@@ -278,35 +273,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalButtonText = submitButton.textContent;
 
             contactFormElement.addEventListener('submit', function(e) {
-                e.preventDefault(); // منع الإرسال الافتراضي للمتصفح
+                e.preventDefault(); 
 
-                // مسح الرسائل السابقة
                 formMessageArea.innerHTML = '';
-                const formMessage = document.createElement('p');
-                formMessage.style.padding = '10px';
-                formMessage.style.marginTop = '15px';
-                formMessage.style.borderRadius = 'var(--border-radius-sm)';
-                formMessage.style.textAlign = 'center';
-                formMessage.style.transition = 'opacity 0.3s ease-in-out';
-                formMessage.style.opacity = '0';
+                const formMessageP = document.createElement('p'); 
+                formMessageP.style.padding = '10px';
+                formMessageP.style.marginTop = '15px';
+                formMessageP.style.borderRadius = 'var(--border-radius-sm)';
+                formMessageP.style.textAlign = 'center';
+                formMessageP.style.transition = 'opacity 0.3s ease-in-out';
+                formMessageP.style.opacity = '0';
 
-                // التحقق من الحقول
+                // Validation
                 if (nameInput.value.trim() === '') {
-                    displayFormMessage('الرجاء إدخال الاسم الكامل.', 'error');
+                    displayFormMessage('الرجاء إدخال الاسم الكامل.', 'error', formMessageArea, formMessageP);
                     return;
                 }
                 if (emailInput.value.trim() === '') {
-                    displayFormMessage('الرجاء إدخال البريد الإلكتروني.', 'error');
+                    displayFormMessage('الرجاء إدخال البريد الإلكتروني.', 'error', formMessageArea, formMessageP);
                     return;
                 }
-                // RegEx بسيط للتحقق من البريد الإلكتروني
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(emailInput.value.trim())) {
-                    displayFormMessage('الرجاء إدخال عنوان بريد إلكتروني صالح.', 'error');
+                    displayFormMessage('الرجاء إدخال عنوان بريد إلكتروني صالح.', 'error', formMessageArea, formMessageP);
                     return;
                 }
                 if (messageInput.value.trim() === '') {
-                    displayFormMessage('الرجاء كتابة رسالتك.', 'error');
+                    displayFormMessage('الرجاء كتابة رسالتك.', 'error', formMessageArea, formMessageP);
                     return;
                 }
 
@@ -315,32 +308,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const formData = new FormData(this);
                 let submissionWasSuccessful = false;
+                
+                // IMPORTANT: Replace with your Google Apps Script URL if using that method
+                // const SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+                const SCRIPT_URL = 'send_email.php'; // For PHP backend
 
-                fetch('send_email.php', { // Target PHP script
+                fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: formData
+                    // If using Google Apps Script and facing CORS issues, add: mode: 'no-cors'
                 })
                 .then(response => {
                     if (!response.ok) {
-                        return response.text().then(text => {
+                        return response.text().then(text => { 
                             throw new Error(`خطأ من الخادم: ${response.status} ${response.statusText}. الرد: ${text}`);
                         });
                     }
-                    return response.json();
+                    return response.json(); 
                 })
                 .then(data => {
                     if (data && data.status === 'success') {
-                        displayFormMessage(data.message || 'تم إرسال رسالتك بنجاح! سيتم التواصل معك قريباً.', 'success');
+                        displayFormMessage(data.message || 'تم إرسال رسالتك بنجاح! سيتم التواصل معك قريباً.', 'success', formMessageArea, formMessageP);
                         contactFormElement.reset();
                         submissionWasSuccessful = true;
                     } else {
-                        displayFormMessage((data && data.message) ? data.message : 'حدث خطأ في معالجة طلبك. يرجى المحاولة مرة أخرى.', 'error');
+                        displayFormMessage((data && data.message) ? data.message : 'حدث خطأ في معالجة طلبك. يرجى المحاولة مرة أخرى.', 'error', formMessageArea, formMessageP);
                         submissionWasSuccessful = false;
                     }
                 })
                 .catch(error => {
                     console.error('Error submitting form:', error);
-                    displayFormMessage('حدث خطأ في الاتصال أو في معالجة الطلب. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.', 'error');
+                    displayFormMessage('حدث خطأ في الاتصال أو في معالجة الطلب. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.', 'error', formMessageArea, formMessageP);
                     submissionWasSuccessful = false;
                 })
                 .finally(() => {
@@ -349,42 +347,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (submissionWasSuccessful) {
                         setTimeout(() => {
-                            const currentMsg = formMessageArea.querySelector('p');
-                            if (currentMsg) currentMsg.style.opacity = '0';
+                            if (formMessageP.parentNode) formMessageP.style.opacity = '0';
                             setTimeout(() => {
-                                if (currentMsg && currentMsg.parentNode) {
-                                    currentMsg.remove();
-                                }
+                                if (formMessageP.parentNode) formMessageP.remove();
                             }, 300);
                         }, 7000);
                     }
                 });
             });
 
-            function displayFormMessage(message, type) {
-                formMessageArea.innerHTML = ''; // Clear previous messages
-                const p = document.createElement('p');
-                p.textContent = message;
+            function displayFormMessage(message, type, area, pElement) {
+                area.innerHTML = ''; 
+                pElement.textContent = message;
                 if (type === 'success') {
-                    p.style.backgroundColor = 'var(--accent-color)';
-                    p.style.color = 'var(--primary-color-dark)'; // Ensure contrast
-                } else { // error
-                    p.style.backgroundColor = '#d9534f'; // Red for error
-                    p.style.color = 'white';
+                    pElement.style.backgroundColor = 'var(--accent-color)';
+                    pElement.style.color = 'var(--primary-color-dark)'; // Ensure good contrast
+                } else { 
+                    pElement.style.backgroundColor = '#d9534f'; // Standard error red
+                    pElement.style.color = 'white';
                 }
-                p.style.padding = '10px';
-                p.style.marginTop = '15px';
-                p.style.borderRadius = 'var(--border-radius-sm)';
-                p.style.textAlign = 'center';
-                p.style.transition = 'opacity 0.3s ease-in-out';
-                p.style.opacity = '0';
-                formMessageArea.appendChild(p);
+                area.appendChild(pElement);
                 requestAnimationFrame(() => {
-                    setTimeout(() => { p.style.opacity = '1'; }, 10);
+                    setTimeout(() => { pElement.style.opacity = '1'; }, 10);
                 });
             }
-        } else {
-            // console.warn("Contact form with class '.contact-form' not found.");
         }
     }
 
@@ -392,35 +378,37 @@ document.addEventListener('DOMContentLoaded', () => {
     function initPricingCards() {
         if (pricingCards.length > 0) {
             pricingCards.forEach(card => {
-                // Hover effect is primarily CSS driven, but JS can add classes if needed
-                // For this request, CSS :hover should suffice for highlight.
-
-                const purchaseButton = card.querySelector('.btn-block'); // Assuming all pricing buttons are .btn-block
+                const purchaseButton = card.querySelector('.btn-block'); // Assumes .btn-block is unique to these buttons
                 if (purchaseButton) {
                     purchaseButton.addEventListener('click', function(e) {
-                        // If the button is a link to #contact, let smooth scroll handle it
                         if (this.getAttribute('href') === '#contact') {
-                            return; // Allow smooth scroll to proceed
+                            // Allow default smooth scroll to contact section if it's a direct link
+                            return;
                         }
                         
-                        e.preventDefault(); // Prevent default if it's not a #contact link
-                        const cardTitle = card.querySelector('.pricing-card-title');
-                        const packageName = cardTitle ? cardTitle.textContent.trim() : "الباقة المحددة";
+                        e.preventDefault(); // Prevent default for other cases or if it's just a button
+                        const cardTitleElement = card.querySelector('.pricing-card-title');
+                        const packageName = cardTitleElement ? cardTitleElement.textContent.trim() : "الباقة المحددة";
                         
-                        const formMessageArea = contactFormElement ? contactFormElement.querySelector('.form-message-area') : null;
-                        const messageP = document.createElement('p');
-                        messageP.textContent = `تم اختيار "${packageName}"! يرجى ملء النموذج أدناه لإكمال الطلب.`;
-                        messageP.style.backgroundColor = 'var(--accent-color)';
-                        messageP.style.color = 'var(--primary-color-dark)';
-                        messageP.style.padding = '10px';
-                        messageP.style.marginTop = '15px';
-                        messageP.style.borderRadius = 'var(--border-radius-sm)';
-                        messageP.style.textAlign = 'center';
+                        const formMsgArea = contactFormElement ? contactFormElement.querySelector('.form-message-area') : null;
                         
-                        if (formMessageArea) {
-                            formMessageArea.innerHTML = ''; // Clear previous messages
-                            formMessageArea.appendChild(messageP);
-                            // Scroll to contact form
+                        if (formMsgArea) {
+                            formMsgArea.innerHTML = ''; // Clear previous messages
+                            const messageP = document.createElement('p');
+                            messageP.textContent = `تم اختيار "${packageName}"! يرجى ملء النموذج أدناه لإكمال الطلب.`;
+                            messageP.style.backgroundColor = 'var(--accent-color)';
+                            messageP.style.color = 'var(--primary-color-dark)';
+                            messageP.style.padding = '10px';
+                            messageP.style.marginTop = '15px';
+                            messageP.style.borderRadius = 'var(--border-radius-sm)';
+                            messageP.style.textAlign = 'center';
+                            messageP.style.transition = 'opacity 0.3s ease-in-out';
+                            messageP.style.opacity = '0';
+                            formMsgArea.appendChild(messageP);
+                            requestAnimationFrame(() => {
+                               setTimeout(() => { messageP.style.opacity = '1'; }, 10);
+                            });
+
                             const contactSection = document.getElementById('contact');
                             if (contactSection) {
                                 const headerOffset = header ? header.offsetHeight : 0;
@@ -429,10 +417,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                             }
                              setTimeout(() => {
-                                if (messageP.parentNode) messageP.remove();
-                            }, 7000); // Remove message after 7 seconds
+                                if (messageP.parentNode) messageP.style.opacity = '0';
+                                setTimeout(() => {
+                                    if (messageP.parentNode) messageP.remove();
+                                }, 300);
+                            }, 7000);
                         } else {
-                            // Fallback if formMessageArea is not found on the page (e.g. if contact form is on a different page)
+                            // Fallback if form message area is not found
                             alert(`تم اختيار "${packageName}"!`);
                         }
                     });
@@ -445,14 +436,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function initFooterYear() {
         if (yearSpan) {
             yearSpan.textContent = new Date().getFullYear();
-        } else {
-            // console.warn("Element with ID 'currentYear' not found in the footer.");
         }
     }
 
-    // --- 11. Optional: Button Click Animation (Simple CSS class toggle) ---
+    // --- 11. Optional: Button Click Animation ---
     function initButtonAnimations() {
-        const allButtons = document.querySelectorAll('.btn'); // General buttons
+        const allButtons = document.querySelectorAll('.btn');
         allButtons.forEach(button => {
             button.addEventListener('mousedown', function() {
                 this.classList.add('btn-pressed');
@@ -460,26 +449,23 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('mouseup', function() {
                 this.classList.remove('btn-pressed');
             });
-            button.addEventListener('mouseleave', function() { // Remove if mouse leaves while pressed
+            button.addEventListener('mouseleave', function() { 
                 this.classList.remove('btn-pressed');
             });
         });
     }
-    // Add CSS for .btn-pressed:
-    // .btn.btn-pressed { transform: translateY(1px) scale(0.98); box-shadow: 0 2px 5px rgba(var(--accent-color-rgb), 0.2); }
-
 
     // --- Initialize all functionalities ---
     initThemeToggle();
     initMobileMenu();
     initSmoothScrolling();
-    initScrollDependentEffects(); // Includes active link, header scroll, scroll-to-top visibility
+    initScrollDependentEffects();
     initScrollToTopButton();
     initScrollAnimations();
     initTypewriterEffect();
     initContactForm();
     initPricingCards();
     initFooterYear();
-    initButtonAnimations(); // Optional button press effect
+    initButtonAnimations();
 
 }); // End of DOMContentLoaded
