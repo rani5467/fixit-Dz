@@ -63,7 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (targetElement) {
                     const headerOffset = header ? header.offsetHeight : 0;
-                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    // window.pageYOffset is deprecated, window.scrollY is the modern equivalent
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
                     const offsetPosition = elementPosition - headerOffset;
 
                     window.scrollTo({
@@ -71,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         behavior: 'smooth'
                     });
                 } else {
-                    console.warn(`Target element #${targetId} not found for smooth scroll.`);
+                    console.warn(`Smooth scroll target not found: #${targetId}`);
                 }
             }
         });
@@ -79,28 +80,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Active Nav Link Highlighting on Scroll ---
     const activateNavLink = () => {
+        // Guard against missing elements
+        if (!header || sections.length === 0 || navLinks.length === 0) {
+            return;
+        }
+
         let currentSectionId = '';
-        const headerOffset = header ? header.offsetHeight : 0;
-        // Use window.scrollY for modern browsers, fallback to pageYOffset
-        const scrollPosition = (window.scrollY || window.pageYOffset) + headerOffset + 70; // Added a bit more offset for better accuracy
+        const headerHeight = header.offsetHeight;
+        const scrollPosition = (window.scrollY || window.pageYOffset) + headerHeight + 70; // Offset for better timing
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            const sectionBottom = sectionTop + section.offsetHeight;
+
+            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
                 currentSectionId = section.getAttribute('id');
             }
         });
         
-        // If no section is actively in view (e.g., at the very top or bottom)
-        if (!currentSectionId && sections.length > 0) {
-            if ((window.scrollY || window.pageYOffset) < sections[0].offsetTop - headerOffset) {
-                currentSectionId = sections[0].getAttribute('id'); // Default to first section if above it
-            } else if ((window.scrollY || window.pageYOffset) >= sections[sections.length - 1].offsetTop + sections[sections.length - 1].offsetHeight - window.innerHeight) {
-                currentSectionId = sections[sections.length - 1].getAttribute('id'); // Default to last section if at the very bottom
+        // Fallback logic for top/bottom of page
+        if (!currentSectionId) {
+            if ((window.scrollY || window.pageYOffset) < sections[0].offsetTop - headerHeight) {
+                currentSectionId = sections[0].getAttribute('id');
+            } else {
+                // If scrolled past all sections, keep the last one active or clear all
+                // For simplicity, let's try to find the closest one if scrolled past all
+                let lastVisibleSection = '';
+                for (let i = sections.length - 1; i >= 0; i--) {
+                    if ((window.scrollY || window.pageYOffset) >= sections[i].offsetTop - headerHeight - 50) {
+                        lastVisibleSection = sections[i].getAttribute('id');
+                        break;
+                    }
+                }
+                currentSectionId = lastVisibleSection || (sections.length > 0 ? sections[0].getAttribute('id') : '');
             }
         }
-
 
         navLinks.forEach(link => {
             link.classList.remove('active');
@@ -111,12 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.addEventListener('scroll', activateNavLink, { passive: true });
-    activateNavLink(); // Call on load to set initial active link
+    activateNavLink(); // Initial call to set active link on page load
 
     // --- Header Scroll Effect ---
     if (header) {
         window.addEventListener('scroll', () => {
-            // Use window.scrollY for modern browsers, fallback to pageYOffset
             if ((window.scrollY || window.pageYOffset) > 50) {
                 header.classList.add('scrolled');
             } else {
@@ -194,15 +207,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
         const submitButton = contactForm.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton ? submitButton.textContent : "Send Message";
+        
+        // Ensure submitButton exists before proceeding
+        if (!submitButton) {
+            console.error("Submit button not found in the contact form. Please ensure your form has a button with type='submit'.");
+            return; // Stop further execution for this form if no submit button
+        }
+        
+        const originalButtonText = submitButton.textContent;
 
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault(); // Prevent actual form submission
 
-            if (submitButton) {
-                submitButton.disabled = true;
-                submitButton.textContent = 'Sending...';
-            }
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
 
             // Remove any existing message
             const existingMessage = this.querySelector('.form-message');
@@ -221,88 +239,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Simulate form submission (replace with actual submission logic if needed)
             // For a real backend, you would use fetch() or XMLHttpRequest here.
-            // Example:
-            // const formData = new FormData(this);
-            // fetch('/your-server-endpoint', { method: 'POST', body: formData })
-            //   .then(response => response.json())
-            //   .then(data => {
-            //     // Handle success
-            //     formMessage.textContent = 'Message sent successfully!';
-            //     formMessage.style.backgroundColor = 'var(--accent-color)';
-            //     formMessage.style.color = 'var(--primary-color)';
-            //     this.reset(); // Clear the form
-            //   })
-            //   .catch(error => {
-            //     // Handle error
-            //     console.error("Form submission error:", error);
-            //     formMessage.textContent = 'An error occurred. Please try again.';
-            //     formMessage.style.backgroundColor = 'red';
-            //     formMessage.style.color = 'white';
-            //   })
-            //   .finally(() => {
-            //      if (submitButton) {
-            //          submitButton.disabled = false;
-            //          submitButton.textContent = originalButtonText;
-            //      }
-            //      // Append and show message
-            //      if (submitButton) { this.insertBefore(formMessage, submitButton); } else { this.appendChild(formMessage); }
-            //      setTimeout(() => formMessage.style.opacity = '1', 10);
-            //      setTimeout(() => {
-            //          formMessage.style.opacity = '0';
-            //          setTimeout(() => { if (formMessage.parentNode) { formMessage.remove(); } }, 500);
-            //      }, 5000);
-            //   });
-
-            // Demo timeout for now:
             setTimeout(() => {
                 try {
+                    // Simulate success
                     formMessage.textContent = 'Message sent successfully! (Demo)';
                     formMessage.style.backgroundColor = 'var(--accent-color)';
                     formMessage.style.color = 'var(--primary-color)';
                     
-                    // Insert message before the button, or at the end of the form
-                    if (submitButton) {
-                        this.insertBefore(formMessage, submitButton);
-                    } else {
-                        this.appendChild(formMessage);
-                    }
+                    // Insert message before the button
+                    this.insertBefore(formMessage, submitButton);
                     
                     // Ensure layout is updated before starting opacity transition
                     requestAnimationFrame(() => {
-                        formMessage.style.opacity = '1';
+                        formMessage.style.opacity = '1'; // Fade in
                     });
 
                     this.reset(); // Clear the form fields
 
+                    // Set timeout to remove the message after a few seconds
                     setTimeout(() => {
-                        formMessage.style.opacity = '0';
+                        formMessage.style.opacity = '0'; // Fade out
                         setTimeout(() => {
-                            if (formMessage.parentNode) { // Check if still in DOM
+                            if (formMessage.parentNode) { // Check if still in DOM before removing
                                 formMessage.remove();
                             }
-                        }, 500); // Remove after fade out (500ms transition)
+                        }, 500); // Remove after fade out animation (500ms)
                     }, 5000); // Message visible for 5 seconds
 
                 } catch (error) {
-                    console.error("Error displaying success message:", error);
+                    console.error("Error displaying success/error message:", error);
+                    // Display an error message to the user
                     formMessage.textContent = 'An error occurred. Please try again.';
                     formMessage.style.backgroundColor = 'red'; // Or a more theme-appropriate error color
                     formMessage.style.color = 'white';
-                    if (submitButton) {
-                        this.insertBefore(formMessage, submitButton);
-                    } else {
-                        this.appendChild(formMessage);
-                    }
-                     requestAnimationFrame(() => {
+                    this.insertBefore(formMessage, submitButton);
+                     requestAnimationFrame(() => { // Ensure DOM update before opacity change
                         formMessage.style.opacity = '1';
                     });
                 } finally {
-                    if (submitButton) {
-                        submitButton.disabled = false;
-                        submitButton.textContent = originalButtonText;
-                    }
+                    // This block will execute regardless of whether an error occurred or not
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalButtonText;
                 }
-            }, 1000); // Simulate network delay (increased to 1 second)
+            }, 1000); // Simulate network delay (e.g., 1 second)
         });
+    } else {
+        // console.warn("Contact form with class '.contact-form' not found.");
     }
 });
