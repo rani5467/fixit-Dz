@@ -1,227 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const menuToggle = document.getElementById('menu-toggle-button');
-    const navLinksContainer = document.querySelector('.nav-links-container');
-    const navLinks = document.querySelectorAll('.nav-links .nav-link'); // More specific selector
-    const header = document.querySelector('.navbar'); // HTML uses class="navbar" for the header
-    const sections = document.querySelectorAll('.section');
-    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+// (Keep all your existing JavaScript code for menu, scroll, animations, etc.)
 
-    // --- Mobile Menu Toggle ---
-    if (menuToggle && navLinksContainer) {
-        menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navLinksContainer.classList.toggle('active');
-            menuToggle.classList.toggle('active'); // For animating the hamburger icon itself
-            const isExpanded = navLinksContainer.classList.contains('active');
-            menuToggle.setAttribute('aria-expanded', String(isExpanded));
-        });
+// --- Contact Form Submission (Modified for PHP backend) ---
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const formMessageArea = contactForm.querySelector('.form-message-area');
 
-        // Close menu when a nav link is clicked
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (navLinksContainer.classList.contains('active')) {
-                    navLinksContainer.classList.remove('active');
-                    menuToggle.classList.remove('active');
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        });
-
-        // Close mobile menu when clicking outside of it
-        document.addEventListener('click', (event) => {
-            if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(event.target) && !menuToggle.contains(event.target)) {
-                navLinksContainer.classList.remove('active');
-                menuToggle.classList.remove('active');
-                menuToggle.setAttribute('aria-expanded', 'false');
-            }
-        });
+    if (!submitButton) {
+        console.error("Submit button not found in the contact form.");
+    } else if (!formMessageArea) {
+        console.error("Form message area (.form-message-area) not found in the contact form.");
     } else {
-        console.warn("Menu toggle button or nav links container not found.");
-    }
-
-    // --- Smooth Scrolling ---
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href && href.startsWith('#') && href.length > 1) {
-                e.preventDefault();
-                const targetId = href.substring(1);
-                const targetElement = document.getElementById(targetId);
-
-                if (targetElement) {
-                    const headerOffset = header ? header.offsetHeight : 0;
-                    const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-                    const offsetPosition = elementPosition - headerOffset;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                } else {
-                    console.warn(`Smooth scroll target not found: #${targetId}`);
-                }
-            }
-        });
-    });
-
-    // --- Active Nav Link Highlighting & Header Scroll Effect ---
-    const handleScroll = () => {
-        let currentSectionId = '';
-        const headerHeight = header ? header.offsetHeight : 0;
-        const scrollPosition = window.scrollY + headerHeight + 70; // Offset for better timing
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionBottom = sectionTop + section.offsetHeight;
-
-            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                currentSectionId = section.getAttribute('id');
-            }
-        });
-        
-        if (!currentSectionId && sections.length > 0) {
-            if (window.scrollY < sections[0].offsetTop - headerHeight) {
-                currentSectionId = sections[0].getAttribute('id');
-            } else {
-                let lastVisibleSection = '';
-                for (let i = sections.length - 1; i >= 0; i--) {
-                    if (window.scrollY >= sections[i].offsetTop - headerHeight - 50) {
-                        lastVisibleSection = sections[i].getAttribute('id');
-                        break;
-                    }
-                }
-                currentSectionId = lastVisibleSection || (sections.length > 0 ? sections[0].getAttribute('id') : '');
-            }
-        }
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${currentSectionId}`) {
-                link.classList.add('active');
-            }
-        });
-
-        // Header scroll effect
-        if (header) {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        }
-
-        // Scroll-to-top button visibility
-        if (scrollToTopBtn) {
-            if (window.scrollY > 300) {
-                scrollToTopBtn.classList.add('visible');
-            } else {
-                scrollToTopBtn.classList.remove('visible');
-            }
-        }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
-
-    // --- Scroll-to-Top Button Functionality ---
-    if (scrollToTopBtn) {
-        scrollToTopBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-
-
-    // --- Scroll Animations with Intersection Observer ---
-    const animatedElements = document.querySelectorAll('.fade-in');
-    if (animatedElements.length > 0) {
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -50px 0px',
-            threshold: 0.1
-        };
-
-        const animationObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const delay = parseInt(entry.target.dataset.delay) || 0;
-                    setTimeout(() => {
-                        entry.target.classList.add('appear');
-                    }, delay);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        animatedElements.forEach(el => {
-            animationObserver.observe(el);
-        });
-    }
-
-    // --- Typewriter Effect ---
-    const typewriterTextElement = document.getElementById('typewriter-text');
-    if (typewriterTextElement) {
-        const textsToType = ["وأنت في مكانك!", "بكل سهولة وأمان.", "بخبرة واحترافية."];
-        let textIndex = 0;
-        let charIndex = 0;
-        const typingSpeed = 100;
-        const erasingSpeed = 50;
-        const pauseBetweenWords = 2000;
-        const pauseBeforeTypingNewWord = 500;
-
-        function type() {
-            if (charIndex < textsToType[textIndex].length) {
-                typewriterTextElement.textContent += textsToType[textIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(type, typingSpeed);
-            } else {
-                setTimeout(erase, pauseBetweenWords);
-            }
-        }
-
-        function erase() {
-            if (charIndex > 0) {
-                typewriterTextElement.textContent = textsToType[textIndex].substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(erase, erasingSpeed);
-            } else {
-                textIndex = (textIndex + 1) % textsToType.length;
-                setTimeout(type, pauseBeforeTypingNewWord);
-            }
-        }
-        // Clear initial placeholder content if any, then start typing
-        typewriterTextElement.textContent = '';
-        setTimeout(type, pauseBeforeTypingNewWord);
-    }
-
-    // --- Contact Form Submission (Demo) ---
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        const submitButton = contactForm.querySelector('button[type="submit"]');
-        const formMessageArea = contactForm.querySelector('.form-message-area'); // Get the message area
-
-        if (!submitButton) {
-            console.error("Submit button not found in the contact form.");
-            return;
-        }
-        if (!formMessageArea) {
-            console.error("Form message area (.form-message-area) not found in the contact form.");
-            return;
-        }
-        
         const originalButtonText = submitButton.textContent;
 
         contactForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Crucial to prevent default submission and 405 error
+            e.preventDefault(); // Prevent default browser submission
 
             submitButton.disabled = true;
             submitButton.textContent = 'جاري الإرسال...'; // Sending...
 
             // Clear previous messages
-            formMessageArea.innerHTML = ''; 
+            formMessageArea.innerHTML = '';
             const formMessage = document.createElement('p');
             formMessage.style.padding = '10px';
             formMessage.style.marginTop = '15px';
@@ -230,53 +29,226 @@ document.addEventListener('DOMContentLoaded', () => {
             formMessage.style.transition = 'opacity 0.3s ease-in-out';
             formMessage.style.opacity = '0';
 
+            const formData = new FormData(this);
 
-            // Simulate form submission (replace with actual AJAX/Fetch call to your backend)
-            setTimeout(() => {
-                try {
-                    // Simulate success
-                    formMessage.textContent = 'تم إرسال رسالتك بنجاح! (تجريبي)'; // Message sent successfully! (Demo)
+            fetch('send_email.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    formMessage.textContent = data.message || 'تم إرسال رسالتك بنجاح!';
                     formMessage.style.backgroundColor = 'var(--accent-color)';
                     formMessage.style.color = 'var(--primary-color)';
-                    
-                    formMessageArea.appendChild(formMessage);
-                    requestAnimationFrame(() => { // Ensure element is in DOM for transition
-                         setTimeout(() => formMessage.style.opacity = '1', 10); // Fade in
-                    });
+                    contactForm.reset(); // Clear the form fields
+                } else {
+                    formMessage.textContent = data.message || 'حدث خطأ. يرجى المحاولة مرة أخرى.';
+                    formMessage.style.backgroundColor = '#d9534f'; // Error red
+                    formMessage.style.color = 'white';
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error);
+                formMessage.textContent = 'حدث خطأ في الاتصال. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.';
+                formMessage.style.backgroundColor = '#d9534f';
+                formMessage.style.color = 'white';
+            })
+            .finally(() => {
+                formMessageArea.appendChild(formMessage);
+                requestAnimationFrame(() => {
+                    setTimeout(() => formMessage.style.opacity = '1', 10); // Fade in
+                });
 
-                    this.reset(); // Clear the form fields
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
 
+                // Optionally hide the message after some time, unless it's an error users need to see
+                if (formMessage.style.backgroundColor !== 'red') { // Or check data.status
                     setTimeout(() => {
                         formMessage.style.opacity = '0';
                         setTimeout(() => {
                             if (formMessage.parentNode) {
                                 formMessage.remove();
                             }
-                        }, 300); // Remove after fade out
-                    }, 5000); // Message visible for 5 seconds
-
-                } catch (error) {
-                    console.error("Error displaying success/error message:", error);
-                    formMessage.textContent = 'حدث خطأ. يرجى المحاولة مرة أخرى.'; // An error occurred. Please try again.
-                    formMessage.style.backgroundColor = '#d9534f'; // Bootstrap danger color
-                    formMessage.style.color = 'white';
-                    formMessageArea.appendChild(formMessage);
-                    requestAnimationFrame(() => {
-                         setTimeout(() => formMessage.style.opacity = '1', 10);
-                    });
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
+                        }, 300);
+                    }, 7000); // Message visible for 7 seconds
                 }
-            }, 1000); // Simulate network delay
+            });
         });
-    } else {
-        // console.warn("Contact form with class '.contact-form' not found.");
     }
+}
 
-    // --- Update Footer Year ---
-    const yearSpan = document.getElementById('currentYear');
-    if (yearSpan) {
-        yearSpan.textContent = new Date().getFullYear();
-    }
+// --- Ensure other JavaScript functions from the previous version are here ---
+// For example: Mobile Menu Toggle, Smooth Scrolling, Active Nav Link Highlighting,
+// Header Scroll Effect, Scroll Animations with Intersection Observer, Typewriter Effect,
+// Update Footer Year, Scroll-to-Top Button.
+
+// Example of other functions that should remain:
+const menuToggle = document.getElementById('menu-toggle-button');
+const navLinksContainer = document.querySelector('.nav-links-container');
+const navLinks = document.querySelectorAll('.nav-links .nav-link');
+const header = document.querySelector('.navbar');
+const sections = document.querySelectorAll('.section');
+const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+if (menuToggle && navLinksContainer) {
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navLinksContainer.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+        const isExpanded = navLinksContainer.classList.contains('active');
+        menuToggle.setAttribute('aria-expanded', String(isExpanded));
+    });
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navLinksContainer.classList.contains('active')) {
+                navLinksContainer.classList.remove('active');
+                menuToggle.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(event.target) && !menuToggle.contains(event.target)) {
+            navLinksContainer.classList.remove('active');
+            menuToggle.classList.remove('active');
+            menuToggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
+navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && href.startsWith('#') && href.length > 1) {
+            e.preventDefault();
+            const targetId = href.substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                const headerOffset = header ? header.offsetHeight : 0;
+                const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+                const offsetPosition = elementPosition - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    });
 });
+
+const activateNavLink = () => {
+    if (!header || sections.length === 0 || navLinks.length === 0) { return; }
+    let currentSectionId = '';
+    const headerHeight = header.offsetHeight;
+    const scrollPosition = window.scrollY + headerHeight + 70;
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            currentSectionId = section.getAttribute('id');
+        }
+    });
+    if (!currentSectionId && sections.length > 0) {
+        if (window.scrollY < sections[0].offsetTop - headerHeight) {
+            currentSectionId = sections[0].getAttribute('id');
+        } else {
+            let lastVisibleSection = '';
+            for (let i = sections.length - 1; i >= 0; i--) {
+                if (window.scrollY >= sections[i].offsetTop - headerHeight - 50) {
+                    lastVisibleSection = sections[i].getAttribute('id');
+                    break;
+                }
+            }
+            currentSectionId = lastVisibleSection || (sections.length > 0 ? sections[0].getAttribute('id') : '');
+        }
+    }
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSectionId}`) {
+            link.classList.add('active');
+        }
+    });
+};
+window.addEventListener('scroll', activateNavLink, { passive: true });
+activateNavLink();
+
+if (header) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }, { passive: true });
+}
+
+const animatedElements = document.querySelectorAll('.fade-in');
+if (animatedElements.length > 0) {
+    const observerOptions = { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 };
+    const animationObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = parseInt(entry.target.dataset.delay) || 0;
+                setTimeout(() => {
+                    entry.target.classList.add('appear');
+                }, delay);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    animatedElements.forEach(el => animationObserver.observe(el));
+}
+
+const typewriterTextElement = document.getElementById('typewriter-text');
+if (typewriterTextElement) {
+    const textsToType = ["وأنت في مكانك!", "بكل سهولة وأمان.", "بخبرة واحترافية."];
+    let textIndex = 0, charIndex = 0;
+    const typeSpeed = 100, eraseSpeed = 50, pauseBetween = 2000, pauseBeforeNew = 500;
+    function type() {
+        if (charIndex < textsToType[textIndex].length) {
+            typewriterTextElement.textContent += textsToType[textIndex].charAt(charIndex++);
+            setTimeout(type, typeSpeed);
+        } else {
+            setTimeout(erase, pauseBetween);
+        }
+    }
+    function erase() {
+        if (charIndex > 0) {
+            typewriterTextElement.textContent = textsToType[textIndex].substring(0, --charIndex);
+            setTimeout(erase, eraseSpeed);
+        } else {
+            textIndex = (textIndex + 1) % textsToType.length;
+            setTimeout(type, pauseBeforeNew);
+        }
+    }
+    typewriterTextElement.textContent = '';
+    setTimeout(type, pauseBeforeNew);
+}
+
+if (scrollToTopBtn) {
+    scrollToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+     window.addEventListener('scroll', () => { // Keep this for scroll-to-top visibility
+        if (window.scrollY > 300) {
+            scrollToTopBtn.classList.add('visible');
+        } else {
+            scrollToTopBtn.classList.remove('visible');
+        }
+    }, { passive: true });
+}
+
+
+const yearSpan = document.getElementById('currentYear');
+if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+}
+
+}); // End of DOMContentLoaded
