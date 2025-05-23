@@ -1,9 +1,9 @@
 /* Custom Styles for Si Tayeb Toufik Portfolio - Fixit Dz */
-/* Version: Expanded Design - Refined + Requests Section + Table */
+/* Version: Expanded Design - Refined + Requests Section + Table + Enhanced Form */
 
 /* Google Fonts Import */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap'); /* Adding an alternative font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
 :root {
     /* Dark Mode Variables (Default) */
@@ -14,71 +14,75 @@
     --accent-color-dark: #ff914d; /* Main Orange */
     --accent-color-hover-dark: #ffad42; /* Lighter Orange for hover */
     --accent-color-rgb-dark: 255, 145, 77;
-    --text-color-dark: #f0f0f0; /* Slightly off-white for better readability */
-    --text-color-secondary-dark: #c5c8cc; /* For less important text */
-    --text-color-muted-dark: #a0a7b3; /* Softer muted text */
+    --text-color-dark: #f0f0f0;
+    --text-color-secondary-dark: #c5c8cc;
+    --text-color-muted-dark: #a0a7b3;
     --bg-color-dark: #12161c;
-    --card-bg-dark: rgba(30, 36, 47, 0.9); /* Slightly more opaque for glassmorphism */
+    --card-bg-dark: rgba(30, 36, 47, 0.9);
     --card-bg-rgb-dark: 30, 36, 47;
-    --border-color-dark: rgba(255, 255, 255, 0.12); /* More visible border */
-    --shadow-color-dark: rgba(0, 0, 0, 0.35); /* Deeper shadow */
-    --glow-color-dark: rgba(var(--accent-color-rgb-dark), 0.55); /* Brighter glow */
+    --border-color-dark: rgba(255, 255, 255, 0.12);
+    --shadow-color-dark: rgba(0, 0, 0, 0.35);
+    --glow-color-dark: rgba(var(--accent-color-rgb-dark), 0.55);
     --input-bg-dark: var(--secondary-color-dark);
-    --input-border-dark: #555e6d; /* Slightly lighter input border */
+    --input-border-dark: #555e6d;
     --placeholder-color-dark: #8892b0;
     --designer-info-bg-dark: var(--secondary-color-dark);
-    --overlay-bg-dark: rgba(18, 22, 28, 0.92); /* Slightly more opaque overlay */
+    --overlay-bg-dark: rgba(18, 22, 28, 0.92);
     --hero-highlight-gradient-dark: linear-gradient(45deg, var(--accent-color-dark), var(--accent-color-hover-dark));
     --btn-primary-text-dark: #ffffff;
     --btn-primary-bg-dark: linear-gradient(45deg, var(--accent-color-dark), #ff7043);
     --btn-shadow-dark: 0 4px 15px rgba(var(--accent-color-rgb-dark), 0.3);
     --link-hover-color-dark: var(--accent-color-hover-dark);
-    --status-pending-bg-dark: rgba(255, 165, 0, 0.2); /* Orange with transparency */
+    --status-pending-bg-dark: rgba(255, 165, 0, 0.2);
     --status-pending-text-dark: #ffa500;
-    --status-in-progress-bg-dark: rgba(30, 144, 255, 0.2); /* DodgerBlue with transparency */
+    --status-in-progress-bg-dark: rgba(30, 144, 255, 0.2);
     --status-in-progress-text-dark: #1e90ff;
-    --status-completed-bg-dark: rgba(60, 179, 113, 0.2); /* MediumSeaGreen with transparency */
+    --status-completed-bg-dark: rgba(60, 179, 113, 0.2);
     --status-completed-text-dark: #3cb371;
     --table-header-bg-dark: #2a303a;
     --table-row-hover-bg-dark: #3a414d;
     --table-border-dark: #404855;
+    --form-bg-dark: rgba(26, 31, 43, 0.9); /* Slightly different from card-bg for distinction */
+    --form-border-dark: rgba(var(--accent-color-rgb-dark), 0.3);
 
     /* Light Mode Variables */
     --primary-color-light: #ffffff;
     --primary-color-rgb-light: 255, 255, 255;
     --secondary-color-light: #f8f9fa;
     --secondary-color-rgb-light: 248, 249, 250;
-    --accent-color-light: #e67e22; /* Deeper orange for better contrast */
-    --accent-color-hover-light: #d35400; /* Darker orange for hover */
+    --accent-color-light: #e67e22;
+    --accent-color-hover-light: #d35400;
     --accent-color-rgb-light: 230, 126, 34;
-    --text-color-light: #2c3e50; /* Darker text for better contrast */
-    --text-color-secondary-light: #495057; /* For less important text in light mode */
-    --text-color-muted-light: #7f8c8d; /* Softer muted text */
-    --bg-color-light: #f4f6f8; /* Off-white background */
-    --card-bg-light: #ffffff; /* Solid white cards */
+    --text-color-light: #2c3e50;
+    --text-color-secondary-light: #495057;
+    --text-color-muted-light: #7f8c8d;
+    --bg-color-light: #f4f6f8;
+    --card-bg-light: #ffffff;
     --card-bg-rgb-light: 255, 255, 255;
-    --border-color-light: #d1d8e0; /* More visible border */
-    --shadow-color-light: rgba(0, 0, 0, 0.1); /* Standard light shadow */
+    --border-color-light: #d1d8e0;
+    --shadow-color-light: rgba(0, 0, 0, 0.1);
     --glow-color-light: rgba(var(--accent-color-rgb-light), 0.3);
     --input-bg-light: #ffffff;
     --input-border-light: #ced4da;
     --placeholder-color-light: #868e96;
     --designer-info-bg-light: #e9ecef;
-    --overlay-bg-light: rgba(255, 255, 255, 0.1); /* Very subtle overlay for light if image is used */
+    --overlay-bg-light: rgba(255, 255, 255, 0.1);
     --hero-highlight-gradient-light: linear-gradient(45deg, var(--accent-color-light), #f39c12);
     --btn-primary-text-light: #ffffff;
     --btn-primary-bg-light: linear-gradient(45deg, var(--accent-color-light), var(--accent-color-hover-light));
     --btn-shadow-light: 0 4px 15px rgba(var(--accent-color-rgb-light), 0.2);
     --link-hover-color-light: var(--accent-color-hover-light);
-    --status-pending-bg-light: #fff3e0; /* Light orange */
+    --status-pending-bg-light: #fff3e0;
     --status-pending-text-light: #e67e22;
-    --status-in-progress-bg-light: #e3f2fd; /* Light blue */
+    --status-in-progress-bg-light: #e3f2fd;
     --status-in-progress-text-light: #1976d2;
-    --status-completed-bg-light: #e8f5e9; /* Light green */
+    --status-completed-bg-light: #e8f5e9;
     --status-completed-text-light: #388e3c;
     --table-header-bg-light: #e9ecef;
     --table-row-hover-bg-light: #f1f3f5;
     --table-border-light: #ced4da;
+    --form-bg-light: #ffffff;
+    --form-border-light: rgba(var(--accent-color-rgb-light), 0.3);
 
 
     /* Universal Variables */
@@ -89,7 +93,7 @@
     --border-radius-sm: 6px;
     --border-radius-md: 10px;
     --border-radius-lg: 18px;
-    --container-padding: 15px; /* Default container padding */
+    --container-padding: 15px;
 }
 
 /* Apply initial theme variables */
@@ -129,6 +133,8 @@ body {
     --table-header-bg: var(--table-header-bg-dark);
     --table-row-hover-bg: var(--table-row-hover-bg-dark);
     --table-border: var(--table-border-dark);
+    --form-bg: var(--form-bg-dark);
+    --form-border: var(--form-border-dark);
 }
 
 body.light-mode {
@@ -167,6 +173,8 @@ body.light-mode {
     --table-header-bg: var(--table-header-bg-light);
     --table-row-hover-bg: var(--table-row-hover-bg-light);
     --table-border: var(--table-border-light);
+    --form-bg: var(--form-bg-light);
+    --form-border: var(--form-border-light);
 }
 
 /* Basic Reset & Body Styles */
@@ -183,7 +191,7 @@ html {
 
 body {
     font-family: var(--font-family-primary);
-    background-image: url('background.jpg'); /* Local background for dark mode */
+    background-image: url('background.jpg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -219,22 +227,16 @@ body::before {
     pointer-events: none;
 }
 
-/* General Container and Section Styling */
-.container {
-    width: 90%;
-    max-width: 1140px;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: var(--container-padding);
-    padding-left: var(--container-padding);
+.container,
+.section,
+main,
+.footer {
     position: relative;
     z-index: 1;
 }
 
 .section {
     padding: 80px 0;
-    position: relative;
-    z-index: 1;
 }
 
 .section-header {
@@ -264,7 +266,6 @@ body::before {
     border-radius: 2px;
     opacity: 0.8;
 }
-
 
 .section-subtitle {
     font-size: clamp(1rem, 2.5vw, 1.25rem);
@@ -329,11 +330,6 @@ body.light-mode .navbar {
     width: auto;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-/*
-body.light-mode .logo-img {
-    filter: brightness(0.1); 
-}
-*/
 
 .nav-logo:hover .logo-img {
     transform: scale(1.12) rotate(-7deg);
@@ -985,6 +981,9 @@ body.light-mode .pricing-card-features li i.fa-times-circle {
 .contact-form {
     padding: 2.5rem;
     max-width: 680px;
+    background: var(--form-bg); /* Use theme variable */
+    border: 1px solid var(--form-border); /* Use theme variable */
+    box-shadow: 0 10px 30px var(--shadow-color); /* Enhanced shadow */
 }
 
 .form-group {
@@ -993,6 +992,8 @@ body.light-mode .pricing-card-features li i.fa-times-circle {
 
 .form-label {
     font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 0.6rem; /* More space for label */
 }
 
 .form-input,
@@ -1000,11 +1001,29 @@ body.light-mode .pricing-card-features li i.fa-times-circle {
 select.form-input {
     padding: 0.8rem 1rem;
     font-size: 1rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+    border-radius: var(--border-radius-sm);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--placeholder-color);
+    opacity: 0.7;
 }
 .form-input:focus,
 .form-textarea:focus,
 select.form-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.35);
+    background-color: var(--primary-color); /* Change background on focus for better feedback */
+}
+body.light-mode .form-input:focus,
+body.light-mode .form-textarea:focus,
+body.light-mode select.form-input:focus {
+    background-color: var(--secondary-color-light);
 }
 
 
@@ -1047,6 +1066,12 @@ select.form-input:focus {
 }
 .footer-links a {
     margin: 0 0.8rem;
+    color: var(--text-color-muted);
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.footer-links a:hover {
+    color: var(--accent-color);
+    text-shadow: 0 0 5px var(--glow-color);
 }
 
 .footer-social-links {
@@ -1055,9 +1080,15 @@ select.form-input:focus {
 .footer-social-links a {
     font-size: 1.6rem;
     margin: 0 0.8rem;
+    color: var(--text-color-muted);
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 .footer-social-links a i {
     color: inherit;
+}
+.footer-social-links a:hover {
+    color: var(--accent-color);
+    transform: translateY(-3px) scale(1.1);
 }
 
 .copyright-text {
@@ -1090,7 +1121,7 @@ body.admin-view .requests-section {
 }
 
 body.light-mode .requests-section {
-    background-color: #eef1f5; /* Lighter background for light mode */
+    background-color: #eef1f5;
 }
 
 .requests-header {
@@ -1136,6 +1167,7 @@ html[dir="rtl"] .search-box input[type="text"] {
     padding-left: 3rem;
 }
 
+
 .search-box input[type="text"]:focus {
     outline: none;
     border-color: var(--accent-color);
@@ -1153,6 +1185,7 @@ html[dir="rtl"] .search-box i.fa-search {
     right: auto;
     left: 1.2rem;
 }
+
 
 .filter-dropdown select {
     padding: 0.7rem 1.2rem;
@@ -1182,6 +1215,7 @@ body.light-mode .filter-dropdown select {
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c757d' width='18px' height='18px'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
 }
 
+
 .filter-dropdown select:focus {
     outline: none;
     border-color: var(--accent-color);
@@ -1190,7 +1224,7 @@ body.light-mode .filter-dropdown select {
 
 /* Requests Table Styling */
 .requests-table-container {
-    overflow-x: auto; /* Allows table to be scrollable on small screens */
+    overflow-x: auto;
     background-color: var(--card-bg);
     border-radius: var(--border-radius-md);
     padding: 1rem;
@@ -1206,7 +1240,7 @@ body.light-mode .filter-dropdown select {
 
 .requests-table th,
 .requests-table td {
-    padding: 0.8rem 1rem; /* Increased padding for table cells */
+    padding: 0.9rem 1.1rem; /* Increased padding */
     text-align: right; /* RTL */
     border-bottom: 1px solid var(--table-border);
     vertical-align: middle;
@@ -1222,7 +1256,7 @@ html[dir="ltr"] .requests-table td {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-bottom-width: 2px; /* Thicker border for header */
+    border-bottom-width: 2px;
     border-bottom-color: var(--accent-color);
 }
 
@@ -1231,7 +1265,7 @@ html[dir="ltr"] .requests-table td {
 }
 
 .requests-table td[data-label="مختصر الرسالة"] {
-    max-width: 250px; /* Limit width of message column */
+    max-width: 250px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1239,12 +1273,14 @@ html[dir="ltr"] .requests-table td {
 
 .status-badge {
     display: inline-block;
-    padding: 0.35em 0.9em;
-    font-size: 0.75rem; /* Smaller for table context */
+    padding: 0.4em 1em; /* More padding */
+    font-size: 0.78rem; /* Adjusted size */
     font-weight: 600;
     border-radius: var(--border-radius-sm);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    min-width: 90px; /* Ensure badges have some width */
+    text-align: center;
 }
 
 .status-badge.pending {
@@ -1260,7 +1296,54 @@ html[dir="ltr"] .requests-table td {
     color: var(--status-completed-text-current);
 }
 
-.action-buttons {
+.request-status time {
+    font-size: 0.85rem;
+    color: var(--text-color-muted);
+    display: block;
+}
+
+.request-card-body { /* This class is from the card layout, not table */
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.request-card-body p {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-color-secondary);
+    margin-bottom: 1rem;
+    text-align: right; /* RTL */
+}
+html[dir="ltr"] .request-card-body p {
+    text-align: left;
+}
+
+.attachments {
+    font-size: 0.9rem;
+    color: var(--text-color-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.attachments i {
+    color: var(--accent-color);
+}
+
+.request-card-actions { /* For card layout */
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end; /* RTL */
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+html[dir="rtl"] .request-card-actions {
+    justify-content: flex-start;
+}
+
+.action-buttons { /* For table layout */
     display: flex;
     gap: 0.5rem;
     justify-content: flex-start; /* RTL */
@@ -1269,58 +1352,76 @@ html[dir="ltr"] .action-buttons {
     justify-content: flex-end;
 }
 
-.action-buttons .btn.btn-action {
-    padding: 0.4em 0.8em; /* Smaller buttons for table */
+.action-buttons .btn.btn-action,
+.request-card-actions .btn.btn-action {
+    padding: 0.5em 1em; /* Smaller buttons */
     font-size: 0.8rem;
     text-transform: none;
     letter-spacing: normal;
-    display: inline-flex; /* For icon alignment */
+    display: inline-flex;
     align-items: center;
+    min-width: 80px; /* Minimum width for action buttons */
+    justify-content: center;
 }
 
 .btn-action i {
     margin-left: 0.4rem; /* RTL */
-    font-size: 0.9em; /* Adjust icon size within button */
+    font-size: 0.9em;
 }
 html[dir="rtl"] .btn-action i {
     margin-left: 0;
     margin-right: 0.4rem;
 }
 
-.btn-details-table, .btn-reject-table, .btn-complete-table, .btn-archive-table {
+.btn-accept, .btn-accept-table {
+    background: var(--status-completed-bg-current);
+    color: var(--status-completed-text-current);
+    border: 1px solid var(--status-completed-text-current);
+}
+.btn-accept:hover, .btn-accept-table:hover {
+    background: var(--status-completed-text-current);
+    color: var(--primary-color-light);
+}
+body.light-mode .btn-accept:hover, body.light-mode .btn-accept-table:hover {
+    color: var(--primary-color-dark);
+}
+
+.btn-details, .btn-details-table {
+    background: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+.btn-details:hover, .btn-details-table:hover {
+    background: var(--accent-color);
+    color: var(--btn-primary-text);
+}
+
+.btn-reply, .btn-complete, .btn-archive,
+.btn-reject-table, .btn-complete-table, .btn-archive-table {
     background-color: var(--secondary-color);
     color: var(--text-color);
     border: 1px solid var(--border-color);
 }
-.btn-details-table:hover, .btn-reject-table:hover, .btn-complete-table:hover, .btn-archive-table:hover {
+.btn-reply:hover, .btn-complete:hover, .btn-archive:hover,
+.btn-reject-table:hover, .btn-complete-table:hover, .btn-archive-table:hover {
     background-color: var(--accent-color-hover);
     color: var(--btn-primary-text);
     border-color: var(--accent-color-hover);
 }
 
-.btn-accept-table {
-    background: var(--status-completed-bg-current);
-    color: var(--status-completed-text-current);
-    border: 1px solid var(--status-completed-text-current);
-}
-.btn-accept-table:hover {
-    background: var(--status-completed-text-current);
-    color: var(--primary-color-light); /* White text on hover */
-}
-body.light-mode .btn-accept-table:hover {
-    color: var(--primary-color-dark); /* Dark text on hover for light mode */
-}
-
 .pagination-controls {
-    margin-top: 2rem;
+    margin-top: 2.5rem; /* More space */
     text-align: center;
 }
 .pagination-controls .btn-pagination {
-    margin: 0 0.25rem;
+    margin: 0 0.3rem; /* Adjusted margin */
+    padding: 0.5em 1em;
+    font-size: 0.9rem;
 }
 .page-info {
     margin: 0 1rem;
     color: var(--text-color-muted);
+    font-size: 0.9rem;
 }
 
 
@@ -1455,6 +1556,9 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
         padding-left: 50%; /* Space for label */
         position: relative;
         border-bottom: 1px dashed var(--border-color);
+        display: flex; /* For better alignment of label and value */
+        justify-content: space-between; /* Align label and value */
+        align-items: center;
     }
     html[dir="ltr"] .requests-table td {
         text-align: left;
@@ -1468,26 +1572,34 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
         content: attr(data-label);
         position: absolute;
         right: 0.5rem; /* RTL */
+        left: auto; /* RTL */
         width: 45%;
         padding-right: 0.5rem; /* RTL */
         font-weight: bold;
         white-space: nowrap;
         color: var(--accent-color);
+        text-align: right; /* Ensure label is right-aligned */
     }
     html[dir="ltr"] .requests-table td::before {
         left: 0.5rem;
         right: auto;
         padding-left: 0.5rem;
         padding-right: 0;
+        text-align: left;
     }
     .action-buttons {
-        justify-content: space-around; /* Spread buttons in mobile */
+        justify-content: space-around;
         padding-top: 0.5rem;
         border-top: none;
+        flex-wrap: wrap; /* Allow buttons to wrap if too many */
     }
     .action-buttons .btn.btn-action {
-        flex-grow: 1; /* Allow buttons to take equal space if needed */
+        /* flex-grow: 1; */ /* Removed to allow natural sizing */
         margin-bottom: 0.5rem;
+        min-width: 100px; /* Ensure buttons have some width */
+    }
+    .action-buttons .btn.btn-action:last-child {
+        margin-bottom: 0;
     }
 }
 
@@ -1547,19 +1659,31 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
         width: 100%;
     }
     .requests-table td {
-        padding-left: 40%; /* Adjust for smaller labels */
+        padding-left: 35%; /* Adjust for very small screens */
+        padding-right: 0.5rem; /* Adjust for very small screens */
     }
     html[dir="ltr"] .requests-table td {
-        padding-right: 40%;
+        padding-right: 35%;
+        padding-left: 0.5rem;
     }
     .requests-table td::before {
-        width: 38%;
+        width: 33%;
+        padding-right: 0.3rem; /* RTL */
+    }
+    html[dir="ltr"] .requests-table td::before {
+        padding-left: 0.3rem;
+        padding-right: 0;
     }
     .action-buttons .btn.btn-action {
-        width: 100%;
+        width: calc(50% - 0.25rem); /* Two buttons per row on smallest screens */
         margin-bottom: 0.5rem;
     }
-    .action-buttons .btn.btn-action:last-child {
-        margin-bottom: 0;
+    .action-buttons .btn.btn-action:nth-child(odd) {
+        margin-right: 0.5rem; /* RTL */
     }
+    html[dir="ltr"] .action-buttons .btn.btn-action:nth-child(odd) {
+        margin-right: 0;
+        margin-left: 0.5rem;
+    }
+
 }
