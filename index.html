@@ -7,23 +7,18 @@
     <meta name="keywords" content="Fixit Dz, دعم فني, إصلاح حاسوب, صيانة كمبيوتر, الجزائر, ويندوز, فيروسات, تسريع النظام, برمجة, شبكات, أسعار, عروض, سي الطيب توفيق">
     <meta name="author" content="سي الطيب توفيق">
     <title>Fixit Dz - خبيرك التقني لإصلاح الحواسيب عن بعد في الجزائر</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="navbar">
-        <div class="container">
+    <header class="navbar"> <div class="container">
             <a href="#hero" class="nav-logo">
                 <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
                 <span class="logo-text-fallback" style="display:none; font-size: 1.75rem; font-weight: 700; color: var(--accent-color);">Fixit Dz</span>
             </a>
-            <button class="menu-toggle" id="menu-toggle-button" aria-label="فتح/إغلاق القائمة" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            
             <nav class="nav-links-container">
                 <ul class="nav-links">
                     <li><a href="#hero" class="nav-link active">الرئيسية</a></li>
@@ -33,13 +28,28 @@
                     <li><a href="#testimonials" class="nav-link">آراء العملاء</a></li>
                     <li><a href="#contact" class="nav-link">تواصل معنا</a></li>
                 </ul>
+                <div class="theme-switch-wrapper">
+                    <i class="fas fa-sun icon"></i>
+                    <label class="theme-switch" for="theme-toggle">
+                        <input type="checkbox" id="theme-toggle" />
+                        <span class="slider round"></span>
+                    </label>
+                    <i class="fas fa-moon icon"></i>
+                </div>
             </nav>
+
+            <button class="menu-toggle" id="menu-toggle-button" aria-label="فتح/إغلاق القائمة" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </header>
 
     <main>
         <section id="hero" class="section hero-section">
-            <div class="container hero-content-wrapper"> <div class="hero-content fade-in" data-animation="fade-in">
+            <div class="container hero-content-wrapper">
+                <div class="hero-content fade-in" data-animation="fade-in">
                     <h1 class="hero-title">
                         حلول تقنية مبتكرة لمشاكل حاسوبك،
                         <span class="highlight" id="typewriter-text"></span><span class="cursor">&nbsp;</span>
@@ -50,7 +60,7 @@
                  <div class="hero-image-container fade-in" data-animation="zoom-in" data-delay="400">
                      <div class="gradient-border-wrapper">
                          <div class="gradient-border"></div>
-                         <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Visual" class="profile-image" onerror="this.onerror=null;this.src='https://placehold.co/250x250/2d3440/f0f0f0?text=Error'; this.style.border='2px solid var(--accent-color)'; this.style.backgroundColor='var(--secondary-color)';">
+                         <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Visual" class="profile-image" onerror="this.onerror=null;this.src='https://placehold.co/250x250/2d3440/f0f0f0?text=Profile+Error'; this.style.border='2px solid var(--accent-color)'; this.style.backgroundColor='var(--secondary-color)';">
                      </div>
                  </div>
             </div>
@@ -156,10 +166,12 @@
                     <h2 class="section-title">من نحن؟ فريق شغوف بالتكنولوجيا في خدمتك</h2>
                 </div>
                 <div class="about-grid">
-                    <div class="about-text fade-in" data-animation="slide-from-right"> <p>Fixit Dz هي مبادرة شبابية جزائرية يقودها سي الطيب توفيق، طالب متخصص في إدارة وأمن الشبكات. نؤمن بأن التكنولوجيا يجب أن تكون سهلة ومتاحة للجميع. هدفنا هو تقديم حلول دعم فني سريعة، فعالة، وموثوقة عن بعد، لمساعدتك على تجاوز أي تحديات تقنية تواجهها مع حاسوبك.</p>
+                    <div class="about-text fade-in" data-animation="slide-from-right">
+                        <p>Fixit Dz هي مبادرة شبابية جزائرية يقودها سي الطيب توفيق، طالب متخصص في إدارة وأمن الشبكات. نؤمن بأن التكنولوجيا يجب أن تكون سهلة ومتاحة للجميع. هدفنا هو تقديم حلول دعم فني سريعة، فعالة، وموثوقة عن بعد، لمساعدتك على تجاوز أي تحديات تقنية تواجهها مع حاسوبك.</p>
                         <p>نحن هنا لتبسيط الأمور المعقدة، وتقديم خبرتنا لضمان عمل جهازك بأفضل أداء ممكن. سواء كنت تواجه مشكلة في النظام، بطء في الأداء، أو هجوم فيروسات، فريقنا جاهز لتقديم المساعدة التي تحتاجها وأنت مرتاح في منزلك.</p>
                     </div>
-                    <div class="about-image fade-in" data-animation="slide-from-left"> <img src="https://placehold.co/450x350/2c3e50/ffffff?text=Si+Tayeb+Toufik&font=lora" alt="سي الطيب توفيق - مؤسس Fixit Dz" class="rounded-image" onerror="this.onerror=null;this.src='https://placehold.co/450x350/2d3440/f0f0f0?text=About+Error';">
+                    <div class="about-image fade-in" data-animation="slide-from-left">
+                        <img src="https://placehold.co/450x350/2c3e50/ffffff?text=Si+Tayeb+Toufik&font=lora" alt="سي الطيب توفيق - مؤسس Fixit Dz" class="rounded-image" onerror="this.onerror=null;this.src='https://placehold.co/450x350/2d3440/f0f0f0?text=About+Error';">
                     </div>
                 </div>
                  <div class="designer-info fade-in" data-animation="fade-in">
