@@ -35,17 +35,18 @@ html {
 }
 
 body {
-    font-family: var(--font-family);
-    background-image: url('pic2'); /* Provided background image */
+    background-image: url('https://i.ibb.co/j3L3N7Y/v1016-b-09.jpg'); /* This is the line to change */
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-color: var(--bg-color); /* Fallback color */
     color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
     line-height: 1.7;
-    overflow-x: hidden; /* Prevent horizontal scrollbars from animations */
-    position: relative; /* For pseudo-element overlay */
+    font-size: 16px;
+    position: relative;
+    overflow-x: hidden;
 }
 
 body::before {
