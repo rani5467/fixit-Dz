@@ -13,32 +13,42 @@
     --text-color-muted-dark: #b0b0b0;
     --bg-color-dark: #12161c;
     --card-bg-dark: rgba(30, 36, 47, 0.85);
-    --card-bg-rgb-dark: 30, 36, 47;
+    --card-bg-rgb-dark: 30, 36, 47; /* For potential use in gradients */
     --border-color-dark: rgba(255, 255, 255, 0.1);
     --shadow-color-dark: rgba(0, 0, 0, 0.25);
     --glow-color-dark: rgba(var(--accent-color-rgb-dark), 0.4);
+    --input-bg-dark: var(--secondary-color-dark);
+    --input-border-dark: #4a5568;
+    --placeholder-color-dark: var(--text-color-muted-dark);
+    --designer-info-bg-dark: var(--secondary-color-dark);
+    --overlay-bg-dark: rgba(18, 22, 28, 0.88);
 
     /* Light Mode Variables */
-    --primary-color-light: #f4f7f6; /* Light gray background */
-    --secondary-color-light: #ffffff; /* White for cards, header */
-    --accent-color-light: #ff7f00; /* A slightly deeper orange for better contrast on light */
-    --accent-color-rgb-light: 255, 127, 0;
+    --primary-color-light: #f4f7f6; /* Light gray page background */
+    --secondary-color-light: #ffffff; /* White for cards, header background */
+    --accent-color-light: #e67e22; /* A slightly deeper orange for better contrast on light */
+    --accent-color-rgb-light: 230, 126, 34;
     --text-color-light: #333333; /* Dark gray for text */
-    --text-color-muted-light: #777777; /* Medium gray for muted text */
-    --bg-color-light: #e9ecef; /* Very light gray page background */
+    --text-color-muted-light: #6c757d; /* Medium gray for muted text */
+    --bg-color-light: #e9ecef; /* Very light gray for body background */
     --card-bg-light: rgba(255, 255, 255, 0.9); /* Slightly transparent white for cards */
-    --card-bg-rgb-light: 255, 255, 255;
+    --card-bg-rgb-light: 255, 255, 255; /* For potential use in gradients */
     --border-color-light: rgba(0, 0, 0, 0.1);
     --shadow-color-light: rgba(0, 0, 0, 0.1);
     --glow-color-light: rgba(var(--accent-color-rgb-light), 0.3);
+    --input-bg-light: #ffffff;
+    --input-border-light: #ced4da;
+    --placeholder-color-light: #999;
+    --designer-info-bg-light: #e0e0e0;
+    --overlay-bg-light: rgba(255, 255, 255, 0.75);
 
-    /* Universal Variables (can be overridden or used directly) */
+
+    /* Universal Variables */
     --font-family: 'Poppins', sans-serif;
     --transition-smooth: all 0.3s ease-in-out;
     --border-radius-sm: 6px;
     --border-radius-md: 10px;
     --border-radius-lg: 16px;
-    --background-light-gray: #252a34; /* Specific for designer-info in dark mode */
 
     /* Initial theme setup (defaults to dark) */
     --primary-color: var(--primary-color-dark);
@@ -53,6 +63,11 @@
     --border-color: var(--border-color-dark);
     --shadow-color: var(--shadow-color-dark);
     --glow-color: var(--glow-color-dark);
+    --input-bg: var(--input-bg-dark);
+    --input-border: var(--input-border-dark);
+    --placeholder-color: var(--placeholder-color-dark);
+    --designer-info-bg: var(--designer-info-bg-dark);
+    --overlay-bg: var(--overlay-bg-dark);
 }
 
 body.light-mode {
@@ -68,7 +83,11 @@ body.light-mode {
     --border-color: var(--border-color-light);
     --shadow-color: var(--shadow-color-light);
     --glow-color: var(--glow-color-light);
-    --background-light-gray: #e9ecef;
+    --input-bg: var(--input-bg-light);
+    --input-border: var(--input-border-light);
+    --placeholder-color: var(--placeholder-color-light);
+    --designer-info-bg: var(--designer-info-bg-light);
+    --overlay-bg: var(--overlay-bg-light);
 }
 
 /* Basic Reset & Body Styles */
@@ -85,7 +104,7 @@ html {
 
 body {
     font-family: var(--font-family);
-    background-image: url('https://i.ibb.co/j3L3N7Y/v1016-b-09.jpg');
+    background-image: url('https://i.ibb.co/j3L3N7Y/v1016-b-09.jpg'); /* User-provided background */
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -108,13 +127,9 @@ body::before {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(18, 22, 28, 0.88);
+    background-color: var(--overlay-bg); /* Use theme variable for overlay */
     z-index: -1;
     transition: background-color 0.3s ease;
-}
-
-body.light-mode::before {
-    background-color: rgba(255, 255, 255, 0.75); /* Lighter overlay for light mode */
 }
 
 .container,
@@ -126,7 +141,7 @@ main,
 }
 
 .section {
-    padding: 60px 0;
+    padding: 70px 0; /* Standardized section padding */
 }
 
 .section-header {
@@ -150,14 +165,15 @@ main,
     margin: 0 auto 1.5rem auto;
 }
 
-/* Header & Navigation */
-.navbar {
+/* Header Styling */
+.navbar { /* This is the class for your header element */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 0.8rem 2%; /* Adjusted padding for better fit */
-    background: rgba(var(--primary-color-rgb-dark), 0.75); /* Default to dark primary with alpha */
+    padding: 0.8rem 2%;
+    background: rgba(30, 36, 47, 0.75); /* Fallback if --primary-color-rgb-dark is not defined early */
+    background: rgba(var(--primary-color-rgb, 30, 36, 47), 0.75); /* Default dark mode header */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     display: flex;
@@ -166,24 +182,22 @@ main,
     z-index: 1000;
     transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 8px var(--shadow-color);
-    min-height: 60px; /* Ensure a minimum height */
+    min-height: 60px;
 }
 body.light-mode .navbar {
-    background: rgba(var(--primary-color-rgb-light, 244, 247, 246), 0.85); /* Light primary with alpha */
-    box-shadow: 0 2px 8px var(--shadow-color);
+    background: rgba(244, 247, 246, 0.85); /* Light mode header */
 }
 
 .navbar.scrolled {
-    background: rgba(var(--primary-color-rgb-dark), 0.95); /* Darker on scroll */
+    background: rgba(var(--primary-color-rgb, 20, 25, 35), 0.95); /* Darker on scroll */
     padding: 0.6rem 2%;
     box-shadow: 0 4px 15px var(--shadow-color);
 }
 body.light-mode .navbar.scrolled {
-    background: rgba(var(--secondary-color-rgb-light, 255, 255, 255), 0.95);
-    box-shadow: 0 4px 15px var(--shadow-color);
+    background: rgba(255, 255, 255, 0.95); /* Lighter on scroll for light mode */
 }
 
-.navbar .container { /* Ensure container within navbar also behaves */
+.navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -191,7 +205,7 @@ body.light-mode .navbar.scrolled {
 }
 
 .nav-logo {
-    font-size: 1.5rem; /* Adjusted logo text size */
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--accent-color);
     text-decoration: none;
@@ -205,10 +219,15 @@ body.light-mode .navbar.scrolled {
 }
 
 .logo-img {
-    height: 30px; /* Adjusted logo image height */
-    width: auto; /* Maintain aspect ratio */
+    height: 35px;
+    width: auto;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+/* Optional: if you have a different logo version for light mode */
+/* body.light-mode .logo-img {
+    filter: invert(1) hue-rotate(180deg);
+} */
+
 
 .nav-logo:hover .logo-img {
     transform: scale(1.1) rotate(-5deg);
@@ -217,28 +236,28 @@ body.light-mode .navbar.scrolled {
 .logo-text-fallback {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--accent-color);
+    color: var(--accent-color); /* Ensure visibility */
 }
 
 .nav-links-container {
     display: flex;
-    align-items: center; /* Vertically align nav items and theme toggle */
+    align-items: center;
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 1.5rem; /* Adjusted gap for desktop */
+    gap: 1.5rem; /* Space between nav links */
     margin: 0;
     padding: 0;
 }
 
 .nav-link {
-    font-size: 0.9rem; /* Adjusted font size for nav links */
+    font-size: 0.9rem;
     color: var(--text-color);
     text-decoration: none;
     position: relative;
-    padding: 0.4rem 0; /* Adjusted padding */
+    padding: 0.4rem 0;
     font-weight: 500;
     transition: color 0.3s ease;
 }
@@ -251,7 +270,7 @@ body.light-mode .navbar.scrolled {
     content: '';
     position: absolute;
     bottom: 0; /* Underline position */
-    right: 0;
+    right: 0; /* Adjusted for RTL */
     width: 0;
     height: 2px;
     background: var(--accent-color);
@@ -261,7 +280,7 @@ body.light-mode .navbar.scrolled {
 .nav-link:hover::before,
 .nav-link.active::before {
     width: 100%;
-    left: 0;
+    left: 0; /* Ensure it expands from the correct side in RTL */
     right: auto;
 }
 
@@ -271,11 +290,11 @@ body.light-mode .navbar.scrolled {
 }
 
 .menu-toggle {
-    display: none;
+    display: none; /* Hidden by default, shown in media query */
     flex-direction: column;
     justify-content: space-around;
-    width: 28px;
-    height: 22px;
+    width: 28px; /* Slightly smaller */
+    height: 22px; /* Slightly smaller */
     background: transparent;
     border: none;
     cursor: pointer;
@@ -291,16 +310,15 @@ body.light-mode .navbar.scrolled {
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
+/* Hamburger to X animation */
 .menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
+    transform: rotate(45deg) translate(6px, 6px); /* Adjusted for new size */
 }
-
 .menu-toggle.active span:nth-child(2) {
     opacity: 0;
 }
-
 .menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
+    transform: rotate(-45deg) translate(6px, -6px); /* Adjusted for new size */
 }
 
 /* Theme Toggle Switch */
@@ -338,9 +356,9 @@ html[dir="ltr"] .theme-switch-wrapper {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color); /* Uses theme's secondary color for the track */
     transition: .4s;
-    border-radius: 22px;
+    border-radius: 22px; /* Keep it rounded */
 }
 
 .slider:before {
@@ -350,45 +368,50 @@ html[dir="ltr"] .theme-switch-wrapper {
     width: 16px;  /* Adjusted size */
     left: 3px;    /* Adjusted position */
     bottom: 3px;  /* Adjusted position */
-    background-color: white;
+    background-color: white; /* Knob color for dark mode */
     transition: .4s;
     border-radius: 50%;
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
 }
 body.light-mode .slider:before {
-    background-color: var(--primary-color-dark); /* Dark circle in light mode */
+    background-color: var(--primary-color-dark); /* Dark knob for light mode */
 }
 
 
-input:checked + .slider {
+input:checked + .slider { /* Light mode active */
     background-color: var(--accent-color);
 }
+body.light-mode input:checked + .slider {
+    background-color: var(--accent-color-light); /* Use light mode accent for slider background */
+}
+
 
 input:checked + .slider:before {
     transform: translateX(22px); /* Adjusted translation */
 }
 
 .theme-switch-wrapper .icon {
-    color: var(--text-color);
+    color: var(--text-color-muted); /* Muted by default */
     font-size: 1.1rem; /* Adjusted icon size */
     margin: 0 0.5rem;
     transition: color 0.3s ease;
 }
+
 body.light-mode .theme-switch-wrapper .icon.fa-sun {
-    color: var(--accent-color-light); /* Highlight active mode icon */
+    color: var(--accent-color); /* Sun icon active in light mode */
 }
 body:not(.light-mode) .theme-switch-wrapper .icon.fa-moon {
-    color: var(--accent-color-dark); /* Highlight active mode icon */
+    color: var(--accent-color); /* Moon icon active in dark mode */
 }
 
 
-/* Hero Section Styling */
+/* Hero Section */
 .hero-section {
     min-height: 90vh;
     display: flex;
     align-items: center;
     text-align: center;
-    padding-top: calc(60px + 3rem); /* Header height + some space */
+    padding-top: calc(60px + 3rem); /* header height + extra padding */
     padding-bottom: 3rem;
 }
 
@@ -405,22 +428,22 @@ body:not(.light-mode) .theme-switch-wrapper .icon.fa-moon {
 }
 
 .hero-title {
-    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+    font-size: clamp(2.2rem, 5.5vw, 3.5rem); /* Adjusted for better balance */
     margin-bottom: 1rem;
-    line-height: 1.25;
+    line-height: 1.3;
     font-weight: 700;
     color: var(--text-color);
 }
 
 .hero-title .highlight {
-    background: var(--gradient);
+    background: var(--gradient); /* This will use the current theme's accent color */
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
 body.light-mode .hero-title .highlight {
-    background: linear-gradient(45deg, var(--accent-color-light), #ffae42);
+    background: linear-gradient(45deg, var(--accent-color-light), #ffc107); /* Adjusted light mode highlight */
 }
 
 
@@ -430,7 +453,7 @@ body.light-mode .hero-title .highlight {
     width: 3px;
     height: 0.9em;
     animation: blink 1s step-end infinite;
-    margin-right: 2px;
+    margin-right: 2px; /* RTL */
     vertical-align: baseline;
 }
 
@@ -440,7 +463,7 @@ body.light-mode .hero-title .highlight {
 }
 
 .hero-subtitle {
-    font-size: clamp(1rem, 2.8vw, 1.25rem);
+    font-size: clamp(1rem, 2.8vw, 1.2rem);
     margin-bottom: 2rem;
     color: var(--text-color-muted);
     max-width: 550px;
@@ -478,13 +501,18 @@ body.light-mode .hero-title .highlight {
     box-shadow: 0 3px 6px rgba(var(--accent-color-rgb), 0.25);
 }
 
+.btn.btn-pressed { /* For JS click effect */
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 5px rgba(var(--accent-color-rgb), 0.2);
+}
+
 .btn-primary {
-    background: var(--gradient);
-    color: var(--primary-color-dark);
+    background: var(--gradient); /* Uses theme's gradient */
+    color: var(--primary-color-dark); /* Dark text on orange gradient */
 }
 body.light-mode .btn-primary {
     color: #fff; /* White text on orange for light mode */
-    background: linear-gradient(45deg, var(--accent-color-light), #ffcc80);
+    background: linear-gradient(45deg, var(--accent-color-light), #ffae42);
 }
 
 
@@ -501,26 +529,26 @@ body.light-mode .btn-primary {
 
 .btn-secondary-outline:hover {
     background: var(--accent-color);
-    color: var(--primary-color-dark);
+    color: var(--primary-color-dark); /* Dark text on accent */
 }
 body.light-mode .btn-secondary-outline:hover {
-    color: var(--secondary-color-light);
+    color: var(--secondary-color-light); /* White text on accent */
 }
 
 
 .btn-purchase {
     background: var(--accent-color);
-    color: white;
+    color: white; /* Text color for purchase button */
 }
 body.light-mode .btn-purchase {
-    color: var(--primary-color-dark);
+    color: var(--primary-color-dark); /* Dark text on accent for light mode if needed */
 }
 
 .btn-purchase:hover {
     background: linear-gradient(45deg, #e87a3d, #fd833c);
 }
 body.light-mode .btn-purchase:hover {
-    background: linear-gradient(45deg, #e67300, #ff8c00);
+    background: linear-gradient(45deg, #d96d00, #ff8000); /* Darker orange for light mode hover */
 }
 
 .btn-block {
@@ -541,12 +569,15 @@ body.light-mode .btn-purchase:hover {
     padding: 8px;
     border-radius: 50%;
     overflow: hidden;
-    background-color: rgba(var(--card-bg-rgb), 0.3);
+    background-color: rgba(var(--card-bg-rgb), 0.3); /* Using theme variable */
     width: 180px;
     height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+body.light-mode .gradient-border-wrapper {
+    background-color: rgba(var(--card-bg-rgb-light), 0.3);
 }
 
 .gradient-border {
@@ -563,7 +594,7 @@ body.light-mode .btn-purchase:hover {
     100% { transform: rotate(360deg); }
 }
 
-.profile-image {
+.profile-image { /* This class is used for the logo in the hero */
     width: 85%;
     height: 85%;
     object-fit: contain;
@@ -576,16 +607,17 @@ body.light-mode .btn-purchase:hover {
 /* About Section */
 .about-section .about-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Default to single column */
     gap: 2.5rem;
     align-items: center;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) { /* Two columns for medium screens and up */
     .about-section .about-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 }
+
 
 .about-text h3 {
     font-size: 1.6rem;
@@ -651,7 +683,7 @@ body.light-mode .skill-item:hover {
     text-align: center;
     margin-top: 2.5rem;
     padding: 1.2rem;
-    background-color: var(--secondary-color);
+    background-color: var(--designer-info-bg);
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-light);
 }
@@ -775,11 +807,11 @@ body.light-mode .project-overlay {
 
 .project-overlay p {
     font-size: 0.85rem;
-    color: var(--text-color); /* This will adapt to light/dark mode */
+    color: var(--text-color);
     margin-bottom: 1.2rem;
 }
 body.light-mode .project-overlay p {
-    color: var(--text-color-light); /* Ensure contrast if overlay is light */
+    color: var(--text-color-light);
 }
 
 .project-overlay .btn {
@@ -789,10 +821,12 @@ body.light-mode .project-overlay p {
 
 /* Pricing Section */
 .pricing-section {
-    background-color: rgba(var(--secondary-color-rgb-dark, 45, 52, 64), 0.2); /* Default for dark */
+    background-color: rgba(45, 52, 64, 0.2); /* Fallback for --secondary-color-rgb-dark */
+    background-color: rgba(var(--secondary-color-rgb, 45, 52, 64), 0.2);
 }
 body.light-mode .pricing-section {
-    background-color: rgba(var(--secondary-color-rgb-light, 233, 236, 239), 0.5); /* Lighter for light mode */
+    background-color: rgba(233, 236, 239, 0.5); /* Fallback for --secondary-color-rgb-light */
+    background-color: rgba(var(--secondary-color-rgb-light, 233, 236, 239), 0.5);
 }
 
 .pricing-grid {
@@ -875,28 +909,24 @@ body.light-mode .popular-badge {
     display: flex;
     align-items: center;
     font-size: 0.9rem;
-    color: var(--text-color-muted); /* Adjusted for general readability */
+    color: var(--text-color-muted);
 }
 body.light-mode .pricing-card-features li {
     color: #555;
 }
 
 .pricing-card-features li i {
-    margin-left: 0.6rem; /* Adjusted for RTL */
+    margin-left: 0.6rem; /* RTL */
     margin-right: 0;
     font-size: 1.1em;
-}
-
-.pricing-card-features li i.fa-check-circle {
     color: var(--accent-color);
 }
 .pricing-card-features li i.fa-times-circle {
-    color: #888; /* Muted for times */
+    color: #888;
 }
 body.light-mode .pricing-card-features li i.fa-times-circle {
     color: #aaa;
 }
-
 
 /* Testimonials Section */
 .testimonials-grid {
@@ -932,7 +962,7 @@ body.light-mode .pricing-card-features li i.fa-times-circle {
     height: 55px;
     border-radius: 50%;
     object-fit: cover;
-    margin-left: 0.8rem; /* For RTL */
+    margin-left: 0.8rem; /* RTL */
     margin-right: 0;
     border: 2px solid var(--accent-color);
 }
@@ -978,16 +1008,16 @@ body.light-mode .pricing-card-features li i.fa-times-circle {
     line-height: 1;
 }
 
-
 /* Contact Section */
 .contact-form-section {
-    background-color: rgba(var(--primary-color-rgb-dark, 26, 31, 43), 0.3);
+    background-color: rgba(26, 31, 43, 0.3); /* Fallback for --primary-color-rgb-dark */
+    background-color: rgba(var(--primary-color-rgb, 26, 31, 43), 0.3);
     padding-bottom: 4rem;
 }
 body.light-mode .contact-form-section {
+    background-color: rgba(244, 247, 246, 0.5); /* Fallback for --primary-color-rgb-light */
     background-color: rgba(var(--primary-color-rgb-light, 244, 247, 246), 0.5);
 }
-
 
 .contact-form {
     background: var(--card-bg);
@@ -1018,33 +1048,20 @@ body.light-mode .contact-form-section {
 select.form-input {
     width: 100%;
     padding: 0.7rem 0.9rem;
-    background-color: var(--secondary-color);
-    border: 1px solid #555;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
     border-radius: var(--border-radius-sm);
     color: var(--text-color);
     font-family: inherit;
     font-size: 0.95rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-body.light-mode .form-input,
-body.light-mode .form-textarea,
-body.light-mode select.form-input {
-    background-color: #fff;
-    border-color: #ced4da;
-    color: var(--text-color-light);
-}
-
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-    color: var(--text-color-muted);
+    color: var(--placeholder-color);
     opacity: 0.8;
 }
-body.light-mode .form-input::placeholder,
-body.light-mode .form-textarea::placeholder {
-    color: #999;
-}
-
 
 .form-input:focus,
 .form-textarea:focus,
@@ -1061,7 +1078,7 @@ select.form-input:focus {
 
 .form-message-area {
     margin-bottom: 1rem;
-    min-height: 35px;
+    min-height: 35px; /* Reserve space for messages */
 }
 .form-message-area p {
     padding: 0.7rem;
@@ -1070,7 +1087,6 @@ select.form-input:focus {
     font-weight: 500;
     font-size: 0.9rem;
 }
-
 
 .contact-form button.btn {
     width: 100%;
@@ -1096,7 +1112,6 @@ body.light-mode .footer {
     border-top: 1px solid #dee2e6;
 }
 
-
 .footer .nav-logo {
     font-size: 1.4rem;
     margin-bottom: 0.8rem;
@@ -1108,14 +1123,12 @@ body.light-mode .footer {
 .footer-links {
     margin-bottom: 0.8rem;
 }
-
 .footer-links a {
     color: var(--text-color-muted);
     text-decoration: none;
     margin: 0 0.6rem;
     transition: color 0.3s ease;
 }
-
 .footer-links a:hover {
     color: var(--accent-color);
 }
@@ -1123,7 +1136,6 @@ body.light-mode .footer {
 .footer-social-links {
     margin-bottom: 1.2rem;
 }
-
 .footer-social-links a {
     color: var(--text-color-muted);
     font-size: 1.4rem;
@@ -1131,9 +1143,8 @@ body.light-mode .footer {
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .footer-social-links a i {
-    color: inherit; /* Ensure icon color is consistent */
+    color: inherit;
 }
-
 .footer-social-links a:hover {
     color: var(--accent-color);
     transform: translateY(-2px);
@@ -1142,7 +1153,6 @@ body.light-mode .footer {
 .copyright-text {
     margin-bottom: 0.3rem;
 }
-
 .designer-credit {
     font-size: 0.75rem;
     color: #888; /* Dark mode */
@@ -1150,7 +1160,6 @@ body.light-mode .footer {
 body.light-mode .designer-credit {
     color: #6c757d; /* Light mode */
 }
-
 
 /* Scroll-to-top Button */
 .scroll-to-top-button {
@@ -1235,38 +1244,40 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
         width: 70%;
         max-width: 280px;
         height: 100vh;
-        flex-direction: column; /* Stack nav links and theme toggle */
-        align-items: center; /* Center items in the mobile menu */
-        background: var(--primary-color);
-        padding: 2rem; /* General padding */
+        flex-direction: column;
+        align-items: center;
+        background: var(--primary-color); /* Will change with theme */
+        padding: 2rem;
         padding-top: 60px; /* Space for close button or if header is not fully covered */
-        gap: 1rem;
+        gap: 0.8rem;
         transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s ease;
         overflow-y: auto;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Generic shadow */
     }
     html[dir="rtl"] .nav-links-container {
-        transform: translateX(100%);
+        transform: translateX(100%); /* Start off-screen to the right */
         right: 0; left:auto;
-        box-shadow: -3px 0 10px var(--shadow-color);
+        box-shadow: -5px 0 15px var(--shadow-color); /* Shadow on the left */
     }
     html[dir="ltr"] .nav-links-container {
-        transform: translateX(-100%);
+        transform: translateX(-100%); /* Start off-screen to the left */
         left: 0; right: auto;
-        box-shadow: 3px 0 10px var(--shadow-color);
+        box-shadow: 5px 0 15px var(--shadow-color); /* Shadow on the right */
     }
 
     .nav-links-container.active {
-        transform: translateX(0);
+        transform: translateX(0); /* Slide in */
     }
     
     .nav-links-container .theme-switch-wrapper {
-        margin: 1.5rem 0; /* Add some space around the theme switcher in mobile menu */
+        margin: 1.5rem 0;
+        order: -1; /* Moves theme toggle to the top in mobile menu */
     }
 
     .nav-links {
         flex-direction: column;
         width: 100%;
-        align-items: stretch;
+        align-items: stretch; /* Make links take full width for easier tapping */
         gap: 0;
     }
     .nav-links li { width: 100%; }
@@ -1280,19 +1291,19 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     html[dir="rtl"] .nav-link { text-align: right; }
     html[dir="ltr"] .nav-link { text-align: left; }
     .nav-link:last-child { border-bottom: none; }
-    .nav-link::before { display: none; }
+    .nav-link::before { display: none; } /* Hide underline for mobile nav items */
     .nav-link.active, .nav-link:hover {
       color: var(--accent-color);
       background-color: var(--secondary-color);
       border-radius: var(--border-radius-sm);
     }
 
-    .hero-section { padding-top: calc(60px + 2rem); } /* header height + some space */
+    .hero-section { padding-top: calc(60px + 2rem); }
     .hero .container.hero-content-wrapper {
-        flex-direction: column;
+        flex-direction: column; /* Stack hero text and image on mobile */
     }
-    .hero-content { order: 2; max-width: 100%; }
-    .hero-image-container { order: 1; margin-bottom: 1.5rem; }
+    .hero-content { order: 2; max-width: 100%; } /* Text below image */
+    .hero-image-container { order: 1; margin-bottom: 1.5rem; } /* Image above text */
 
     .profile-image { max-width: 160px; max-height: 160px; }
     .gradient-border-wrapper { width: 180px; height: 180px; }
@@ -1300,11 +1311,12 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     .hero-cta { justify-content: center; }
 
     .contact-grid { grid-template-columns: 1fr; }
+    /* .contact-info was removed from HTML, so no need for its responsive rule here */
 }
 
 @media (max-width: 768px) {
     .section { padding: 2.5rem 0; }
-    .hero-section { padding: calc(60px + 1rem) 0 2.5rem; } /* header height + some space */
+    .hero-section { padding: calc(60px + 1rem) 0 2.5rem; }
     .hero-title { font-size: clamp(1.8rem, 6vw, 2.5rem); }
     .hero .section-subtitle { font-size: clamp(0.85rem, 2.2vw, 1rem); }
     .btn { padding: 0.6em 1.4em; font-size: 0.9rem; }
@@ -1328,13 +1340,13 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     .nav-links-container { 
         width: 85%; 
         max-width: 260px;
-        padding-top: 50px; /* Adjust top padding for smaller screens */
+        padding-top: 50px;
     }
     .profile-image { max-width: 100px; max-height: 100px; }
     .gradient-border-wrapper { width: 120px; height: 120px; padding: 6px; }
     .btn { font-size: 0.85rem; }
     .btn-lg { font-size: 0.9rem; }
-    .theme-switch-wrapper { margin-right: 0.5rem; } /* Reduce margin for smaller screens */
+    .theme-switch-wrapper { margin-right: 0.5rem; } /* RTL */
     html[dir="rtl"] .theme-switch-wrapper { margin-left: 0.5rem; }
-    html[dir="ltr"] .theme-switch-wrapper { margin-left: 0.5rem; }
+    html[dir="ltr"] .theme-switch-wrapper { margin-left: 0.5rem; } /* LTR */
 }
