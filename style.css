@@ -13,7 +13,7 @@
     --text-color-muted-dark: #b0b0b0;
     --bg-color-dark: #12161c;
     --card-bg-dark: rgba(30, 36, 47, 0.85);
-    --card-bg-rgb-dark: 30, 36, 47;
+    --card-bg-rgb-dark: 30, 36, 47; /* For potential use in gradients */
     --border-color-dark: rgba(255, 255, 255, 0.1);
     --shadow-color-dark: rgba(0, 0, 0, 0.25);
     --glow-color-dark: rgba(var(--accent-color-rgb-dark), 0.4);
@@ -26,11 +26,11 @@
     --btn-primary-text-dark: var(--primary-color-dark); /* Text color for primary buttons in dark mode */
 
     /* Light Mode Variables */
-    --primary-color-light: #ffffff; /* Main background for light mode - WHITE */
-    --secondary-color-light: #f8f9fa; /* Slightly off-white for cards/header */
-    --accent-color-light: #ff7f00; /* A vibrant orange for light mode */
-    --accent-color-rgb-light: 255, 127, 0;
-    --text-color-light: #212529; /* Dark text for light mode */
+    --primary-color-light: #f4f7f6; /* Light gray page background */
+    --secondary-color-light: #ffffff; /* White for cards, header background */
+    --accent-color-light: #e67e22; /* A slightly deeper orange for better contrast on light */
+    --accent-color-rgb-light: 230, 126, 34;
+    --text-color-light: #333333; /* Dark gray for text */
     --text-color-muted-light: #6c757d; /* Medium gray for muted text */
     --bg-color-light: #ffffff; /* Body background is white */
     --card-bg-light: #ffffff; /* Cards are white */
@@ -63,7 +63,7 @@
     --text-color-muted: var(--text-color-muted-dark);
     --bg-color: var(--bg-color-dark);
     --card-bg: var(--card-bg-dark);
-    --card-bg-rgb: var(--card-bg-rgb-dark);
+    --card-bg-rgb: var(--card-bg-rgb-dark); /* For gradient-border-wrapper */
     --border-color: var(--border-color-dark);
     --shadow-color: var(--shadow-color-dark);
     --glow-color: var(--glow-color-dark);
@@ -112,12 +112,8 @@ html {
 
 body {
     font-family: var(--font-family);
-    /* If you want a white background ALWAYS, set it here directly and remove the image for light mode */
-    /* background-image: none; */
-    /* background-color: #ffffff; */
-
-    /* If you want the image for dark mode and white for light mode: */
-    background-image: url('pic1.png'); /* Default background for dark mode */
+    /* Updated to local background image for dark mode */
+    background-image: url('background.jpg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -240,18 +236,10 @@ body.light-mode .navbar.scrolled {
 }
 
 .logo-img {
-    height: 35px;
-    width: auto;
+    height: 35px; /* Consistent logo height */
+    width: auto; /* Maintain aspect ratio */
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-/* In light mode, if the logo is dark on a transparent BG, it's fine.
-   If the logo itself has a dark background (like the ibb.co one), it might look odd on a white header.
-   Consider a version of the logo for light backgrounds. */
-/*
-body.light-mode .logo-img {
-    filter: brightness(0.1); // Example: Invert or darken if logo is light
-}
-*/
 
 .nav-logo:hover .logo-img {
     transform: scale(1.1) rotate(-5deg);
@@ -260,28 +248,28 @@ body.light-mode .logo-img {
 .logo-text-fallback {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--accent-color);
+    color: var(--accent-color); /* Ensure visibility */
 }
 
 .nav-links-container {
     display: flex;
-    align-items: center;
+    align-items: center; /* Vertically align nav items and theme toggle */
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
+    gap: 1.5rem; /* Adjusted gap for desktop */
     margin: 0;
     padding: 0;
 }
 
 .nav-link {
-    font-size: 0.9rem;
+    font-size: 0.9rem; /* Adjusted font size for nav links */
     color: var(--text-color);
     text-decoration: none;
     position: relative;
-    padding: 0.4rem 0;
+    padding: 0.4rem 0; /* Adjusted padding */
     font-weight: 500;
     transition: color 0.3s ease;
 }
@@ -293,7 +281,7 @@ body.light-mode .logo-img {
 .nav-link::before {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: 0; /* Underline position */
     right: 0;
     width: 0;
     height: 2px;
@@ -314,16 +302,16 @@ body.light-mode .logo-img {
 }
 
 .menu-toggle {
-    display: none;
+    display: none; /* Hidden by default, shown in media query */
     flex-direction: column;
     justify-content: space-around;
-    width: 28px;
-    height: 22px;
+    width: 28px; /* Slightly smaller */
+    height: 22px; /* Slightly smaller */
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 1005;
+    z-index: 1005; /* Ensure it's above other header elements */
 }
 
 .menu-toggle span {
@@ -335,13 +323,13 @@ body.light-mode .logo-img {
 }
 
 .menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
+    transform: rotate(45deg) translate(6px, 6px); /* Adjusted for new size */
 }
 .menu-toggle.active span:nth-child(2) {
     opacity: 0;
 }
 .menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
+    transform: rotate(-45deg) translate(6px, -6px); /* Adjusted for new size */
 }
 
 /* Theme Toggle Switch */
@@ -378,7 +366,7 @@ html[dir="ltr"] .theme-switch-wrapper {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color); /* Uses theme's secondary color for the track */
     transition: .4s;
     border-radius: 22px;
 }
@@ -390,7 +378,7 @@ html[dir="ltr"] .theme-switch-wrapper {
     width: 16px;
     left: 3px;
     bottom: 3px;
-    background-color: #fff; /* Knob color for dark mode */
+    background-color: white; /* Knob color for dark mode */
     transition: .4s;
     border-radius: 50%;
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
@@ -405,6 +393,7 @@ input:checked + .slider { /* Light mode active */
 body.light-mode input:checked + .slider { /* Slider background when light mode is active */
     background-color: var(--accent-color-light);
 }
+
 
 input:checked + .slider:before {
     transform: translateX(22px);
@@ -529,11 +518,11 @@ body:not(.light-mode) .theme-switch-wrapper .icon.fa-sun {
 }
 
 .btn-primary {
-    background: var(--gradient); /* This will use the theme-specific gradient if defined, or general accent */
+    background: var(--gradient); /* This will use the theme's accent color */
     color: var(--btn-primary-text); /* Use theme variable for text color */
 }
 body.light-mode .btn-primary {
-    background: linear-gradient(45deg, var(--accent-color-light), #ffae42); /* Specific gradient for light mode */
+    background: linear-gradient(45deg, var(--accent-color-light), #ffae42);
 }
 
 
@@ -550,10 +539,10 @@ body.light-mode .btn-primary {
 
 .btn-secondary-outline:hover {
     background: var(--accent-color);
-    color: var(--primary-color-dark); /* Text color for dark mode */
+    color: var(--primary-color-dark);
 }
 body.light-mode .btn-secondary-outline:hover {
-    color: var(--secondary-color-light); /* Text color for light mode */
+    color: var(--secondary-color-light);
 }
 
 
@@ -562,7 +551,7 @@ body.light-mode .btn-secondary-outline:hover {
     color: white;
 }
 body.light-mode .btn-purchase {
-    color: var(--primary-color-dark); /* Dark text on orange for light mode */
+    color: var(--primary-color-dark);
 }
 .btn-purchase:hover {
     background: linear-gradient(45deg, #e87a3d, #fd833c);
@@ -589,12 +578,15 @@ body.light-mode .btn-purchase:hover {
     padding: 8px;
     border-radius: 50%;
     overflow: hidden;
-    background-color: rgba(var(--card-bg-rgb), 0.3); /* Use theme variable */
+    background-color: rgba(var(--card-bg-rgb), 0.3);
     width: 180px;
     height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+body.light-mode .gradient-border-wrapper {
+    background-color: rgba(var(--card-bg-rgb-light), 0.3);
 }
 
 .gradient-border {
@@ -667,16 +659,16 @@ body.light-mode .btn-purchase:hover {
 }
 .skill-item:hover {
     background-color: var(--accent-color);
-    color: var(--primary-color-dark); /* Dark text on accent */
+    color: var(--primary-color-dark);
     transform: translateY(-2px) scale(1.03);
 }
 body.light-mode .skill-item {
-    background: #e0e0e0; /* Light gray for light mode */
-    color: var(--text-color-light); /* Dark text on light gray */
+    background: #e0e0e0;
+    color: var(--text-color-light);
 }
 body.light-mode .skill-item:hover {
     background-color: var(--accent-color);
-    color: #fff; /* White text on accent for light mode */
+    color: #fff;
 }
 
 .about-image img.rounded-image {
@@ -699,7 +691,7 @@ body.light-mode .skill-item:hover {
     text-align: center;
     margin-top: 2.5rem;
     padding: 1.2rem;
-    background-color: var(--designer-info-bg); /* Theme variable */
+    background-color: var(--designer-info-bg);
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-light);
 }
@@ -753,7 +745,7 @@ body.light-mode .skill-item:hover {
     transition: transform 0.3s ease, text-shadow 0.3s ease;
 }
 .card-icon i {
-    color: inherit;
+    color: inherit; /* Ensures FontAwesome icons get the accent color */
 }
 
 .service-card:hover .card-icon {
@@ -922,15 +914,18 @@ body.light-mode .popular-badge {
     font-size: 0.9rem;
     color: var(--text-color-muted);
 }
+body.light-mode .pricing-card-features li {
+    color: #555; /* Darker text for features in light mode */
+}
 
 .pricing-card-features li i {
     margin-left: 0.6rem; /* RTL */
     margin-right: 0;
     font-size: 1.1em;
-    color: var(--accent-color);
+    color: var(--accent-color); /* Ensures all feature icons are accent color */
 }
 .pricing-card-features li i.fa-times-circle {
-    color: #888;
+    color: #888; /* Muted for times */
 }
 body.light-mode .pricing-card-features li i.fa-times-circle {
     color: #aaa;
@@ -1149,7 +1144,7 @@ body.light-mode .footer {
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .footer-social-links a i {
-    color: inherit;
+    color: inherit; /* Ensure icons inherit color */
 }
 .footer-social-links a:hover {
     color: var(--accent-color);
@@ -1161,10 +1156,10 @@ body.light-mode .footer {
 }
 .designer-credit {
     font-size: 0.75rem;
-    color: #888; /* Dark mode */
+    color: #888;
 }
 body.light-mode .designer-credit {
-    color: #6c757d; /* Light mode */
+    color: #6c757d;
 }
 
 /* Scroll-to-top Button */
@@ -1210,7 +1205,7 @@ html[dir="ltr"] .scroll-to-top-button {
     transform: translateY(-2px) scale(1.1);
 }
 .scroll-to-top-button i {
-    color: white !important;
+    color: white !important; /* Ensure icon is white */
 }
 
 /* Scroll Animation Base Styles */
@@ -1258,7 +1253,7 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
         gap: 0.8rem;
         transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s ease;
         overflow-y: auto;
-        box-shadow: 0 0 15px var(--shadow-color); /* Generic shadow */
+        box-shadow: 0 0 15px var(--shadow-color);
     }
     html[dir="rtl"] .nav-links-container {
         transform: translateX(100%);
