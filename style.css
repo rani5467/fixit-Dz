@@ -4,24 +4,73 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #1a1f2b; /* Deep charcoal / very dark blue */
-    --secondary-color: #2d3440; /* Darker gray-blue */
-    --accent-color: #ff914d; /* Bright orange */
-    --accent-color-rgb: 255, 145, 77; /* For RGBA usage */
-    --text-color: #f0f0f0; /* Light gray for text */
-    --text-color-muted: #b0b0b0; /* Slightly lighter muted text for better contrast */
-    --bg-color: #12161c; /* Very dark, almost black background */
-    --card-bg: rgba(30, 36, 47, 0.85); /* Semi-transparent card background for glassmorphism */
-    --card-bg-rgb: 30, 36, 47;
+    /* Dark Mode Variables (Default) */
+    --primary-color-dark: #1a1f2b;
+    --secondary-color-dark: #2d3440;
+    --accent-color-dark: #ff914d;
+    --accent-color-rgb-dark: 255, 145, 77;
+    --text-color-dark: #f0f0f0;
+    --text-color-muted-dark: #b0b0b0;
+    --bg-color-dark: #12161c;
+    --card-bg-dark: rgba(30, 36, 47, 0.85);
+    --card-bg-rgb-dark: 30, 36, 47;
+    --border-color-dark: rgba(255, 255, 255, 0.1);
+    --shadow-color-dark: rgba(0, 0, 0, 0.25);
+    --glow-color-dark: rgba(var(--accent-color-rgb-dark), 0.4);
+
+    /* Light Mode Variables */
+    --primary-color-light: #f4f7f6; /* Light gray background */
+    --secondary-color-light: #ffffff; /* White for cards, header */
+    --accent-color-light: #ff7f00; /* A slightly deeper orange for better contrast on light */
+    --accent-color-rgb-light: 255, 127, 0;
+    --text-color-light: #333333; /* Dark gray for text */
+    --text-color-muted-light: #777777; /* Medium gray for muted text */
+    --bg-color-light: #e9ecef; /* Very light gray page background */
+    --card-bg-light: rgba(255, 255, 255, 0.9); /* Slightly transparent white for cards */
+    --card-bg-rgb-light: 255, 255, 255;
+    --border-color-light: rgba(0, 0, 0, 0.1);
+    --shadow-color-light: rgba(0, 0, 0, 0.1);
+    --glow-color-light: rgba(var(--accent-color-rgb-light), 0.3);
+
+    /* Universal Variables (can be overridden or used directly) */
     --font-family: 'Poppins', sans-serif;
     --transition-smooth: all 0.3s ease-in-out;
-    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.2);
-    --shadow-strong: 0 8px 25px rgba(0, 0, 0, 0.3);
-    --border-radius-sm: 6px; /* Slightly smaller radius for a sharper look */
+    --border-radius-sm: 6px;
     --border-radius-md: 10px;
     --border-radius-lg: 16px;
-    --background-light-gray: #252a34; /* For elements like designer-info */
+
+    /* Initial theme setup (defaults to dark) */
+    --primary-color: var(--primary-color-dark);
+    --secondary-color: var(--secondary-color-dark);
+    --accent-color: var(--accent-color-dark);
+    --accent-color-rgb: var(--accent-color-rgb-dark);
+    --text-color: var(--text-color-dark);
+    --text-color-muted: var(--text-color-muted-dark);
+    --bg-color: var(--bg-color-dark);
+    --card-bg: var(--card-bg-dark);
+    --card-bg-rgb: var(--card-bg-rgb-dark);
+    --border-color: var(--border-color-dark);
+    --shadow-color: var(--shadow-color-dark);
+    --glow-color: var(--glow-color-dark);
+    --background-light-gray: #252a34; /* Specific for designer-info in dark mode */
 }
+
+body.light-mode {
+    --primary-color: var(--primary-color-light);
+    --secondary-color: var(--secondary-color-light);
+    --accent-color: var(--accent-color-light);
+    --accent-color-rgb: var(--accent-color-rgb-light);
+    --text-color: var(--text-color-light);
+    --text-color-muted: var(--text-color-muted-light);
+    --bg-color: var(--bg-color-light);
+    --card-bg: var(--card-bg-light);
+    --card-bg-rgb: var(--card-bg-rgb-light);
+    --border-color: var(--border-color-light);
+    --shadow-color: var(--shadow-color-light);
+    --glow-color: var(--glow-color-light);
+    --background-light-gray: #e9ecef; /* Lighter for designer-info in light mode */
+}
+
 
 /* Basic Reset & Body Styles */
 * {
@@ -32,23 +81,23 @@
 
 html {
     scroll-behavior: smooth;
-    font-size: 16px; /* Base font size */
+    font-size: 16px;
 }
 
 body {
     font-family: var(--font-family);
-    /* Ensure this URL is correct and accessible. Replace if needed. */
     background-image: url('https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-color: var(--bg-color); /* Fallback color */
-    color: var(--text-color);
+    background-color: var(--bg-color); /* Uses theme variable */
+    color: var(--text-color); /* Uses theme variable */
     line-height: 1.7;
     overflow-x: hidden;
     position: relative;
     z-index: 0;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
 }
 
 body::before {
@@ -60,8 +109,13 @@ body::before {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(18, 22, 28, 0.88); /* Dark overlay for readability */
-    z-index: -1; /* Places the overlay BEHIND the body's direct content */
+    background-color: rgba(18, 22, 28, 0.88); /* Default dark overlay */
+    z-index: -1;
+    transition: background-color 0.3s ease;
+}
+
+body.light-mode::before {
+    background-color: rgba(255, 255, 255, 0.7); /* Lighter overlay for light mode */
 }
 
 /* Ensure main content containers are above the overlay */
@@ -99,13 +153,13 @@ main,
 }
 
 /* Header Styling */
-.navbar { /* This is the class for your header element */
+.navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     padding: 0.8rem 5%;
-    background: rgba(26, 31, 43, 0.75);
+    background: rgba(var(--primary-color-rgb, 26, 31, 43), 0.75); /* Default to dark primary with alpha */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     display: flex;
@@ -113,14 +167,24 @@ main,
     align-items: center;
     z-index: 1000;
     transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+body.light-mode .navbar {
+    background: rgba(var(--primary-color-rgb-light, 244, 247, 246), 0.75); /* Light primary with alpha */
+    box-shadow: 0 2px 8px var(--shadow-color);
 }
 
+
 .navbar.scrolled {
-    background: rgba(20, 25, 35, 0.95);
+    background: rgba(var(--primary-color-rgb, 20, 25, 35), 0.95); /* Darker on scroll */
     padding: 0.6rem 5%;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 15px var(--shadow-color);
 }
+body.light-mode .navbar.scrolled {
+    background: rgba(var(--secondary-color-rgb-light, 255, 255, 255), 0.95); /* Lighter on scroll for light mode */
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
 
 .nav-logo {
     font-size: 1.6rem;
@@ -140,20 +204,25 @@ main,
     height: 35px;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+body.light-mode .logo-img {
+    /* Optional: if you have a different logo version for light mode */
+    /* filter: invert(1) hue-rotate(180deg); */
+}
+
 
 .nav-logo:hover .logo-img {
     transform: scale(1.1) rotate(-5deg);
 }
 
-.logo-text-fallback { /* Style for the fallback text if image fails */
+.logo-text-fallback {
     font-size: 1.6rem;
     font-weight: 700;
-    color: var(--accent-color); /* Ensure it's visible */
+    color: var(--accent-color);
 }
-
 
 .nav-links-container {
     display: flex;
+    align-items: center; /* Align theme toggle with nav links */
 }
 
 .nav-links {
@@ -234,6 +303,74 @@ main,
     transform: rotate(-45deg) translate(6px, -6px);
 }
 
+/* Theme Toggle Switch */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 1.5rem; /* For RTL, this should be margin-left */
+}
+html[dir="rtl"] .theme-switch-wrapper {
+    margin-right: 0;
+    margin-left: 1.5rem;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 24px; /* Adjusted size */
+    position: relative;
+    width: 48px; /* Adjusted size */
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--secondary-color); /* Use theme variable */
+    transition: .4s;
+    border-radius: 24px; /* Keep it rounded */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px; /* Adjusted size */
+    width: 18px; /* Adjusted size */
+    left: 3px; /* Adjusted position */
+    bottom: 3px; /* Adjusted position */
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+input:checked + .slider {
+    background-color: var(--accent-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px); /* Adjusted translation */
+}
+
+/* Optional: Icons for sun/moon */
+.theme-switch-wrapper .icon {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+}
+body.light-mode .theme-switch-wrapper .icon {
+    color: var(--text-color);
+}
+
+
 /* Hero Section */
 .hero-section {
     min-height: 90vh;
@@ -244,14 +381,14 @@ main,
     padding-bottom: 3rem;
 }
 
-.hero-content-wrapper { /* Wrapper for text and image */
+.hero-content-wrapper {
     display: flex;
-    flex-direction: column; /* Default for mobile, will be row on larger screens if needed */
+    flex-direction: column;
     align-items: center;
     gap: 2rem;
 }
 
-.hero-content { /* Text part */
+.hero-content {
     max-width: 700px;
     margin: 0 auto;
 }
@@ -265,12 +402,16 @@ main,
 }
 
 .hero-title .highlight {
-    background: var(--gradient);
+    background: var(--gradient); /* This will use the current theme's accent color */
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
+body.light-mode .hero-title .highlight {
+    background: linear-gradient(45deg, var(--accent-color-light), #ffae42); /* Specific gradient for light mode if needed */
+}
+
 
 .cursor {
     display: inline-block;
@@ -278,7 +419,7 @@ main,
     width: 3px;
     height: 0.9em;
     animation: blink 1s step-end infinite;
-    margin-right: 2px; /* For RTL */
+    margin-right: 2px;
     vertical-align: baseline;
 }
 
@@ -290,7 +431,7 @@ main,
 .hero-subtitle {
     font-size: clamp(1rem, 2.8vw, 1.25rem);
     margin-bottom: 2rem;
-    color: #ddd;
+    color: var(--text-color-muted);
     max-width: 550px;
     margin-left: auto;
     margin-right: auto;
@@ -305,7 +446,7 @@ main,
     border-radius: var(--border-radius-sm);
     text-decoration: none;
     font-weight: 600;
-    transition: var(--transition), transform 0.2s ease-out, box-shadow 0.3s ease;
+    transition: var(--transition-smooth), transform 0.2s ease-out, box-shadow 0.3s ease;
     display: inline-block;
     border: 2px solid transparent;
     font-size: 0.95rem;
@@ -327,9 +468,15 @@ main,
 }
 
 .btn-primary {
-    background: var(--gradient);
-    color: var(--primary-color);
+    background: var(--gradient); /* Uses theme's gradient */
+    color: var(--primary-color-dark); /* Text color for primary button, ensure contrast */
 }
+body.light-mode .btn-primary {
+    color: var(--text-color-light); /* Ensure text is readable on light orange */
+    background: linear-gradient(45deg, var(--accent-color-light), #ffcc80);
+}
+
+
 .btn-primary.btn-lg {
     padding: 0.9em 2.2em;
     font-size: 1.05rem;
@@ -343,15 +490,26 @@ main,
 
 .btn-secondary-outline:hover {
     background: var(--accent-color);
-    color: var(--primary-color);
+    color: var(--primary-color); /* This will be light on dark, dark on light */
 }
+body.light-mode .btn-secondary-outline:hover {
+    color: var(--secondary-color-light); /* White text on orange bg */
+}
+
 
 .btn-purchase {
     background: var(--accent-color);
-    color: white;
+    color: white; /* Text color for purchase button */
 }
+body.light-mode .btn-purchase {
+    color: var(--primary-color-dark); /* Dark text on orange for light mode if needed */
+}
+
 .btn-purchase:hover {
     background: linear-gradient(45deg, #e87a3d, #fd833c);
+}
+body.light-mode .btn-purchase:hover {
+    background: linear-gradient(45deg, #e67300, #ff8c00);
 }
 
 .btn-block {
@@ -394,7 +552,7 @@ main,
     100% { transform: rotate(360deg); }
 }
 
-.profile-image { /* For the hero section image/logo */
+.profile-image {
     width: 85%;
     height: 85%;
     object-fit: contain;
@@ -407,17 +565,16 @@ main,
 /* About Section */
 .about-section .about-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Default to single column */
+    grid-template-columns: 1fr;
     gap: 2.5rem;
     align-items: center;
 }
 
-@media (min-width: 768px) { /* Two columns for medium screens and up */
+@media (min-width: 768px) {
     .about-section .about-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 }
-
 
 .about-text h3 {
     font-size: 1.6rem;
@@ -429,7 +586,7 @@ main,
     font-size: 0.95rem;
     line-height: 1.7;
     margin-bottom: 1.2rem;
-    color: #ddd;
+    color: var(--text-color-muted); /* Use muted for paragraphs */
 }
 
 .skill-list {
@@ -445,38 +602,48 @@ main,
     border-radius: var(--border-radius-sm);
     font-size: 0.85rem;
     font-weight: 500;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: var(--transition), background-color 0.3s, color 0.3s;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: var(--transition-smooth), background-color 0.3s, color 0.3s;
+    color: var(--text-color); /* Ensure text color contrasts with skill item background */
 }
 .skill-item:hover {
     background-color: var(--accent-color);
-    color: var(--primary-color);
+    color: var(--primary-color-dark); /* Dark text on accent for better contrast */
     transform: translateY(-2px) scale(1.03);
 }
+body.light-mode .skill-item {
+    background: #e0e0e0; /* Lighter gray for light mode */
+    color: var(--text-color-light);
+}
+body.light-mode .skill-item:hover {
+    background-color: var(--accent-color);
+    color: #fff; /* White text on accent for light mode */
+}
+
 
 .about-image img.rounded-image {
     width: 100%;
     max-width: 400px;
     border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-light); /* Use theme shadow */
     object-fit: cover;
     display: block;
-    margin: 1rem auto 0; /* Add some margin when stacked */
+    margin: 1rem auto 0;
     transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
 }
 
 .about-image img.rounded-image:hover {
     transform: scale(1.02) rotate(-1deg);
-    box-shadow: var(--shadow-strong);
+    box-shadow: var(--shadow-strong); /* Use theme shadow */
 }
 
 .designer-info {
     text-align: center;
     margin-top: 2.5rem;
     padding: 1.2rem;
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color); /* Use theme variable */
     border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-light);
+    box-shadow: var(--shadow-light); /* Use theme shadow */
 }
 
 .designer-info p {
@@ -504,9 +671,9 @@ main,
     padding: 2rem 1.5rem;
     border-radius: var(--border-radius-md);
     text-align: center;
-    box-shadow: var(--shadow);
+    box-shadow: 0 6px 12px var(--shadow-color); /* Adjusted shadow */
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
     will-change: transform;
     display: flex;
     flex-direction: column;
@@ -516,24 +683,24 @@ main,
 .service-card:hover,
 .project-card:hover {
     transform: perspective(1000px) rotateX(4deg) rotateY(-4deg) scale(1.04);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 0 18px rgba(var(--accent-color-rgb), 0.35);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 18px var(--glow-color); /* Use theme glow */
     border-color: rgba(var(--accent-color-rgb), 0.5);
 }
 
 .card-icon {
     font-size: 2.8rem;
-    color: var(--accent-color); /* Explicitly set icon color */
+    color: var(--accent-color);
     margin-bottom: 1.2rem;
     display: inline-block;
     transition: transform 0.3s ease, text-shadow 0.3s ease;
 }
-.card-icon i { /* Ensure FontAwesome icons inherit this color */
+.card-icon i {
     color: inherit;
 }
 
 .service-card:hover .card-icon {
     transform: scale(1.1) rotate(-5deg);
-    text-shadow: 0 0 8px rgba(var(--accent-color-rgb), 0.6);
+    text-shadow: 0 0 8px var(--glow-color); /* Use theme glow */
 }
 
 .card-title {
@@ -545,7 +712,7 @@ main,
 
 .card-description {
     font-size: 0.9rem;
-    color: #ccc;
+    color: var(--text-color-muted); /* Use muted for descriptions */
     line-height: 1.6;
     margin-bottom: 1.2rem;
     flex-grow: 1;
@@ -571,7 +738,7 @@ main,
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(rgba(26, 31, 43, 0.75), rgba(26, 31, 43, 0.98));
+    background: linear-gradient(rgba(var(--primary-color-rgb-dark), 0.7), rgba(var(--primary-color-rgb-dark), 0.98)); /* Use theme variable */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -582,6 +749,10 @@ main,
     text-align: center;
     border-radius: var(--border-radius-md);
 }
+body.light-mode .project-overlay {
+    background: linear-gradient(rgba(var(--primary-color-rgb-light), 0.7), rgba(var(--primary-color-rgb-light), 0.98));
+}
+
 
 .project-card:hover .project-overlay {
     opacity: 1;
@@ -595,9 +766,13 @@ main,
 
 .project-overlay p {
     font-size: 0.85rem;
-    color: var(--text-color);
+    color: var(--text-color); /* This will adapt to light/dark mode */
     margin-bottom: 1.2rem;
 }
+body.light-mode .project-overlay p {
+    color: var(--text-color-light); /* Ensure contrast if overlay is light */
+}
+
 
 .project-overlay .btn {
     padding: 0.5rem 1rem;
@@ -606,8 +781,12 @@ main,
 
 /* Pricing Section */
 .pricing-section {
-    background-color: rgba(var(--secondary-color-rgb, 45, 52, 64), 0.2);
+    background-color: rgba(var(--secondary-color-rgb, 45, 52, 64), 0.2); /* Default for dark */
 }
+body.light-mode .pricing-section {
+    background-color: rgba(var(--secondary-color-rgb-light, 233, 236, 239), 0.5); /* Lighter for light mode */
+}
+
 .pricing-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -623,8 +802,8 @@ main,
     box-shadow: var(--shadow-light);
     display: flex;
     flex-direction: column;
-    transition: var(--transition);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: var(--transition-smooth);
+    border: 1px solid var(--border-color);
 }
 
 .pricing-card:hover, .pricing-card.popular {
@@ -643,11 +822,14 @@ main,
     left: 50%;
     transform: translateX(-50%);
     background: var(--gradient);
-    color: var(--primary-color);
+    color: var(--primary-color-dark); /* Text on badge */
     padding: 0.25rem 0.8rem;
     border-radius: var(--border-radius-sm);
     font-size: 0.85rem;
     font-weight: 600;
+}
+body.light-mode .popular-badge {
+    color: var(--text-color-light); /* Ensure contrast on light orange */
 }
 
 .pricing-card-title {
@@ -670,7 +852,7 @@ main,
     font-size: 0.9rem;
     font-weight: 400;
     color: var(--text-color-muted);
-    margin-right: 0.25rem; /* Adjusted for RTL */
+    margin-right: 0.25rem;
 }
 
 .pricing-card-features {
@@ -685,21 +867,28 @@ main,
     display: flex;
     align-items: center;
     font-size: 0.9rem;
-    color: #bbb;
+    color: var(--text-color-muted);
 }
+body.light-mode .pricing-card-features li {
+    color: #555; /* Darker text for features in light mode */
+}
+
 
 .pricing-card-features li i {
     margin-left: 0.6rem; /* Adjusted for RTL */
     margin-right: 0;
-    color: var(--accent-color); /* Ensures all feature icons are accent color */
+    color: var(--accent-color);
     font-size: 1.1em;
 }
 
 .pricing-card-features li i.fa-check-circle {
-    color: var(--accent-color); /* Explicitly for check */
+    color: var(--accent-color);
 }
 .pricing-card-features li i.fa-times-circle {
-    color: #6c757d; /* Muted for times */
+    color: #888; /* Muted for times, slightly darker for light mode */
+}
+body.light-mode .pricing-card-features li i.fa-times-circle {
+    color: #aaa;
 }
 
 
@@ -717,8 +906,8 @@ main,
     padding: 1.8rem;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-smooth);
 }
 
 .testimonial-card:hover {
@@ -757,7 +946,7 @@ main,
 .testimonial-text {
     font-size: 0.95rem;
     line-height: 1.7;
-    color: #ccc;
+    color: var(--text-color-muted); /* Use muted for the quote text */
     font-style: italic;
     position: relative;
     padding-right: 1.5em;
@@ -786,9 +975,13 @@ main,
 
 /* Contact Section */
 .contact-form-section {
-    background-color: rgba(var(--primary-color-rgb, 26, 31, 43), 0.3); /* Lighter than pricing */
+    background-color: rgba(var(--primary-color-rgb, 26, 31, 43), 0.3); /* Default for dark */
     padding-bottom: 4rem;
 }
+body.light-mode .contact-form-section {
+    background-color: rgba(var(--primary-color-rgb-light, 244, 247, 246), 0.5); /* Lighter for light mode */
+}
+
 
 .contact-form {
     background: var(--card-bg);
@@ -797,7 +990,7 @@ main,
     padding: 2rem;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-strong);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     max-width: 650px;
     margin: 0 auto;
 }
@@ -820,19 +1013,32 @@ select.form-input {
     width: 100%;
     padding: 0.7rem 0.9rem;
     background-color: var(--secondary-color);
-    border: 1px solid #555;
+    border: 1px solid #555; /* Slightly darker border for dark mode */
     border-radius: var(--border-radius-sm);
     color: var(--text-color);
     font-family: inherit;
     font-size: 0.95rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+body.light-mode .form-input,
+body.light-mode .form-textarea,
+body.light-mode select.form-input {
+    background-color: #fff; /* White background for inputs in light mode */
+    border-color: #ced4da; /* Standard light mode border color */
+    color: var(--text-color-light);
+}
+
 
 .form-input::placeholder,
 .form-textarea::placeholder {
     color: var(--text-color-muted);
     opacity: 0.8;
 }
+body.light-mode .form-input::placeholder,
+body.light-mode .form-textarea::placeholder {
+    color: #999;
+}
+
 
 .form-input:focus,
 .form-textarea:focus,
@@ -858,6 +1064,8 @@ select.form-input:focus {
     font-weight: 500;
     font-size: 0.9rem;
 }
+/* Message success/error specific colors are handled in JS, but can add base here if needed */
+
 
 .contact-form button.btn {
     width: 100%;
@@ -877,6 +1085,12 @@ select.form-input:focus {
     position: relative;
     z-index: 1;
 }
+body.light-mode .footer {
+    background: var(--secondary-color-light); /* Lighter footer for light mode */
+    color: var(--text-color-muted-light);
+    border-top: 1px solid #dee2e6;
+}
+
 
 .footer .nav-logo {
     font-size: 1.4rem;
@@ -906,13 +1120,13 @@ select.form-input:focus {
 }
 
 .footer-social-links a {
-    color: var(--text-color-muted); /* Default color for icons */
+    color: var(--text-color-muted);
     font-size: 1.4rem;
     margin: 0 0.6rem;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .footer-social-links a i {
-    color: inherit; /* Make sure Font Awesome icons inherit the <a> tag's color */
+    color: inherit;
 }
 
 .footer-social-links a:hover {
@@ -926,15 +1140,19 @@ select.form-input:focus {
 
 .designer-credit {
     font-size: 0.75rem;
-    color: #6c757d;
+    color: #888; /* Dark mode */
 }
+body.light-mode .designer-credit {
+    color: #6c757d; /* Light mode */
+}
+
 
 /* Scroll-to-top Button */
 .scroll-to-top-button {
     position: fixed;
     bottom: 20px;
     background-color: var(--accent-color);
-    color: white;
+    color: white; /* Icon color */
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -971,15 +1189,15 @@ html[dir="ltr"] .scroll-to-top-button {
     background-color: #e67e22; /* Darker orange on hover */
     transform: translateY(-2px) scale(1.1);
 }
-.scroll-to-top-button i { /* Ensure FontAwesome icon inside is white */
-    color: white;
+.scroll-to-top-button i {
+    color: white !important; /* Ensure icon is white */
 }
 
 /* Scroll Animation Base Styles */
 .fade-in {
     opacity: 0;
     transition-property: opacity, transform;
-    transition-duration: 0.6s; /* Faster default animation */
+    transition-duration: 0.6s;
     transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
@@ -989,12 +1207,8 @@ html[dir="ltr"] .scroll-to-top-button {
 }
 
 /* Specific Animation Initial States */
-.fade-in[data-animation="fade-in"] {
-    transform: translateY(25px);
-}
-.fade-in[data-animation="slide-up"] {
-    transform: translateY(55px);
-}
+.fade-in[data-animation="fade-in"] { transform: translateY(25px); }
+.fade-in[data-animation="slide-up"] { transform: translateY(55px); }
 html[dir="ltr"] .fade-in[data-animation="slide-from-left"] { transform: translateX(-55px); }
 html[dir="ltr"] .fade-in[data-animation="slide-from-right"] { transform: translateX(55px); }
 html[dir="rtl"] .fade-in[data-animation="slide-from-left"] { transform: translateX(55px); }
@@ -1017,21 +1231,21 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
         max-width: 280px;
         height: 100vh;
         flex-direction: column;
-        background: var(--primary-color);
+        background: var(--primary-color); /* Will change with theme */
         padding: 4.5rem 1.5rem 1.5rem;
         gap: 0.8rem;
-        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s ease; /* Added background-color transition */
         overflow-y: auto;
     }
     html[dir="rtl"] .nav-links-container {
         transform: translateX(100%);
         right: 0; left:auto;
-        box-shadow: -3px 0 10px rgba(0,0,0,0.2);
+        box-shadow: -3px 0 10px var(--shadow-color);
     }
     html[dir="ltr"] .nav-links-container {
         transform: translateX(-100%);
         left: 0; right: auto;
-        box-shadow: 3px 0 10px rgba(0,0,0,0.2);
+        box-shadow: 3px 0 10px var(--shadow-color);
     }
 
     .nav-links-container.active {
@@ -1064,10 +1278,10 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
 
     .hero-section { padding-top: 6rem; }
     .hero .container.hero-content-wrapper {
-        flex-direction: column; /* Stack text and image on mobile */
+        flex-direction: column;
     }
-    .hero-content { order: 2; max-width: 100%; } /* Text below image */
-    .hero-image-container { order: 1; margin-bottom: 1.5rem; } /* Image above text */
+    .hero-content { order: 2; max-width: 100%; }
+    .hero-image-container { order: 1; margin-bottom: 1.5rem; }
 
     .profile-image { max-width: 160px; max-height: 160px; }
     .gradient-border-wrapper { width: 180px; height: 180px; }
@@ -1075,7 +1289,7 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     .hero-cta { justify-content: center; }
 
     .contact-grid { grid-template-columns: 1fr; }
-    .contact-info { margin-top: 2rem; } /* If contact-info is used */
+    /* .contact-info { margin-top: 2rem; } */ /* Removed as contact-info div is not in the latest HTML */
 }
 
 @media (max-width: 768px) {
@@ -1088,7 +1302,7 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] { transform: transla
     .about-grid, .services-grid, .projects-grid, .testimonials-grid, .pricing-grid { gap: 1.2rem; }
 
     .about-image { margin-top: 1.5rem; }
-    .service-card, .project-card, .pricing-card, .testimonial-card, .contact-form, .contact-info { padding: 1.2rem; }
+    .service-card, .project-card, .pricing-card, .testimonial-card, .contact-form { padding: 1.2rem; }
     .card-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
     .card-title { font-size: 1.2rem; }
     .pricing-card-price { font-size: 1.8rem; }
