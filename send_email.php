@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Using a no-reply address from your domain for the "From" header is often better for deliverability.
     // The user's email goes into "Reply-To".
     // Replace 'yourdomain.com' with your actual domain if you have one, or use a generic sender if necessary.
-    $headers = "From: Fixit Dz <noreply@yourdomain.com>\r\n";
+    $headers = "From: Fixit Dz <noreply@yourdomain.com>\r\n"; // Replace yourdomain.com with your actual domain if possible
     $headers .= "Reply-To: " . $email_from . "\r\n";
     $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
