@@ -3,38 +3,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuToggleButton = document.getElementById('menu-toggle-button');
     const navLinksContainer = document.querySelector('.nav-links-container');
     const navLinks = document.querySelectorAll('.nav-links .nav-link');
-    const header = document.querySelector('.navbar'); // HTML uses class="navbar" for the header element
-    const sections = document.querySelectorAll('.section');
+    const header = document.querySelector('.navbar');
+    const sections = document.querySelectorAll('.section'); // All sections with class="section"
     const scrollToTopBtn = document.getElementById('scrollToTopBtn');
     const themeToggleButton = document.getElementById('theme-toggle');
     const typewriterTextElement = document.getElementById('typewriter-text');
     const contactFormElement = document.querySelector('.contact-form');
     const yearSpan = document.getElementById('currentYear');
     const pricingCards = document.querySelectorAll('.pricing-card');
+    // Elements for the "Requests" section (if they exist in the current HTML)
+    const requestSearchInput = document.getElementById('requestSearchInput');
+    const requestFilterSelect = document.getElementById('requestFilterSelect');
+    const requestsList = document.getElementById('requestsList'); // For card-based list
+    const requestsTableBody = document.getElementById('requestsTableBody'); // For table-based list
 
     // --- 1. Theme Toggle Functionality ---
     function initThemeToggle() {
         if (!themeToggleButton) {
-            console.warn("Theme toggle button with ID 'theme-toggle' not found.");
+            // console.warn("Theme toggle button with ID 'theme-toggle' not found.");
             return;
         }
-
         const currentTheme = localStorage.getItem('theme');
-
         function applyTheme(theme) {
             if (theme === 'light') {
                 document.body.classList.add('light-mode');
                 themeToggleButton.checked = true;
-            } else { // Default to dark mode
+            } else { 
                 document.body.classList.remove('light-mode');
                 themeToggleButton.checked = false;
             }
         }
-
-        // Apply the saved theme on initial load or default to dark
-        applyTheme(currentTheme || 'dark');
-
-
+        applyTheme(currentTheme || 'dark'); // Default to dark if no theme saved
         themeToggleButton.addEventListener('change', function() {
             if (this.checked) {
                 applyTheme('light');
@@ -49,42 +48,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. Mobile Menu Toggle ---
     function initMobileMenu() {
         if (!menuToggleButton || !navLinksContainer) {
-            console.warn("Menu toggle button or nav links container not found.");
+            // console.warn("Menu toggle button or nav links container not found.");
             return;
         }
-
         menuToggleButton.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent click from bubbling to document
+            e.stopPropagation();
             navLinksContainer.classList.toggle('active');
-            menuToggleButton.classList.toggle('active'); // For animating the hamburger icon itself
-            const isExpanded = navLinksContainer.classList.contains('active');
-            menuToggleButton.setAttribute('aria-expanded', String(isExpanded));
+            menuToggleButton.classList.toggle('active');
+            menuToggleButton.setAttribute('aria-expanded', navLinksContainer.classList.contains('active'));
         });
-
-        // Close menu when a nav link is clicked
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 if (navLinksContainer.classList.contains('active')) {
                     navLinksContainer.classList.remove('active');
-                    menuToggleButton.classList.remove('active'); // Ensure hamburger icon resets
+                    menuToggleButton.classList.remove('active');
                     menuToggleButton.setAttribute('aria-expanded', 'false');
                 }
             });
         });
-
-        // Close mobile menu when clicking outside of it
         document.addEventListener('click', (event) => {
             if (navLinksContainer.classList.contains('active') &&
                 !navLinksContainer.contains(event.target) &&
                 !menuToggleButton.contains(event.target)) {
                 navLinksContainer.classList.remove('active');
-                menuToggleButton.classList.remove('active'); // Ensure hamburger icon resets
+                menuToggleButton.classList.remove('active');
                 menuToggleButton.setAttribute('aria-expanded', 'false');
             }
         });
     }
 
-    // --- 3. Smooth Scrolling for Navigation Links ---
+    // --- 3. Smooth Scrolling ---
     function initSmoothScrolling() {
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
@@ -93,18 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.preventDefault();
                     const targetId = href.substring(1);
                     const targetElement = document.getElementById(targetId);
-
                     if (targetElement) {
                         const headerOffset = header ? header.offsetHeight : 0;
                         const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
                         const offsetPosition = elementPosition - headerOffset;
-
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-                    } else {
-                        console.warn(`Smooth scroll target not found: #${targetId}`);
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                     }
                 }
             });
@@ -113,35 +99,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 4. Active Nav Link Highlighting & Header Scroll Effect ---
     function initScrollDependentEffects() {
-        if (!header && sections.length === 0 && navLinks.length === 0 && !scrollToTopBtn) {
-            return; // No elements to work with
-        }
-
+        if (!header && sections.length === 0 && navLinks.length === 0 && !scrollToTopBtn) { return; }
         const handleScroll = () => {
             const headerHeight = header ? header.offsetHeight : 0;
-            // Adjust the offset for active link highlighting. Consider a point slightly below the header.
-            const scrollThreshold = headerHeight + 20; // 20px buffer below the header
-
+            const scrollThreshold = window.innerHeight * 0.4;
             let currentSectionId = '';
 
             sections.forEach(section => {
-                const sectionTop = section.offsetTop - headerHeight; 
+                const sectionId = section.getAttribute('id');
+                if (!sectionId) return; 
+                const sectionTop = section.offsetTop - headerHeight;
                 const sectionBottom = sectionTop + section.offsetHeight;
-                // Check if the top of the section is at or above the scrollThreshold and part of it is visible
                 if (window.scrollY >= sectionTop - scrollThreshold && window.scrollY < sectionBottom - scrollThreshold ) {
-                     currentSectionId = section.getAttribute('id');
+                     currentSectionId = sectionId;
                 }
             });
             
-            // Fallback for top/bottom of page
             if (!currentSectionId && sections.length > 0) {
-                if (window.scrollY < sections[0].offsetTop - headerHeight) {
-                    currentSectionId = sections[0].getAttribute('id'); // Default to first section
-                } else if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 20) { // Near bottom
-                    currentSectionId = sections[sections.length - 1].getAttribute('id'); // Default to last section
+                const firstSectionWithId = Array.from(sections).find(s => s.getAttribute('id'));
+                const lastSectionWithId = Array.from(sections).reverse().find(s => s.getAttribute('id'));
+
+                if (firstSectionWithId && window.scrollY < firstSectionWithId.offsetTop - headerHeight) {
+                    currentSectionId = firstSectionWithId.getAttribute('id');
+                } else if (lastSectionWithId && window.scrollY + window.innerHeight >= document.body.scrollHeight - 20) {
+                    currentSectionId = lastSectionWithId.getAttribute('id');
                 }
             }
-
 
             navLinks.forEach(link => {
                 link.classList.remove('active');
@@ -151,109 +134,75 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Header scroll effect
             if (header) {
-                if (window.scrollY > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
+                if (window.scrollY > 50) header.classList.add('scrolled');
+                else header.classList.remove('scrolled');
             }
-
-            // Scroll-to-top button visibility
             if (scrollToTopBtn) {
-                if (window.scrollY > 300) {
-                    scrollToTopBtn.classList.add('visible');
-                } else {
-                    scrollToTopBtn.classList.remove('visible');
-                }
+                if (window.scrollY > 300) scrollToTopBtn.classList.add('visible');
+                else scrollToTopBtn.classList.remove('visible');
             }
         };
-
         window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll(); // Initial call
+        handleScroll();
     }
 
-    // --- 5. Scroll-to-Top Button Functionality ---
+    // --- 5. Scroll-to-Top Button ---
     function initScrollToTopButton() {
         if (scrollToTopBtn) {
             scrollToTopBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         }
     }
 
-    // --- 6. Scroll Animations (Fade-in, Slide-in, etc.) ---
+    // --- 6. Scroll Animations ---
     function initScrollAnimations() {
         const animatedElements = document.querySelectorAll('.fade-in');
-        if (animatedElements.length === 0) {
-            return;
-        }
-
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -50px 0px', // Start animation a bit before element is fully visible
-            threshold: 0.1 // At least 10% of the element is visible
-        };
-
+        if (animatedElements.length === 0) return;
+        const observerOptions = { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 };
         const animationObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const delay = parseInt(entry.target.dataset.delay) || 0;
-                    setTimeout(() => {
-                        entry.target.classList.add('appear');
-                    }, delay);
-                    observer.unobserve(entry.target); // Animate only once
+                    setTimeout(() => entry.target.classList.add('appear'), delay);
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
-
-        animatedElements.forEach(el => {
-            animationObserver.observe(el);
-        });
+        animatedElements.forEach(el => animationObserver.observe(el));
     }
 
     // --- 7. Typewriter Effect ---
     function initTypewriterEffect() {
         if (typewriterTextElement) {
             const textsToType = ["وأنت في مكانك!", "بكل سهولة وأمان.", "بخبرة واحترافية."];
-            let textIndex = 0;
-            let charIndex = 0;
-            const typingSpeed = 100;
-            const erasingSpeed = 50;
-            const pauseBetweenWords = 2000;
-            const pauseBeforeTypingNewWord = 500;
-
+            let textIndex = 0, charIndex = 0;
+            const typeSpeed = 100, eraseSpeed = 50, pauseBetween = 2000, pauseBeforeNew = 500;
             function type() {
                 if (charIndex < textsToType[textIndex].length) {
-                    typewriterTextElement.textContent += textsToType[textIndex].charAt(charIndex);
-                    charIndex++;
-                    setTimeout(type, typingSpeed);
+                    typewriterTextElement.textContent += textsToType[textIndex].charAt(charIndex++);
+                    setTimeout(type, typeSpeed);
                 } else {
-                    setTimeout(erase, pauseBetweenWords);
+                    setTimeout(erase, pauseBetween);
                 }
             }
-
             function erase() {
                 if (charIndex > 0) {
-                    typewriterTextElement.textContent = textsToType[textIndex].substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(erase, erasingSpeed);
+                    typewriterTextElement.textContent = textsToType[textIndex].substring(0, --charIndex);
+                    setTimeout(erase, eraseSpeed);
                 } else {
-                    textIndex = (textIndex + 1) % textsToType.length; // Move to the next text
-                    setTimeout(type, pauseBeforeTypingNewWord);
+                    textIndex = (textIndex + 1) % textsToType.length;
+                    setTimeout(type, pauseBeforeNew);
                 }
             }
-            typewriterTextElement.textContent = ''; // Clear initial content
-            setTimeout(type, pauseBeforeTypingNewWord); // Start the typing animation
+            typewriterTextElement.textContent = '';
+            setTimeout(type, pauseBeforeNew);
         }
     }
 
-    // --- 8. Contact Form Validation and Submission ---
+    // --- 8. Contact Form Validation and Submission (to Google Apps Script) ---
     function initContactForm() {
         if (contactFormElement) {
             const submitButton = contactFormElement.querySelector('button[type="submit"]');
@@ -262,11 +211,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailInput = contactFormElement.querySelector('#email');
             const messageInput = contactFormElement.querySelector('#message');
 
+            // !!! هذا هو الرابط الذي قدمته لـ Google Apps Script !!!
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbPZJ0RiFXcLrJT8rNtS49jdsAPU2faveAQdT9tU-oZTy2Al90apnOTNF6COmS2h-oPg/exec";
+
             if (!submitButton || !formMessageArea || !nameInput || !emailInput || !messageInput) {
                 console.error("أحد عناصر نموذج الاتصال مفقود. يرجى التحقق من HTML IDs: name, email, message, and class: form-message-area.");
-                if (formMessageArea) { // Provide feedback if possible
+                if (formMessageArea) {
                      formMessageArea.innerHTML = '<p style="color: red; background-color: #fdd; padding: 10px; border-radius: var(--border-radius-sm);">خطأ في تهيئة النموذج. يرجى الاتصال بمسؤول الموقع.</p>';
                 }
+                return;
+            }
+            if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" || SCRIPT_URL === "") { // Safety check, though you provided it
+                console.error("لم يتم تعيين رابط Google Apps Script في script.js. لن يعمل إرسال النموذج.");
+                displayFormMessage('تهيئة النموذج غير مكتملة. الإرسال معطل.', 'error', formMessageArea, document.createElement('p'));
+                if(submitButton) submitButton.disabled = true;
                 return;
             }
 
@@ -276,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault(); 
 
                 formMessageArea.innerHTML = '';
-                const formMessageP = document.createElement('p'); 
+                const formMessageP = document.createElement('p');
                 formMessageP.style.padding = '10px';
                 formMessageP.style.marginTop = '15px';
                 formMessageP.style.borderRadius = 'var(--border-radius-sm)';
@@ -284,27 +242,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 formMessageP.style.transition = 'opacity 0.3s ease-in-out';
                 formMessageP.style.opacity = '0';
 
-                // Validation
                 if (nameInput.value.trim() === '') {
                     displayFormMessage('الرجاء إدخال الاسم الكامل.', 'error', formMessageArea, formMessageP);
-                    nameInput.focus(); // Focus on the empty field
-                    return;
+                    nameInput.focus(); return;
                 }
                 if (emailInput.value.trim() === '') {
                     displayFormMessage('الرجاء إدخال البريد الإلكتروني.', 'error', formMessageArea, formMessageP);
-                    emailInput.focus();
-                    return;
+                    emailInput.focus(); return;
                 }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(emailInput.value.trim())) {
                     displayFormMessage('الرجاء إدخال عنوان بريد إلكتروني صالح.', 'error', formMessageArea, formMessageP);
-                    emailInput.focus();
-                    return;
+                    emailInput.focus(); return;
                 }
                 if (messageInput.value.trim() === '') {
                     displayFormMessage('الرجاء كتابة رسالتك.', 'error', formMessageArea, formMessageP);
-                    messageInput.focus();
-                    return;
+                    messageInput.focus(); return;
                 }
 
                 submitButton.disabled = true;
@@ -312,51 +265,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const formData = new FormData(this);
                 let submissionWasSuccessful = false;
-                
-                // IMPORTANT: Change this URL if you switch to Google Apps Script
-                const SCRIPT_URL = 'send_email.php'; // For PHP backend
 
                 fetch(SCRIPT_URL, {
                     method: 'POST',
-                    body: formData
-                    // If using Google Apps Script and facing CORS issues, add: mode: 'no-cors'
+                    body: formData,
+                    mode: 'no-cors' // Important for basic Google Apps Script web apps
                 })
                 .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => { 
-                            let errorDetail = `خطأ من الخادم: ${response.status} ${response.statusText}.`;
-                            // Try to parse as JSON to get specific message from PHP
-                            try {
-                                const jsonError = JSON.parse(text);
-                                if (jsonError && jsonError.message) {
-                                    errorDetail = jsonError.message; // Use PHP's error message
-                                } else {
-                                     errorDetail += ` الرد: ${text}`; // Fallback to raw text
-                                }
-                            } catch (parseError) {
-                                // If response is not JSON (e.g. HTML error page from server)
-                                errorDetail += ` الرد غير متوقع من الخادم.`;
-                                console.warn("Server response was not JSON:", text);
-                            }
-                            throw new Error(errorDetail);
-                        });
-                    }
-                    return response.json(); 
-                })
-                .then(data => {
-                    if (data && data.status === 'success') {
-                        displayFormMessage(data.message || 'تم إرسال رسالتك بنجاح! سيتم التواصل معك قريباً.', 'success', formMessageArea, formMessageP);
-                        contactFormElement.reset();
-                        submissionWasSuccessful = true;
-                    } else {
-                        displayFormMessage((data && data.message) ? data.message : 'حدث خطأ في معالجة طلبك. يرجى المحاولة مرة أخرى.', 'error', formMessageArea, formMessageP);
-                        submissionWasSuccessful = false;
-                    }
+                    // With mode: 'no-cors', response is opaque. We can't check response.ok or response.json().
+                    // We proceed optimistically. The Apps Script should handle errors and log them.
+                    displayFormMessage('تم إرسال رسالتك بنجاح! سيتم التحقق منها قريباً.', 'success', formMessageArea, formMessageP);
+                    contactFormElement.reset();
+                    submissionWasSuccessful = true;
                 })
                 .catch(error => {
-                    console.error('Error submitting form:', error);
-                    // Display the detailed error message from the Error object if available
-                    displayFormMessage(error.message || 'حدث خطأ في الاتصال أو في معالجة الطلب. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.', 'error', formMessageArea, formMessageP);
+                    // This catch block will primarily handle network errors or if the SCRIPT_URL is entirely wrong.
+                    console.error('Error submitting form to Google Apps Script:', error);
+                    displayFormMessage('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.', 'error', formMessageArea, formMessageP);
                     submissionWasSuccessful = false;
                 })
                 .finally(() => {
@@ -379,9 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 pElement.textContent = message;
                 if (type === 'success') {
                     pElement.style.backgroundColor = 'var(--accent-color)';
-                    pElement.style.color = 'var(--btn-primary-text)'; // Use theme variable for text on accent
+                    pElement.style.color = 'var(--btn-primary-text)'; 
                 } else { 
-                    pElement.style.backgroundColor = '#d9534f'; // Standard error red
+                    pElement.style.backgroundColor = '#d9534f'; 
                     pElement.style.color = 'white';
                 }
                 area.appendChild(pElement);
@@ -471,6 +396,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- 12. Requests Section Search and Filter (Client-side for HTML structure if it exists) ---
+    function initRequestsSection() {
+        const requestsSection = document.getElementById('requests');
+        if (!requestsSection) { // Check if the section exists
+            // console.log("Requests section not found in this HTML, skipping initialization.");
+            return; 
+        }
+
+        // Proceed only if the section and its child elements exist
+        if (!requestsList && !requestsTableBody) { // Check if either card list or table body exists
+             // console.warn("Neither requestsList nor requestsTableBody found for filtering.");
+            return;
+        }
+        if (!requestSearchInput || !requestFilterSelect) {
+            // console.warn("Requests section filter/search controls not found.");
+            return;
+        }
+        
+        const requestItems = requestsTableBody ? 
+                             Array.from(requestsTableBody.querySelectorAll('tr')) : 
+                             Array.from(requestsList.querySelectorAll('.request-card'));
+
+        if(requestItems.length === 0) return; // No items to filter/search
+
+
+        function filterAndSearchRequests() {
+            const searchTerm = requestSearchInput.value.toLowerCase().trim();
+            const filterValue = requestFilterSelect.value;
+
+            requestItems.forEach(item => { 
+                let textContentToSearch = '';
+                if (item.tagName === 'TR') {
+                    item.querySelectorAll('td:not(.action-buttons)').forEach(td => {
+                        textContentToSearch += (td.textContent || td.innerText || "").toLowerCase() + " ";
+                    });
+                } else { 
+                    const title = item.querySelector('.meta h3')?.textContent.toLowerCase() || '';
+                    const description = item.querySelector('.request-card-body p')?.textContent.toLowerCase() || '';
+                    const service = item.querySelector('.meta p')?.textContent.toLowerCase() || '';
+                    textContentToSearch = `${title} ${description} ${service}`;
+                }
+                
+                const status = item.dataset.status || '';
+
+                const matchesSearch = textContentToSearch.includes(searchTerm);
+                const matchesFilter = (filterValue === 'all') || (status === filterValue);
+
+                if (matchesSearch && matchesFilter) {
+                    item.style.display = ''; 
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        requestSearchInput.addEventListener('input', filterAndSearchRequests);
+        requestFilterSelect.addEventListener('change', filterAndSearchRequests);
+    }
+
+
     // --- Initialize all functionalities ---
     initThemeToggle();
     initMobileMenu();
@@ -479,9 +464,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollToTopButton();
     initScrollAnimations();
     initTypewriterEffect();
-    initContactForm();
+    initContactForm(); 
     initPricingCards();
     initFooterYear();
     initButtonAnimations();
+    initRequestsSection(); // Call this last or ensure its elements are available
 
 }); // End of DOMContentLoaded
