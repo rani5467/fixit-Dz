@@ -13,10 +13,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="navbar"> <div class="container">
+    <header class="navbar">
+        <div class="container">
             <a href="#hero" class="nav-logo">
-                <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Logo" class="logo-img" onerror="this.onerror=null;this.src='https://placehold.co/150x50/1a1f2b/ff914d?text=Logo+Error';">
-                </a>
+                <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                <span class="logo-text-fallback" style="display:none; font-size: 1.75rem; font-weight: 700; color: var(--accent-color);">Fixit Dz</span>
+            </a>
             <button class="menu-toggle" id="menu-toggle-button" aria-label="فتح/إغلاق القائمة" aria-expanded="false">
                 <span></span>
                 <span></span>
@@ -37,17 +39,18 @@
 
     <main>
         <section id="hero" class="section hero-section">
-            <div class="container hero-content fade-in" data-animation="fade-in">
-                <h1 class="hero-title">
-                    حلول تقنية مبتكرة لمشاكل حاسوبك،
-                    <span class="highlight" id="typewriter-text"></span><span class="cursor">&nbsp;</span>
-                </h1>
-                <p class="hero-subtitle fade-in" data-animation="fade-in-delay-1">Fixit Dz يقدم لك دعمًا فنيًا احترافيًا عن بعد في الجزائر. سرعة، كفاءة، وموثوقية.</p>
-                <a href="#pricing" class="btn btn-primary btn-lg fade-in" data-animation="fade-in-delay-2">اكتشف باقاتنا الآن</a>
+            <div class="container hero-content-wrapper"> <div class="hero-content fade-in" data-animation="fade-in">
+                    <h1 class="hero-title">
+                        حلول تقنية مبتكرة لمشاكل حاسوبك،
+                        <span class="highlight" id="typewriter-text"></span><span class="cursor">&nbsp;</span>
+                    </h1>
+                    <p class="hero-subtitle fade-in" data-animation="fade-in-delay-1">Fixit Dz يقدم لك دعمًا فنيًا احترافيًا عن بعد في الجزائر. سرعة، كفاءة، وموثوقية.</p>
+                    <a href="#pricing" class="btn btn-primary btn-lg fade-in" data-animation="fade-in-delay-2">اكتشف باقاتنا الآن</a>
+                </div>
                  <div class="hero-image-container fade-in" data-animation="zoom-in" data-delay="400">
                      <div class="gradient-border-wrapper">
                          <div class="gradient-border"></div>
-                         <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Visual" class="profile-image" onerror="this.onerror=null;this.src='https://placehold.co/300x300/2d3440/f0f0f0?text=Image+Error';">
+                         <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Visual" class="profile-image" onerror="this.onerror=null;this.src='https://placehold.co/250x250/2d3440/f0f0f0?text=Error'; this.style.border='2px solid var(--accent-color)'; this.style.backgroundColor='var(--secondary-color)';">
                      </div>
                  </div>
             </div>
@@ -156,10 +159,10 @@
                     <div class="about-text fade-in" data-animation="slide-from-right"> <p>Fixit Dz هي مبادرة شبابية جزائرية يقودها سي الطيب توفيق، طالب متخصص في إدارة وأمن الشبكات. نؤمن بأن التكنولوجيا يجب أن تكون سهلة ومتاحة للجميع. هدفنا هو تقديم حلول دعم فني سريعة، فعالة، وموثوقة عن بعد، لمساعدتك على تجاوز أي تحديات تقنية تواجهها مع حاسوبك.</p>
                         <p>نحن هنا لتبسيط الأمور المعقدة، وتقديم خبرتنا لضمان عمل جهازك بأفضل أداء ممكن. سواء كنت تواجه مشكلة في النظام، بطء في الأداء، أو هجوم فيروسات، فريقنا جاهز لتقديم المساعدة التي تحتاجها وأنت مرتاح في منزلك.</p>
                     </div>
-                    <div class="about-image fade-in" data-animation="slide-from-left"> <img src="https://placehold.co/450x350/1a1f2b/ff914d?text=Si+Tayeb+Toufik" alt="سي الطيب توفيق - مؤسس Fixit Dz" class="rounded-image" onerror="this.onerror=null;this.src='https://placehold.co/450x350/2d3440/f0f0f0?text=About+Error';">
+                    <div class="about-image fade-in" data-animation="slide-from-left"> <img src="https://placehold.co/450x350/2c3e50/ffffff?text=Si+Tayeb+Toufik&font=lora" alt="سي الطيب توفيق - مؤسس Fixit Dz" class="rounded-image" onerror="this.onerror=null;this.src='https://placehold.co/450x350/2d3440/f0f0f0?text=About+Error';">
                     </div>
                 </div>
-                 <div class="designer-info fade-in" data-animation="fade-in" style="text-align: center; margin-top: 3rem; padding:1.5rem; background-color: var(--secondary-color); border-radius: var(--border-radius-md);">
+                 <div class="designer-info fade-in" data-animation="fade-in">
                     <p><strong>سي الطيب توفيق</strong></p>
                     <p>مؤسس Fixit Dz | طالب تخصص إدارة وأمن الشبكات (BTS)</p>
                 </div>
@@ -174,7 +177,7 @@
                 <div class="testimonials-grid">
                     <article class="testimonial-card fade-in" data-animation="zoom-in" data-delay="0">
                         <div class="testimonial-author-info">
-                            <img src="https://placehold.co/80x80/ff7f11/ffffff?text=أ" alt="صورة العميل أحمد" class="testimonial-avatar">
+                            <img src="https://placehold.co/80x80/ff914d/1a1f2b?text=أحمد" alt="صورة العميل أحمد" class="testimonial-avatar">
                             <div>
                                 <h4 class="testimonial-author-name">أحمد. م</h4>
                                 <p class="testimonial-author-title">مطور ويب</p>
@@ -184,7 +187,7 @@
                     </article>
                     <article class="testimonial-card fade-in" data-animation="zoom-in" data-delay="200">
                          <div class="testimonial-author-info">
-                            <img src="https://placehold.co/80x80/28a745/ffffff?text=ف" alt="صورة العميلة فاطمة" class="testimonial-avatar">
+                            <img src="https://placehold.co/80x80/ff914d/1a1f2b?text=فاطمة" alt="صورة العميلة فاطمة" class="testimonial-avatar">
                             <div>
                                 <h4 class="testimonial-author-name">فاطمة. ز</h4>
                                 <p class="testimonial-author-title">طالبة جامعية</p>
@@ -194,7 +197,7 @@
                     </article>
                     <article class="testimonial-card fade-in" data-animation="zoom-in" data-delay="400">
                         <div class="testimonial-author-info">
-                            <img src="https://placehold.co/80x80/1f3c88/ffffff?text=ي" alt="صورة العميل يوسف" class="testimonial-avatar">
+                            <img src="https://placehold.co/80x80/ff914d/1a1f2b?text=يوسف" alt="صورة العميل يوسف" class="testimonial-avatar">
                             <div>
                                 <h4 class="testimonial-author-name">يوسف. ك</h4>
                                 <p class="testimonial-author-title">صاحب عمل حر</p>
@@ -245,7 +248,10 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-logo">
-                 <a href="#hero" class="nav-logo">Fixit Dz</a>
+                 <a href="#hero" class="nav-logo">
+                    <img src="https://i.ibb.co/gZ1qJzJ/logo.png" alt="Fixit Dz Footer Logo" class="logo-img" style="height: 30px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span class="logo-text-fallback" style="display:none; font-size: 1.5rem; font-weight: 700; color: var(--accent-color);">Fixit Dz</span>
+                 </a>
             </div>
             <div class="footer-links">
                 <a href="#services">خدماتنا</a> |
