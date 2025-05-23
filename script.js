@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         menuToggleButton.addEventListener('click', (e) => {
-            e.stopPropagation();
+            e.stopPropagation(); // Prevent click from bubbling to document
             navLinksContainer.classList.toggle('active');
             menuToggleButton.classList.toggle('active'); // For animating the hamburger icon itself
             const isExpanded = navLinksContainer.classList.contains('active');
@@ -119,17 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const handleScroll = () => {
             const headerHeight = header ? header.offsetHeight : 0;
-            // Adjust the offset for active link highlighting. Consider the middle of the viewport.
-            const scrollThreshold = window.innerHeight * 0.4; 
+            // Adjust the offset for active link highlighting. Consider a point slightly below the header.
+            const scrollThreshold = headerHeight + 20; // 20px buffer below the header
 
             let currentSectionId = '';
 
             sections.forEach(section => {
-                const sectionTop = section.offsetTop - headerHeight; 
+                const sectionTop = section.offsetTop;
                 const sectionBottom = sectionTop + section.offsetHeight;
-                // Check if the top of the section is above the threshold and bottom is below
-                if (window.scrollY >= sectionTop - scrollThreshold && window.scrollY < sectionBottom - scrollThreshold) {
-                    currentSectionId = section.getAttribute('id');
+                // Check if the top of the section is at or above the scrollThreshold and part of it is visible
+                if (window.scrollY + scrollThreshold >= sectionTop && window.scrollY < sectionBottom - (window.innerHeight * 0.5) + scrollThreshold ) {
+                     currentSectionId = section.getAttribute('id');
                 }
             });
             
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!submitButton || !formMessageArea || !nameInput || !emailInput || !messageInput) {
                 console.error("أحد عناصر نموذج الاتصال مفقود. يرجى التحقق من HTML IDs: name, email, message, and class: form-message-area.");
-                if (formMessageArea) {
+                if (formMessageArea) { // Provide feedback if possible
                      formMessageArea.innerHTML = '<p style="color: red; background-color: #fdd; padding: 10px; border-radius: var(--border-radius-sm);">خطأ في تهيئة النموذج. يرجى الاتصال بمسؤول الموقع.</p>';
                 }
                 return;
@@ -287,19 +287,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Validation
                 if (nameInput.value.trim() === '') {
                     displayFormMessage('الرجاء إدخال الاسم الكامل.', 'error', formMessageArea, formMessageP);
+                    nameInput.focus(); // Focus on the empty field
                     return;
                 }
                 if (emailInput.value.trim() === '') {
                     displayFormMessage('الرجاء إدخال البريد الإلكتروني.', 'error', formMessageArea, formMessageP);
+                    emailInput.focus();
                     return;
                 }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(emailInput.value.trim())) {
                     displayFormMessage('الرجاء إدخال عنوان بريد إلكتروني صالح.', 'error', formMessageArea, formMessageP);
+                    emailInput.focus();
                     return;
                 }
                 if (messageInput.value.trim() === '') {
                     displayFormMessage('الرجاء كتابة رسالتك.', 'error', formMessageArea, formMessageP);
+                    messageInput.focus();
                     return;
                 }
 
@@ -309,9 +313,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData(this);
                 let submissionWasSuccessful = false;
                 
-                // IMPORTANT: Replace with your Google Apps Script URL if using that method
-                // const SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
-                const SCRIPT_URL = 'send_email.php'; // For PHP backend
+                // IMPORTANT: Change this URL if you switch to Google Apps Script
+                const SCRIPT_URL = 'send_email.php'; 
 
                 fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -319,9 +322,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     // If using Google Apps Script and facing CORS issues, add: mode: 'no-cors'
                 })
                 .then(response => {
+                    // For PHP, we expect a JSON response.
+                    // If using 'no-cors' for Google Apps Script, this part needs to be handled differently
+                    // as response.ok and response.json() might not be reliable.
                     if (!response.ok) {
+                        // Attempt to get more error info if possible
                         return response.text().then(text => { 
-                            throw new Error(`خطأ من الخادم: ${response.status} ${response.statusText}. الرد: ${text}`);
+                            let errorDetail = `Server responded with ${response.status}: ${response.statusText}.`;
+                            try {
+                                const jsonError = JSON.parse(text);
+                                if (jsonError && jsonError.message) {
+                                    errorDetail += ` Message: ${jsonError.message}`;
+                                }
+                            } catch (parseError) {
+                                errorDetail += ` Response body: ${text}`;
+                            }
+                            throw new Error(errorDetail);
                         });
                     }
                     return response.json(); 
@@ -338,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .catch(error => {
                     console.error('Error submitting form:', error);
-                    displayFormMessage('حدث خطأ في الاتصال أو في معالجة الطلب. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.', 'error', formMessageArea, formMessageP);
+                    displayFormMessage('حدث خطأ في الاتصال أو في معالجة الطلب. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى. (' + error.message + ')', 'error', formMessageArea, formMessageP);
                     submissionWasSuccessful = false;
                 })
                 .finally(() => {
@@ -353,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             }, 300);
                         }, 7000);
                     }
+                    // Error messages will persist until the next submission attempt or page reload.
                 });
             });
 
@@ -361,14 +378,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 pElement.textContent = message;
                 if (type === 'success') {
                     pElement.style.backgroundColor = 'var(--accent-color)';
-                    pElement.style.color = 'var(--primary-color-dark)'; // Ensure good contrast
+                    pElement.style.color = 'var(--btn-primary-text)'; // Use theme variable for text on accent
                 } else { 
                     pElement.style.backgroundColor = '#d9534f'; // Standard error red
                     pElement.style.color = 'white';
                 }
                 area.appendChild(pElement);
+                // Ensure the element is in the DOM and styles are applied before starting the transition
                 requestAnimationFrame(() => {
-                    setTimeout(() => { pElement.style.opacity = '1'; }, 10);
+                    setTimeout(() => { pElement.style.opacity = '1'; }, 10); // Fade in
                 });
             }
         }
@@ -397,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const messageP = document.createElement('p');
                             messageP.textContent = `تم اختيار "${packageName}"! يرجى ملء النموذج أدناه لإكمال الطلب.`;
                             messageP.style.backgroundColor = 'var(--accent-color)';
-                            messageP.style.color = 'var(--primary-color-dark)';
+                            messageP.style.color = 'var(--btn-primary-text)'; // Use theme variable
                             messageP.style.padding = '10px';
                             messageP.style.marginTop = '15px';
                             messageP.style.borderRadius = 'var(--border-radius-sm)';
