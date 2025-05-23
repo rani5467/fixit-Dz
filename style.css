@@ -35,46 +35,42 @@ html {
 }
 
 body {
-    background-image: url('https://i.ibb.co/j3L3N7Y/v1016-b-09.jpg'); /* This is the line to change */
+    font-family: var(--font-family);
+    background-image: url('https://i.ibb.co/j3L3N7Y/v1016-b-09.jpg'); /* Your provided background image */
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-color: var(--bg-color); /* Fallback color */
+    background-color: var(--bg-color); /* Fallback color if image fails to load */
     color: var(--text-color);
-    font-family: 'Poppins', sans-serif;
     line-height: 1.7;
-    font-size: 16px;
-    position: relative;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Prevent horizontal scrollbars from animations */
+    position: relative; /* Crucial for stacking context of pseudo-elements */
+    z-index: 0; /* Establishes a base stacking context */
 }
 
+/* This pseudo-element creates the dark overlay on top of the background image,
+   but behind the actual page content. */
 body::before {
     content: "";
-    position: fixed;
+    position: fixed; /* Covers the entire viewport */
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(18, 22, 28, 0.88); /* Dark overlay for readability */
-    z-index: -1;
+    z-index: -1; /* Places the overlay BEHIND the body's direct content */
 }
 
-/* Container */
-.container {
-    width: 90%;
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 0 15px;
-    position: relative;
-    z-index: 1;
-}
-
-/* Sections */
-.section {
-    padding: 80px 0;
-    position: relative;
-    z-index: 1;
+/* Container, Sections, Main, Footer: Ensure these are above the overlay */
+.container,
+.section,
+main, /* Ensuring main content area is also in the correct stacking context */
+.footer {
+    position: relative; /* Creates a stacking context */
+    z-index: 1;         /* Ensures these are above the body::before overlay */
 }
 
 .section-header {
@@ -98,25 +94,25 @@ body::before {
     margin: 0 auto 2rem auto;
 }
 
-/* Header & Navigation */
-.navbar { /* Renamed from .header to .navbar in HTML */
+/* Header Styling */
+.navbar { /* This is the class for your header element */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     padding: 1rem 5%;
-    background: rgba(26, 31, 43, 0.7); /* Glassmorphism effect */
+    background: rgba(26, 31, 43, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 1000;
+    z-index: 1000; /* Highest z-index to stay on top */
     transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.navbar.scrolled { /* Style for header when page is scrolled */
+.navbar.scrolled {
     background: rgba(20, 25, 35, 0.95);
     padding: 0.75rem 5%;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -133,6 +129,26 @@ body::before {
     transform: scale(1.05);
 }
 
+.logo-img { /* If you use an image for the logo in the header */
+    height: 40px;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo:hover .logo-img { /* If .logo wraps .logo-img */
+    transform: scale(1.15) rotate(-8deg);
+}
+
+/* This is for the text part if you have logo image + text */
+.logo-text {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
 .nav-links-container {
     display: flex;
 }
@@ -140,7 +156,7 @@ body::before {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 2rem; /* Space between nav links */
+    gap: 2rem;
     margin: 0;
     padding: 0;
 }
@@ -192,7 +208,7 @@ body::before {
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 1001;
+    z-index: 1001; /* Ensure it's above navbar in mobile if navbar is not fixed */
 }
 
 .menu-toggle span {
@@ -216,22 +232,22 @@ body::before {
 }
 
 
-/* Hero Section */
-.hero-section {
+/* Hero Section Styling */
+.hero-section { /* Matched ID from HTML */
     min-height: 100vh;
     display: flex;
     align-items: center;
-    text-align: center; /* Center content for hero */
-    padding-top: 8rem; /* Account for fixed header */
+    text-align: center;
+    padding-top: 8rem;
 }
 
 .hero-content {
-    max-width: 800px; /* Allow wider content */
-    margin: 0 auto; /* Center content */
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4.2rem); /* Larger, responsive title */
+    font-size: clamp(2.5rem, 6vw, 4.2rem);
     margin-bottom: 1.5rem;
     line-height: 1.3;
     font-weight: 700;
@@ -262,7 +278,7 @@ body::before {
 }
 
 .hero-subtitle {
-    font-size: clamp(1.1rem, 3vw, 1.4rem); /* Slightly larger subtitle */
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
     margin-bottom: 2.5rem;
     color: #ddd;
     max-width: 600px;
@@ -270,12 +286,12 @@ body::before {
     margin-right: auto;
 }
 
-.hero-cta {
+.hero-cta { /* This class was in previous HTML, ensure it's used or remove if .btn is direct child */
     margin-top: 2rem;
 }
 
 .btn {
-    padding: 0.9em 2em; /* Slightly larger buttons */
+    padding: 0.9em 2em;
     border-radius: var(--border-radius-sm);
     text-decoration: none;
     font-weight: 600;
@@ -286,13 +302,13 @@ body::before {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    text-transform: uppercase; /* Uppercase button text */
+    text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .btn:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 15px rgba(var(--accent-color-rgb), 0.4); /* Neon glow effect */
+    box-shadow: 0 8px 15px rgba(var(--accent-color-rgb), 0.4);
 }
 
 .btn:active {
@@ -302,9 +318,9 @@ body::before {
 
 .btn-primary {
     background: var(--gradient);
-    color: var(--primary-color); /* Dark text on light gradient */
+    color: var(--primary-color);
 }
-.btn-primary.btn-lg {
+.btn-primary.btn-lg { /* For the hero button */
     padding: 1em 2.5em;
     font-size: 1.1rem;
 }
@@ -320,12 +336,12 @@ body::before {
     color: var(--primary-color);
 }
 
-.btn-purchase { /* Specific style for "اختر الباقة" on the professional plan */
+.btn-purchase {
     background: var(--accent-color);
     color: white;
 }
 .btn-purchase:hover {
-    background: linear-gradient(45deg, #ffac81, #ff914d); /* Slightly lighter orange on hover */
+    background: linear-gradient(45deg, #ffac81, #ff914d);
 }
 
 .btn-block {
@@ -334,7 +350,7 @@ body::before {
 }
 
 .hero-image-container {
-    margin-top: 3rem; /* Space above the image in hero */
+    margin-top: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -344,9 +360,9 @@ body::before {
 .gradient-border-wrapper {
     position: relative;
     padding: 10px;
-    border-radius: 50%; /* Make it circular for the logo */
+    border-radius: 50%; /* Circular for the logo */
     overflow: hidden;
-    background-color: rgba(var(--card-bg), 0.5);
+    background-color: rgba(var(--card-bg-rgb, 30, 36, 47), 0.5); /* Ensure card-bg-rgb is defined or use a direct rgba value */
     width: 200px; /* Adjust size as needed */
     height: 200px; /* Adjust size as needed */
     display: flex;
@@ -370,23 +386,102 @@ body::before {
 }
 
 .profile-image { /* This class is used for the logo in the hero */
-    width: 90%; /* Slightly smaller than the wrapper to show border */
+    width: 90%;
     height: 90%;
-    object-fit: contain; /* Ensure logo fits well */
+    object-fit: contain;
     border-radius: 50%;
     position: relative;
     z-index: 2;
     display: block;
+    /* border: 3px solid var(--bg-color); Removed this as it might not look good with the logo */
 }
 
-/* Services Section */
-.services-grid {
+/* About Section */
+.about-section .about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    align-items: center;
+}
+
+.about-text h3 { /* Assuming h3 is used inside .about-text */
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.about-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: #ddd;
+}
+
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.skill-item {
+    background: var(--secondary-color);
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: var(--transition), background-color 0.3s, color 0.3s;
+}
+.skill-item:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    transform: translateY(-3px) scale(1.05);
+}
+
+.about-image img.rounded-image {
+    width: 100%;
+    max-width: 450px;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-strong);
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+}
+
+.about-image img.rounded-image:hover {
+    transform: scale(1.03) rotate(-2deg);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+.designer-info {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-light);
+}
+
+.designer-info p {
+    margin: 0.5rem 0;
+    color: var(--text-color);
+}
+.designer-info strong {
+    color: var(--accent-color);
+}
+
+/* Services Section & Projects Section Cards */
+.services-grid,
+.projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2.5rem;
 }
 
-.service-card {
+.service-card,
+.project-card {
     background: var(--card-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -397,44 +492,102 @@ body::before {
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
     will-change: transform;
+    display: flex; /* Added for flex alignment */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: space-between; /* Push button to bottom */
 }
 
-.service-card:hover {
+.service-card:hover,
+.project-card:hover {
     transform: perspective(1200px) rotateX(5deg) rotateY(-5deg) scale(1.05);
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(var(--accent-color-rgb), 0.4);
     border-color: rgba(var(--accent-color-rgb), 0.6);
 }
 
-.card-icon { /* Generic class for icons in cards */
-    font-size: 3rem;
+.card-icon {
+    font-size: 3rem; /* Adjusted from service-icon */
     color: var(--accent-color);
     margin-bottom: 1.5rem;
     display: inline-block;
     transition: transform 0.3s ease, text-shadow 0.3s ease;
 }
 
-.service-card:hover .card-icon {
+.service-card:hover .card-icon { /* Specific for service card if needed, or use .card-icon for all */
     transform: scale(1.15) rotate(-8deg);
     text-shadow: 0 0 10px rgba(var(--accent-color-rgb), 0.7);
 }
 
-.card-title { /* Generic class for titles in cards */
-    font-size: 1.5rem;
+.card-title {
+    font-size: 1.5rem; /* Adjusted from service-card h3 */
     margin-bottom: 1rem;
     color: var(--text-color);
     font-weight: 600;
 }
 
-.card-description { /* Generic class for descriptions in cards */
+.card-description {
     font-size: 0.95rem;
     color: #ccc;
     line-height: 1.6;
     margin-bottom: 1.5rem; /* Space before button */
+    flex-grow: 1; /* Allow description to take available space */
+}
+
+.project-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+.project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(26, 31, 43, 0.7), rgba(26, 31, 43, 0.95));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    text-align: center;
+    border-radius: var(--border-radius-md);
+}
+
+.project-card:hover .project-overlay {
+    opacity: 1;
+}
+
+.project-overlay h3 {
+    font-size: 1.6rem;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.project-overlay p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.project-overlay .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
 }
 
 /* Pricing Section */
 .pricing-section {
-    background-color: rgba(var(--secondary-color), 0.3); /* Slight background differentiation */
+    background-color: rgba(var(--secondary-color-rgb, 45, 52, 64), 0.3); /* Define --secondary-color-rgb or use direct rgba */
 }
 .pricing-grid {
     display: grid;
@@ -483,6 +636,7 @@ body::before {
     color: var(--text-color);
     margin-bottom: 1rem;
     font-weight: 600;
+    text-align: center;
 }
 
 .pricing-card-price {
@@ -490,20 +644,21 @@ body::before {
     font-weight: 700;
     color: var(--accent-color);
     margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 .pricing-card-price .currency {
     font-size: 1rem;
     font-weight: 400;
     color: var(--text-color-muted);
-    margin-left: 0.25rem;
+    margin-right: 0.25rem; /* Adjusted for RTL */
 }
 
 .pricing-card-features {
     list-style: none;
     padding: 0;
     margin-bottom: 2rem;
-    flex-grow: 1; /* Pushes button to bottom */
+    flex-grow: 1;
 }
 
 .pricing-card-features li {
@@ -515,68 +670,14 @@ body::before {
 }
 
 .pricing-card-features li i {
-    margin-right: 0.75rem; /* Adjusted for RTL */
-    margin-left: 0;
+    margin-left: 0.75rem; /* Adjusted for RTL */
+    margin-right: 0;
     color: var(--accent-color);
     font-size: 1.2em;
 }
 
 .pricing-card-features li .fa-times-circle {
-    color: #6c757d; /* Muted color for unavailable features */
-}
-
-/* About Section */
-.about-section .about-grid { /* Use .about-grid for consistency */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 3rem;
-    align-items: center;
-}
-
-.about-text h3 {
-    font-size: 1.8rem;
-    color: var(--text-color);
-    margin-bottom: 1rem;
-}
-
-.about-text p {
-    font-size: 1rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-    color: #ddd;
-}
-
-.about-image img.rounded-image {
-    width: 100%;
-    max-width: 400px; /* Adjusted size */
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-strong);
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
-    transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
-}
-
-.about-image img.rounded-image:hover {
-    transform: scale(1.03) rotate(-2deg); /* Slight rotation on hover */
-    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-}
-
-.designer-info {
-    text-align: center;
-    margin-top: 3rem;
-    padding: 1.5rem;
-    background-color: var(--secondary-color); /* Using secondary color for better contrast */
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-light);
-}
-
-.designer-info p {
-    margin: 0.5rem 0;
-    color: var(--text-color);
-}
-.designer-info strong {
-    color: var(--accent-color);
+    color: #6c757d;
 }
 
 /* Testimonials Section */
@@ -609,11 +710,11 @@ body::before {
 }
 
 .testimonial-avatar {
-    width: 60px; /* Slightly smaller avatar */
+    width: 60px;
     height: 60px;
     border-radius: 50%;
     object-fit: cover;
-    margin-left: 1rem; /* Adjusted for RTL */
+    margin-left: 1rem; /* For RTL */
     margin-right: 0;
     border: 2px solid var(--accent-color);
 }
@@ -635,27 +736,35 @@ body::before {
     line-height: 1.6;
     color: #ccc;
     font-style: italic;
+    position: relative;
+    padding-right: 1.5em; /* Space for quote */
+    padding-left: 1.5em; /* Space for quote */
 }
 
 .testimonial-text::before {
     content: "“";
-    font-size: 2rem;
+    font-size: 2.5rem; /* Larger quotes */
     color: var(--accent-color);
-    margin-right: 0.25rem;
-    line-height: 0;
+    position: absolute;
+    right: -5px; /* Adjusted for RTL */
+    top: -0.2em;
+    line-height: 1;
 }
 .testimonial-text::after {
     content: "”";
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: var(--accent-color);
-    margin-left: 0.25rem;
-    line-height: 0;
+    position: absolute;
+    left: -5px; /* Adjusted for RTL */
+    bottom: -0.5em;
+    line-height: 1;
 }
+
 
 /* Contact Section */
 .contact-form-section {
-    background-color: rgba(var(--primary-color-rgb, 26, 31, 43), 0.5); /* Slightly different background for contact */
-    padding-bottom: 4rem; /* Extra padding at bottom */
+    background-color: rgba(var(--primary-color-rgb, 26, 31, 43), 0.5); /* Define --primary-color-rgb or use direct rgba */
+    padding-bottom: 4rem;
 }
 
 .contact-form {
@@ -666,8 +775,8 @@ body::before {
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-strong);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    max-width: 700px; /* Limit form width */
-    margin: 0 auto; /* Center the form */
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .form-group {
@@ -683,11 +792,11 @@ body::before {
 
 .form-input,
 .form-textarea,
-.form-select /* Added for consistency if you use select elsewhere */ {
+select.form-input /* Target select specifically if needed */ {
     width: 100%;
     padding: 0.75rem 1rem;
     background-color: var(--secondary-color);
-    border: 1px solid #4a5568; /* Slightly lighter border */
+    border: 1px solid #4a5568;
     border-radius: var(--border-radius-sm);
     color: var(--text-color);
     font-family: inherit;
@@ -703,10 +812,10 @@ body::before {
 
 .form-input:focus,
 .form-textarea:focus,
-.form-select:focus {
+select.form-input:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.3); /* Neon glow effect */
+    box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.3);
 }
 
 .form-textarea {
@@ -716,28 +825,68 @@ body::before {
 
 .form-message-area {
     margin-bottom: 1rem;
-    font-size: 0.9rem;
+    min-height: 40px; /* Reserve space for messages */
 }
 .form-message-area p {
     padding: 0.75rem;
     border-radius: var(--border-radius-sm);
     text-align: center;
+    font-weight: 500;
+}
+
+.contact-form button.btn {
+    width: 100%; /* Make button full width */
+    cursor: pointer;
+}
+
+.contact-info { /* This class was in a previous version, ensure it's used in HTML if needed */
+    background: var(--card-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 2.5rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-info .info-item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    color: #ccc;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+.contact-info .info-item:last-child {
+    margin-bottom: 0;
+}
+
+.contact-info .info-item i {
+    font-size: 1.8rem;
+    color: var(--accent-color);
+    width: 30px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.contact-info .info-item:hover i {
+    transform: scale(1.2);
 }
 
 /* Footer Styling */
 .footer {
     background: var(--primary-color);
-    padding: 3rem 0 2rem; /* Adjusted padding */
+    padding: 3rem 0 2rem;
     text-align: center;
     color: var(--text-color-muted);
     font-size: 0.9rem;
-    margin-top: 0; /* Removed top margin, section padding will handle it */
-    border-top: 2px solid var(--secondary-color); /* Thicker border */
+    margin-top: 0;
+    border-top: 2px solid var(--secondary-color);
     position: relative;
     z-index: 1;
 }
 
-.footer .nav-logo { /* Re-style logo for footer */
+.footer .nav-logo {
     font-size: 1.5rem;
     margin-bottom: 1rem;
     display: inline-block;
@@ -764,7 +913,7 @@ body::before {
 
 .footer-social-links a {
     color: var(--text-color-muted);
-    font-size: 1.5rem; /* Slightly smaller social icons in footer */
+    font-size: 1.5rem;
     margin: 0 0.75rem;
     transition: color 0.3s ease, transform 0.3s ease;
 }
@@ -787,7 +936,7 @@ body::before {
 .scroll-to-top-button {
     position: fixed;
     bottom: 20px;
-    right: 20px; /* Adjusted for RTL, will be left */
+    right: 20px; /* Default for LTR */
     background-color: var(--accent-color);
     color: white;
     width: 45px;
@@ -827,13 +976,13 @@ html[dir="rtl"] .scroll-to-top-button {
 .fade-in {
     opacity: 0;
     transition-property: opacity, transform;
-    transition-duration: 0.7s; /* Slightly faster for better perceived performance */
-    transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); /* Smoother easing */
+    transition-duration: 0.7s;
+    transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .fade-in.appear {
     opacity: 1;
-    transform: translateY(0) translateX(0) scale(1) !important; /* Use !important to override inline styles if any conflict */
+    transform: translateY(0) translateX(0) scale(1) !important;
 }
 
 /* Specific Animation Initial States */
@@ -845,21 +994,20 @@ html[dir="rtl"] .scroll-to-top-button {
     transform: translateY(50px);
 }
 
-.fade-in[data-animation="slide-from-left"] { /* For RTL, this will appear from the right */
+/* For RTL, these will be reversed by the html[dir="rtl"] specific selectors below */
+.fade-in[data-animation="slide-from-left"] {
+    transform: translateX(-50px);
+}
+.fade-in[data-animation="slide-from-right"] {
     transform: translateX(50px);
 }
+
 html[dir="rtl"] .fade-in[data-animation="slide-from-left"] {
-    transform: translateX(-50px);
-}
-
-
-.fade-in[data-animation="slide-from-right"] { /* For RTL, this will appear from the left */
-    transform: translateX(-50px);
+    transform: translateX(50px); /* Slide from right in RTL */
 }
 html[dir="rtl"] .fade-in[data-animation="slide-from-right"] {
-    transform: translateX(50px);
+    transform: translateX(-50px); /* Slide from left in RTL */
 }
-
 
 .fade-in[data-animation="zoom-in"] {
     transform: scale(0.9);
@@ -867,7 +1015,7 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] {
 
 /* Delayed animations for hero section elements */
 .fade-in[data-animation="fade-in-delay-1"].appear {
-    transition-delay: 0.2s; /* Adjusted delays */
+    transition-delay: 0.2s;
 }
 .fade-in[data-animation="fade-in-delay-2"].appear {
     transition-delay: 0.4s;
@@ -876,47 +1024,48 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] {
 
 /* Responsive Design Adjustments */
 @media (max-width: 992px) {
-    .navbar {
-        padding: 0.8rem 5%;
+    .navbar { /* This is the header element */
+        padding: 0.8rem 2%; /* Adjusted padding for smaller screens */
     }
     .menu-toggle {
-        display: flex; /* Changed from block to flex for better alignment of spans */
+        display: flex;
     }
 
     .nav-links-container {
         position: fixed;
         top: 0;
-        right: -100%; /* Start off-screen */
-        width: 75%; /* Adjust width as needed */
-        max-width: 320px; /* Max width for the menu */
-        height: 100vh; /* Full height */
-        background: var(--primary-color); /* Solid background */
+        right: -100%; /* Start off-screen for RTL */
+        width: 75%;
+        max-width: 300px; /* Slightly narrower menu */
+        height: 100vh;
         flex-direction: column;
-        padding-top: 5rem; /* Space for close button or header */
-        box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+        background: var(--primary-color);
+        padding: 5rem 1.5rem 1.5rem; /* Adjusted padding */
+        box-shadow: -3px 0 10px rgba(0,0,0,0.2); /* Shadow for RTL */
+        gap: 1rem;
         transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        overflow-y: auto; /* Allow scrolling if many links */
+        overflow-y: auto;
     }
     html[dir="rtl"] .nav-links-container {
-        right: auto;
-        left: -100%;
-        transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        right: -100%; /* Start off-screen to the right */
+        left: auto;
+        box-shadow: 3px 0 10px rgba(0,0,0,0.2); /* Shadow on the left for RTL */
+        transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     }
-
 
     .nav-links-container.active {
         right: 0;
     }
     html[dir="rtl"] .nav-links-container.active {
-        left: 0;
-        right: auto;
+        right: 0;
+        left: auto;
     }
 
     .nav-links {
         flex-direction: column;
         width: 100%;
-        align-items: center; /* Center links in mobile menu */
-        gap: 0; /* Remove gap, use padding on li */
+        align-items: flex-start; /* Align text to the start (right for RTL) */
+        gap: 0;
     }
 
     .nav-links li {
@@ -924,15 +1073,12 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] {
     }
 
     .nav-link {
-        font-size: 1.2rem;
-        padding: 1rem 1.5rem; /* More padding for touch */
+        font-size: 1.1rem;
+        padding: 0.8rem 1rem;
         display: block;
-        text-align: right; /* Adjusted for RTL */
+        text-align: right; /* Default for RTL */
         border-bottom: 1px solid var(--secondary-color);
         width: 100%;
-    }
-    html[dir="rtl"] .nav-link {
-        text-align: right;
     }
 
     .nav-link:last-child {
@@ -944,21 +1090,21 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] {
     .nav-link.active, .nav-link:hover {
       color: var(--accent-color);
       background-color: var(--secondary-color);
-      border-radius: 0; /* Full width highlight */
+      border-radius: var(--border-radius-sm); /* Keep some rounding */
     }
 
     .hero .container {
-        flex-direction: column-reverse; /* Image first on mobile */
+        flex-direction: column-reverse;
         text-align: center;
-        gap: 2rem; /* Reduced gap */
+        gap: 2rem;
     }
     .hero-content {
-        order: 1; /* Text below image */
+        order: 1; /* Text content first in visual order (top) */
         max-width: 100%;
     }
     .hero-image-container {
-        order: 2; /* Image above text */
-        margin-bottom: 2rem;
+        order: 2; /* Image below text */
+        margin-bottom: 2rem; /* Was margin-bottom: 1rem */
     }
     .hero .section-subtitle {
         text-align: center;
@@ -966,13 +1112,13 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] {
     .hero-cta {
         justify-content: center;
     }
-    .profile-image {
-        max-width: 180px; /* Smaller profile image on mobile */
-        max-height: 180px;
+    .profile-image { /* This is the logo in hero */
+        max-width: 150px; /* Smaller logo in hero on mobile */
+        max-height: 150px;
     }
     .gradient-border-wrapper {
-        width: 200px;
-        height: 200px;
+        width: 170px; /* Adjust to fit smaller logo */
+        height: 170px;
         padding: 8px;
     }
 
@@ -988,11 +1134,11 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] {
     .section {
         padding: 3rem 0;
     }
-    .hero {
-        padding-top: 5rem; /* Adjust for potentially smaller header */
+    .hero-section { /* Ensure hero section also gets reduced padding */
+        padding: 6rem 0 3rem; /* Adjust top padding for header */
     }
     .hero-title {
-        font-size: clamp(2rem, 7vw, 2.8rem); /* Further reduce title size */
+        font-size: clamp(2rem, 6vw, 2.8rem);
     }
     .hero .section-subtitle {
         font-size: clamp(0.9rem, 2.5vw, 1.1rem);
@@ -1005,44 +1151,49 @@ html[dir="rtl"] .fade-in[data-animation="slide-from-right"] {
         padding: 0.9em 2em;
         font-size: 1rem;
     }
-    .about-grid, .services-grid, .projects-grid, .testimonials-grid {
-        gap: 1.5rem; /* Reduce gap between grid items */
+    .about-grid, .services-grid, .projects-grid, .testimonials-grid, .pricing-grid {
+        gap: 1.5rem;
     }
-    .service-card, .project-card, .pricing-card, .testimonial-card, .contact-info {
-        padding: 1.5rem;
+
+    .about-grid {
+        grid-template-columns: 1fr; /* Stack about content and image */
     }
-    .card-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-    }
-    .card-title {
-        font-size: 1.3rem;
-    }
-    .pricing-card-price {
-        font-size: 2rem;
+    .about-image {
+        margin-top: 2rem;
     }
 }
 
 @media (max-width: 480px) {
     body {
-        font-size: 14px; /* Slightly smaller base font for very small screens */
+        font-size: 14px;
     }
     .container {
-        padding: 0 1rem; /* Reduce side padding */
+        padding: 0 1rem;
     }
-    .nav-logo {
-        font-size: 1.5rem;
+    .nav-logo { /* Logo text in header */
+        font-size: 1.4rem;
     }
-    .logo-img { /* If using image logo */
-        height: 2.5rem;
+    .logo-img { /* Logo image in header */
+        height: 30px;
     }
     .hero-title {
-        font-size: 1.8rem;
+        font-size: clamp(1.8rem, 7vw, 2.2rem);
     }
     .section-title {
         font-size: 1.8rem;
     }
+    .service-card, .project-card, .pricing-card, .testimonial-card, .contact-info, .contact-form {
+        padding: 1.5rem;
+    }
     .nav-links-container {
-        width: 85%; /* Wider mobile menu on small screens */
+        width: 85%;
+    }
+    .profile-image { /* Logo in hero */
+        max-width: 120px;
+        max-height: 120px;
+    }
+    .gradient-border-wrapper {
+        width: 140px;
+        height: 140px;
     }
 }
